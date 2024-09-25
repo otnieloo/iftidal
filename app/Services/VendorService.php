@@ -95,7 +95,9 @@ class VendorService extends BaseService
         'password' => $request->password,
         'name' => $request->name,
         'role_id' => Role::where('division', 2)->first()->id,
-        'vendor_id' => $vendor->id
+        'vendor_id' => $vendor->id,
+        'user_status_id' => 3,
+        'email_verified_at' => date("Y-m-d H:i:s"),
       ];
 
 

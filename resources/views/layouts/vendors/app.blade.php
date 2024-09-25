@@ -33,6 +33,8 @@
   <!-- APP CSS -->
   @vite(['resources/css/app.css'])
 
+  <script src="{{ asset('assets/js/core.js?v=') . random_string(7) }}"></script>
+
   @stack('style')
 
 </head>
@@ -110,7 +112,6 @@
   <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@7.1.0/dist/promise.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="{{ asset('vendor/datatables-bs5/datatables.min.js?v=') . random_string(7) }}"></script>
-  <script src="{{ asset('assets/js/core.js?v=') . random_string(7) }}"></script>
 
   <!-- APP JS -->
   @vite('resources/js/app.js')

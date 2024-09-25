@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VendorRequest;
+use App\Models\User;
 use App\Models\Vendor;
 use App\Models\VendorBussiness;
 use App\Models\VendorCategory;
@@ -186,6 +187,12 @@ class VendorController extends Controller
       "vendor_status_id" => 3,
     ]);
 
+    User::query()
+    ->where("vendor_id", $vendor->id)
+    ->update([
+      "user_status_id" => 3,
+    ]);
+
     $response = response_success_default(__("Vendor has been approved!"), FALSE, url()->previous());
     return response_json($response);
   }
@@ -201,6 +208,12 @@ class VendorController extends Controller
     ->where("id", $vendor->id)
     ->update([
       "vendor_status_id" => 4,
+    ]);
+
+    User::query()
+    ->where("vendor_id", $vendor->id)
+    ->update([
+      "user_status_id" => 4,
     ]);
 
     $response = response_success_default(__("Vendor has been declined!"), FALSE, url()->previous());

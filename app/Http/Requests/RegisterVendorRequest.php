@@ -25,29 +25,42 @@ class RegisterVendorRequest extends FormRequest
   {
     return [
       "name" => [
-        "required", "string", "max:255"
+        "required",
+        "string",
+        "max:255"
       ],
       "email" => [
-        "required", "string", "email", "max:255"
+        "required",
+        "string",
+        "email",
+        "max:255"
       ],
       "password" => [
-        "required", "string", "min:6"
-      ],
-      "company_name" => [
-        "required", "string", "max:255",
+        "required",
+        "string",
+        "min:6"
       ],
       "company_legal_number" => [
-        "required", "string", "max:255",
+        "required",
+        "string",
+        "max:255",
       ],
       "vendor_category_id" => [
-        "required", "exists:vendor_categories,id"
+        "required",
+        "exists:vendor_categories,id"
       ],
       "vendor_type_id" => [
-        "required", "exists:vendor_types,id"
+        "required",
+        "exists:vendor_types,id"
       ],
       "vendor_business_id" => [
-        "required", "exists:vendor_businesses,id"
-      ]
+        "required",
+        "exists:vendor_bussinesses,id"
+      ],
+      "terms" => [
+        "required",
+      ],
+      'g-recaptcha-response' => 'recaptcha',
     ];
   }
 }

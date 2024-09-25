@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Livewire\Apps\Admin\Product\Index as ProductLivewire;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,8 +46,15 @@ Route::get("/logout", function () {
 Route::get("/register", [RegisterController::class, "index"])->name("register.index");
 Route::post("/register/vendor", [RegisterController::class, "store_vendor"])->name("register.store.vendor");
 // End Authentication
+Route::get("/email/verify/{id}/{hash}", function (EmailVerificationRequest $request) {
+  $request->fulfill();
+  return view("auth.verify-email");
+})->name("verification.verify");
+Route::get("/must-verify-email", function () {
+  return view("auth.must-verified");
+})->name("verification.notice");
 
-Route::middleware(["auth", "check_maintanance", "check_division:1", "check_session_token"])->group(function () {
+Route::middleware(["auth", "check_maintanance", "verified", "check_session_token"])->group(function () {
   Route::get("/app/dashboard", DashboardController::class)->name("app.dashboard")->middleware("check_authorized:002D");
 
   Route::post("/app/users/get", [UserController::class, "get"])->name("app.users.get")->middleware("check_authorized:003U");

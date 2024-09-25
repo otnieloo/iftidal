@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/main/custom-admin.css?v=') . random_string(7) }}">
     <link rel="shortcut icon" href="assets/images/logo/favicon.svg" type="image/x-icon">
     <link rel="shortcut icon" href="assets/images/logo/favicon.png" type="image/png">
+
+
+    @stack('styles')
 </head>
 
 <body>
@@ -32,6 +35,10 @@
     @include('sweetalert::alert')
     <script src="{{ asset('assets/js/core.js?v=' . random_string(7)) }}"></script>
     {!! session("message") !!}
+
+
+
+    @stack('scripts')
 </body>
 
 </html>

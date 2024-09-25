@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterVendorRequest;
+use App\Models\VendorBussiness;
+use App\Models\VendorCategory;
+use App\Models\VendorType;
 use App\Services\Auth\RegisterService;
 use Illuminate\Http\Request;
 
@@ -23,7 +26,14 @@ class RegisterController extends Controller
    */
   public function index()
   {
-    //
+    $data = [
+      'vendor_categories' => VendorCategory::where('parent_category_id', NULL)->get(),
+      'vendor_bussinesses' => VendorBussiness::all(),
+      'vendor_types' => VendorType::all()
+    ];
+
+
+    return view("auth.vendor.register", $data);
   }
 
   /**

@@ -75,23 +75,42 @@ class LoginService extends BaseService
       if (Hash::check($request->password, $get_user->password)) {
         $check_multi_login = $this->check_multi_login($get_user->id);
 
-        if ($check_multi_login) {
-          $remember = $request->has("remember_me");
-          Auth::loginUsingId($get_user->id, $remember);
-
-          $this->create_session_token($get_user->id);
-          $response->status = TRUE;
-          $response->status_code = 200;
-          $response->message = __("Success login!");
-
-          if ($get_user->role->division == 1) {
-            $response->next_url = \route("app.dashboard");
-          } else if ($get_user->role->division == 2) {
-            $response->next_url = \route("vendor.dashboard.index");
-          }
-        } else {
+        if (!$check_multi_login) {
           $response->message = __("Currently user has login in another device!");
           $response->status_code = 403;
+          goto end;
+        }
+
+        if (!$get_user->email_verified_at) {
+          $response->message = __("Please verify your email first!");
+          $response->status_code = 403;
+          goto end;
+        }
+
+        if ($get_user->user_status_id == 2) {
+          $response->message = __("Your account will be review!");
+          $response->status_code = 403;
+          goto end;
+        }
+
+        if ($get_user->user_status_id == 4) {
+          $response->message = __("Your account has been banned!");
+          $response->status_code = 403;
+          goto end;
+        }
+
+        $remember = $request->has("remember_me");
+        Auth::loginUsingId($get_user->id, $remember);
+
+        $this->create_session_token($get_user->id);
+        $response->status = TRUE;
+        $response->status_code = 200;
+        $response->message = __("Success login!");
+
+        if ($get_user->role->division == 1) {
+          $response->next_url = \route("app.dashboard");
+        } else if ($get_user->role->division == 2) {
+          $response->next_url = \route("vendor.dashboard.index");
         }
       } else {
         $response->message = __("Wrong password!");
@@ -102,6 +121,7 @@ class LoginService extends BaseService
       $response->status_code = 403;
     }
 
+    end:
     return $response;
   }
 }

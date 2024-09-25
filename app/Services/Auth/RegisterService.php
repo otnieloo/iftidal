@@ -1,11 +1,14 @@
-<?php namespace App\Services\Auth;
-      use App\Http\Requests\RegisterVendorRequest;
-      use App\Models\User;
-      use App\Models\Vendor;
-      use App\Services\Cores\BaseService;
-      use App\Services\Cores\ErrorService;
-      use Illuminate\Auth\Events\Registered;
-      use Illuminate\Support\Facades\Hash;
+<?php
+
+namespace App\Services\Auth;
+
+use App\Http\Requests\RegisterVendorRequest;
+use App\Models\User;
+use App\Models\Vendor;
+use App\Services\Cores\BaseService;
+use App\Services\Cores\ErrorService;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterService extends BaseService
 {
@@ -20,9 +23,10 @@ class RegisterService extends BaseService
     $error = FALSE;
     $this->trans_begin();
 
-    try  {
+
+    try {
       $values_vendor = [
-        "vendor_status_id" => 1,
+        "vendor_status_id" => 2,
         "vendor_category_id" => $request->vendor_category_id,
         "vendor_business_id" => $request->vendor_business_id,
         "vendor_type_id" => $request->vendor_type_id,
@@ -34,20 +38,23 @@ class RegisterService extends BaseService
         "contact_person_name" => $request->name,
         "contact_person_phone" => "",
         "contact_person_email" => $request->email,
-        "register_date" => date("Y-m-d")
+        "register_date" => date("Y-m-d"),
       ];
+
+      // dd($values_vendor);
       $vendor = Vendor::create($values_vendor);
 
       $array_name = explode(" ", $request->name);
       do {
-        $username = $array_name . rand(1, 99999);
+        $username = $array_name[0] . rand(1, 99999);
         $check_exists = User::query()->where("username", $username)->exists();
       } while ($check_exists);
+
 
       $values_user = [
         "vendor_id" => $vendor->id,
         "role_id" => 2,
-        "user_status_id" => 1,
+        "user_status_id" => 2,
         "name" => $request->name,
         "email" => $request->email,
         "username" => $username,
@@ -72,7 +79,7 @@ class RegisterService extends BaseService
       $this->trans_rollback();
     } else {
       $this->trans_commit();
-      $response = response_success_default(__("Successfully registered! Please check your email!"));
+      $response = response_success_default(__("Successfully registered! Please check your email!"), FALSE, route("login"));
     }
 
     return $response;
