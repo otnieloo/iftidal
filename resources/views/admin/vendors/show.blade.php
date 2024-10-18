@@ -1,4 +1,4 @@
-@extends('layouts.vendors.app')
+@extends('layouts.admin.app')
 
 @push('style')
 <style>
@@ -96,7 +96,7 @@
             <h5>{{ __("Vendor Information") }}</h5>
           </div>
           <div class="col-md-3">
-            <a href="{{ route('app.vendors.edit', $vendor->id) }}" class="btn btn-success btn-sm">{{ __("Edit") }}</a>
+            <a href="{{ route('app.vendors.edit', $vendor->id) }}" class="btn btn-success btn-sm"><i class='fa-solid fa-pen-to-square'></i></a>
           </div>
         </div>
         <hr style="border: 1px solid black; padding: 0; margin: 0">

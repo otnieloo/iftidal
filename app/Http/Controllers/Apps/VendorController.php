@@ -51,7 +51,7 @@ class VendorController extends Controller
       $row[] = $vendor->register_date;
       $row[] = $vendor->apporved_date;
 
-      $button = "<a href='" . \route("app.vendors.show", $vendor->id) . "' class='btn btn-info btn-sm m-1'>Detail</a>";
+      $button = "<a href='" . \route("app.vendors.show", $vendor->id) . "' class='btn btn-info btn-sm m-1'><i class='fa-solid fa-pen-to-square'></i></a>";
       $button .= form_delete("formUser$vendor->id", route("app.vendors.destroy", $vendor->id));
 
       $row[] = $button;

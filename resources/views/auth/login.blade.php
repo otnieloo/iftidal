@@ -13,9 +13,10 @@
 
           <div class="card py-5">
             <div class="card-body">
-              <div class="container">
+              <div class="container text-center">
                 <h1>AMBOI.MY</h1>
-                <h4 style="color:gray;">Login</h4>
+                <h3>Login</h3>
+                <p class="text-muted">Sign In to your account</p>
 
                 <div class="form-group">
                   <div class="input-group">
@@ -35,25 +36,14 @@
                   </div>
                 </div>
 
-
-                <div>
-                  <label class="custom-control custom-checkbox ms-3 d-flex">
-                    <input type="checkbox" class="custom-control-input" value="terms" name="terms">
-                    <span class="custom-control-label ms-2">Agree the <a href="#">terms
-                        and
-                        policy</a></span>
-                  </label>
-                </div>
-
                 <div class="d-flex">
-                  <button class="btn btn-block btn-warning next">Register</button>
+                  <button class="btn btn-block btn-warning next">Login</button>
                 </div>
 
 
                 <div class="mt-5">
-                  Don't have an account? <a href="{{ route('login') }}">Register</a>
+                  Don't have an account? <a href="{{ route('register.vendor.index') }}">Register as Vendor</a> or <a href="{{ route('register.user.index') }}">Register as User</a>
                 </div>
-
 
               </div>
             </div>

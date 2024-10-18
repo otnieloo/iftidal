@@ -178,13 +178,13 @@ const CORE = {
 
   promptUser(message, callback) {
     Swal.fire({
-      title: "Anda yakin?",
+      title: "Are you sure?",
       text: message,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Ya, lakukan ini!",
+      confirmButtonText: "Yes!",
     }).then((result) => {
       if (result.value) {
         callback();
@@ -217,13 +217,13 @@ const CORE = {
 
   promptDeleteFetch(formId, message) {
     Swal.fire({
-      title: "Anda yakin?",
+      title: "Are you sure?",
       text: message,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Ya, lakukan ini!",
+      confirmButtonText: "Yes!",
     }).then((result) => {
       if (result.value) {
         CORE.showLoadAdmin();
@@ -241,7 +241,7 @@ const CORE = {
           .then((response) => response.json())
           .then((response) => {
             CORE.removeLoadAdmin();
-            CORE.sweet("success", "Berhasil!", response.message);
+            CORE.sweet("success", "Success!", response.message);
             window.setTimeout(
               () => (window.location.href = response.next_url),
               700
@@ -249,7 +249,7 @@ const CORE = {
           })
           .catch((err) => {
             CORE.removeLoadAdmin();
-            CORE.sweet("error", "Gagal!", "Terjadi kesalahan server!");
+            CORE.sweet("error", "Fails!", "Have something error on server!");
           });
       }
     });
@@ -278,19 +278,19 @@ const CORE = {
 
     if (request.status == 200) {
       const response = await request.json();
-      CORE.sweet("success", "Sukses!", response.message);
+      CORE.sweet("success", "Success!", response.message);
       window.setTimeout(() => (window.location.href = response.next_url), 1500);
     } else if (request.status == 400) {
       const response = await request.json();
-      CORE.sweet("error", "Gagal!", "Terdapat input yang salah!");
+      CORE.sweet("error", "Fails!", "The input you entered is incorrect! Please check your input again.");
       CORE.insertValidationErrors(response.data);
     } else if (request.status == 422) {
       const response = await request.json();
-      CORE.sweet("error", "Gagal!", "Terdapat input yang salah!");
+      CORE.sweet("error", "Fails!", "The input you entered is incorrect! Please check your input again.");
       CORE.insertValidationErrorsNew(response.errors);
     } else {
       const response = await request.json();
-      CORE.sweet("error", "Gagal!", response.message);
+      CORE.sweet("error", "Fails!", response.message);
     }
   },
 
@@ -373,7 +373,7 @@ const CORE = {
       // console.log(response);
 
       if (response.status_code == 200) {
-        CORE.sweet("success", "Sukses!", "Berhasil login!");
+        CORE.sweet("success", "Success!", "Logged in!");
         window.setTimeout(
           () => (window.location.href = response.next_url),
           1500
@@ -381,7 +381,7 @@ const CORE = {
       } else if (response.status_code == 400) {
         CORE.insertValidationErrors(response.data);
       } else {
-        CORE.sweet("error", "Gagal!", response.message);
+        CORE.sweet("error", "Fails!", response.message);
       }
     });
   },

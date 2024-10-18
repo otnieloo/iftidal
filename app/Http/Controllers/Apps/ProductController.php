@@ -51,8 +51,13 @@ class ProductController extends Controller
       $row[] = $product->product_level;
       $row[] = $product->product_status;
 
-      $button = "<a href='" . route('app.products.edit', $product->id) . "' class='btn btn-info btn-sm'>Edit</a>";
+      $button = "<a href='" . route('app.products.edit', $product->id) . "' class='btn btn-info btn-sm'><i class='fa-solid fa-pen-to-square'></i></a>";
       $button .= form_delete("formProduct$product->id", route("app.products.destroy", $product->id));
+
+      if ($product->product_status_id == 1 && is_role("Super Admin")) {
+        $button .= form_custom("formApproveProduct$product->id", route("app.products.approve", $product->id), "fa-solid fa-check", "success", __("Approve this product?"));
+        $button .= form_custom("formDeclineProduct$product->id", route("app.products.decline", $product->id), "fa-solid fa-xmark", "danger", __("Decline this product?"));
+      }
 
       $row[] = $button;
       $data[] = $row;
@@ -96,8 +101,13 @@ class ProductController extends Controller
       $row[] = $product->product_status;
 
 
-      $button = "<a href='" . route('app.products.edit', $product->id) . "' class='btn btn-info btn-sm'>Edit</a>";
+      $button = "<a href='" . route('app.products.edit', $product->id) . "' class='btn btn-info btn-sm'><i class='fa-solid fa-pen-to-square'></i></a>";
       $button .= form_delete("formProduct$product->id", route("app.products.destroy", $product->id));
+
+      if ($product->product_status_id == 1 && is_role("Super Admin")) {
+        $button .= form_custom("formApproveProduct$product->id", route("app.products.approve", $product->id), "fa-solid fa-check", "success", __("Approve this product?"));
+        $button .= form_custom("formDeclineProduct$product->id", route("app.products.decline", $product->id), "fa-solid fa-xmark", "danger", __("Decline this product?"));
+      }
 
       $row[] = $button;
       $data[] = $row;
@@ -228,5 +238,39 @@ class ProductController extends Controller
     $product->delete();
     $response = \response_success_default("Product has been deleted!", FALSE, \route("app.products.index"));
     return \response_json($response);
+  }
+
+  /**
+   * Approve product
+   *
+   * @param Product $product
+   */
+  public function approve(Product $product)
+  {
+    Product::query()
+    ->where("id", $product->id)
+    ->update([
+      "product_status_id" => 2
+    ]);
+
+    $response = \response_success_default(__("Product has been approved!"), $product->id, \route("app.products.index"));
+    return response_json($response);
+  }
+
+  /**
+   * Decline product
+   *
+   * @param Product $product
+   */
+  public function decline(Product $product)
+  {
+    Product::query()
+    ->where("id", $product->id)
+    ->update([
+      "product_status_id" => 3
+    ]);
+
+    $response = \response_success_default(__("Product has been declined!"), $product->id, \route("app.products.index"));
+    return response_json($response);
   }
 }

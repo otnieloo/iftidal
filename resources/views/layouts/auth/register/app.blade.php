@@ -6,14 +6,11 @@
     <!-- META DATA -->
     <meta charset="UTF-8">
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <meta name="Description" content="Sparic - Laravel Multipurpose Responsive Bootstrap5 Dashboard Template">
-    <meta name="Author" content="Spruko Technologies Private Limited">
-    <meta name="keywords"
-        content="admin dashboard, admin dashboard laravel, admin panel template, blade template, blade template laravel, bootstrap template, dashboard laravel, laravel admin, laravel admin dashboard, laravel admin panel, laravel admin template, laravel bootstrap admin template, laravel bootstrap template, laravel template, vite laravel template, vite admin template, vite laravel admin, vite laravel admin dashboard, vite laravel bootstrap admin template">
+    <meta name="Description" content="Amboi - A platform that brings together vendors and event committees">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- TITLE -->
-    <title> Sparic - Laravel Multipurpose Responsive Bootstrap5 Dashboard Template</title>
+    <title>Amboi - A platform that brings together vendors and event committees</title>
 
     <!-- FAVICON -->
     <link rel="icon" href="{{asset('build/assets/images/brand/favicon.ico')}}" type="image/x-icon">
@@ -28,6 +25,7 @@
 
     <!-- ICONS CSS -->
     <link href="{{asset('build/assets/iconfonts/icons.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
     <!-- ANIMATE CSS -->
     <link href="{{asset('build/assets/iconfonts/animated.css')}}" rel="stylesheet">
@@ -35,6 +33,7 @@
     <!-- APP CSS -->
     @vite(['resources/css/app.css'])
 
+    @livewireStyles
     @yield('styles')
 
     <style>
@@ -78,6 +77,7 @@
 
     <!-- SCRIPTS -->
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js"></script>
     <!-- JQUERY MIN JS -->
     <script src="{{asset('build/assets/plugins/jquery/jquery.min.js')}}"></script>
 
@@ -101,6 +101,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('assets/js/core.js?v=') . random_string(7) }}"></script>
 
+    @livewireScripts
 
     <!-- APP JS -->
     @vite('resources/js/app.js')

@@ -19,7 +19,7 @@ class ProductImage extends Model
   public function productImage() : Attribute
   {
     return new Attribute(
-      get: fn($value) => "product/image/$value",
+      get: fn($value) => asset("storage/product/image/$value"),
     );
   }
 }

@@ -131,8 +131,10 @@ class ProductService extends BaseService
         }
 
         ProductImage::insert($productImage);
+        Product::query()
+        ->where("id", $product->id)
+        ->update(["product_image" => $productImage[0]["product_image"]]);
       }
-
 
       // Insert product package
       if ($request->has('package_type') && $request->package_type) {
@@ -250,6 +252,9 @@ class ProductService extends BaseService
           }
 
           ProductImage::whereIn('id', $listProductImageId)->delete();
+          Product::query()
+          ->where("id", $product->id)
+          ->update(["product_image" => $productImage[0]["product_image"]]);
         }
       }
 

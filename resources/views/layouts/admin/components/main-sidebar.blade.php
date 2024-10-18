@@ -30,7 +30,7 @@
               class="side-menu__icon fa-regular fa-calendar"></i><span class="side-menu__label">Advertisement</span></a>
         </li>
         <li class="slide">
-          <a href="{{ route('app.dashboard') }}" class="side-menu__item"><i
+          <a href="{{ route('app.customers.index') }}" class="side-menu__item"><i
               class="side-menu__icon fa-solid fa-user"></i><span class="side-menu__label">Customer Engagement</span></a>
         </li>
         <li class="slide">

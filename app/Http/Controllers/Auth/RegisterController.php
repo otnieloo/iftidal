@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterVendorRequest;
+use App\Http\Requests\UserRegisterRequest;
 use App\Models\VendorBussiness;
 use App\Models\VendorCategory;
 use App\Models\VendorType;
@@ -20,11 +21,31 @@ class RegisterController extends Controller
   }
 
   /**
+   * Display register as user
+   *
+   */
+  public function index_user()
+  {
+    return view("auth.user.register");
+  }
+
+  /**
+   * Store register user
+   *
+   * @param \App\Http\Requests\UserRegisterRequest
+   */
+  public function store_user(UserRegisterRequest $request)
+  {
+    $response = $this->service->store_user($request);
+    return \response_json($response);
+  }
+
+  /**
    * Display a listing of the resource.
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index_vendor()
   {
     $data = [
       'vendor_categories' => VendorCategory::where('parent_category_id', NULL)->get(),
