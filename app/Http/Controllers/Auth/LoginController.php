@@ -41,4 +41,20 @@ class LoginController extends Controller
     $response = $this->login_service->login($request);
     return \response_json($response);
   }
+
+  /**
+   * Receive callback google
+   *
+   * @param Request $request
+   */
+  public function callback_google(Request $request)
+  {
+    $response = $this->login_service->login_google($request);
+
+    if ($response->status) {
+      return redirect()->route($response->next_url);
+    }
+
+    return redirect()->route("login");
+  }
 }

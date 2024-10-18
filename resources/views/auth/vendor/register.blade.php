@@ -13,7 +13,7 @@
     <!-- ROW -->
     <div class="row">
       <div class="col-lg-5 col-md-8 col-sm-12 mx-auto">
-        <form action="{{ route('register.store.vendor') }}" method="POST" with-submit-crud>
+        <form action="{{ route('register.vendor.store') }}" method="POST" with-submit-crud>
           <div id="smartwizard">
             <ul class="nav">
               <li class="nav-item">

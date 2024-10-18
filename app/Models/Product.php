@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\VendorScope;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,6 +24,13 @@ class Product extends Model
 
   public function product_package()
   {
-    return $this->hasOne(ProductPackage::class);
+    return $this->hasOne(ProductPackage::class, "product_id", "id");
+  }
+
+  public function productImage() : Attribute
+  {
+    return new Attribute(
+      get: fn($value) => asset("storage/product/image/$value"),
+    );
   }
 }

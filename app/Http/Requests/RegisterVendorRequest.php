@@ -60,7 +60,7 @@ class RegisterVendorRequest extends FormRequest
       "terms" => [
         "required",
       ],
-      'g-recaptcha-response' => 'recaptcha',
+      // 'g-recaptcha-response' => 'recaptcha',
     ];
   }
 }

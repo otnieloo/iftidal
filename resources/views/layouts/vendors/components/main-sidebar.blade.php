@@ -45,7 +45,7 @@
                     <ul class="sidemenu-list">
                       <li class="side-menu-label1"><a href="javascript:void(0)">Submenu items</a></li>
                       <li><a href="javascript:void(0)" class="slide-item">Financial</a></li>
-                      <li><a href="javascript:void(0)" class="slide-item">Order</a></li>
+                      <li><a href="{{ route('vendor.orders.index') }}" class="slide-item">Order</a></li>
                       <li><a href="{{ route('vendor.profiles.index') }}" class="slide-item">Profile</a></li>
                       <li><a href="{{ route('vendor.products.index') }}" class="slide-item">Product & Services</a></li>
                       <li><a href="javascript:void(0)" class="slide-item">Work</a></li>

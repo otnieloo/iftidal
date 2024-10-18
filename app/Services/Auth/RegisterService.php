@@ -3,6 +3,7 @@
 namespace App\Services\Auth;
 
 use App\Http\Requests\RegisterVendorRequest;
+use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Services\Cores\BaseService;
@@ -55,6 +56,60 @@ class RegisterService extends BaseService
         "vendor_id" => $vendor->id,
         "role_id" => 2,
         "user_status_id" => 2,
+        "name" => $request->name,
+        "email" => $request->email,
+        "username" => $username,
+        "password" => Hash::make($request->password),
+      ];
+      $user = User::create($values_user);
+
+      event(new Registered($user));
+    } catch (\Exception $e) {
+      dd($e->getMessage());
+      $error = TRUE;
+      if ($e->getCode() == 403) {
+        $response->message = $e->getMessage();
+        $response->status_code = 403;
+      } else {
+        $response = response_errors_default();
+        ErrorService::error($e, "RegisterService::store_vendor");
+      }
+    }
+
+    end:
+    if ($error) {
+      $this->trans_rollback();
+    } else {
+      $this->trans_commit();
+      $response = response_success_default(__("Successfully registered! Please check your email!"), FALSE, route("login"));
+    }
+
+    return $response;
+  }
+
+  /**
+   * Register vendor
+   *
+   * @param UserRegisterRequest $request
+   */
+  public function store_user(UserRegisterRequest $request)
+  {
+    $response = create_response();
+    $error = FALSE;
+    $this->trans_begin();
+
+
+    try {
+      $array_name = explode(" ", $request->name);
+      do {
+        $username = $array_name[0] . rand(1, 99999);
+        $check_exists = User::query()->where("username", $username)->exists();
+      } while ($check_exists);
+
+
+      $values_user = [
+        "role_id" => 3,
+        "user_status_id" => 1,
         "name" => $request->name,
         "email" => $request->email,
         "username" => $username,

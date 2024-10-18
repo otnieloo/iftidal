@@ -19,13 +19,8 @@ class User extends Authenticatable implements MustVerifyEmail
    *
    * @var array<int, string>
    */
-  protected $fillable = [
-    'name',
-    'email',
-    'password',
-    'role_id',
-    'username',
-    'vendor_id'
+  protected $guarded = [
+    'id'
   ];
 
   /**
@@ -56,5 +51,10 @@ class User extends Authenticatable implements MustVerifyEmail
   public function vendor()
   {
     return $this->belongsTo(Vendor::class);
+  }
+
+  public function status()
+  {
+    return $this->belongsTo(UserStatus::class, "user_status_id", "id");
   }
 }

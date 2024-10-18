@@ -20,18 +20,21 @@ class DatabaseSeeder extends Seeder
       UserStatusSeeder::class,
       UserSeed::class,
       ModuleSeeder::class,
-      // ProjectSettingSeed::class,
+      ProjectSettingSeed::class,
       VendorStatusSeeder::class,
-      // VendorSeeder::class,
+      VendorSeeder::class,
       ProductConditionSeeder::class,
       ProductLevelSeeder::class,
       ProductCategorySeeder::class,
-      // ProductStatusSeeder::class,
+      ProductStatusSeeder::class,
       VendorTypeSeeder::class,
       VendorBusinessedSeeder::class,
-      VendorCategorySeeder::class
+      VendorCategorySeeder::class,
 
-
+      OrderStatusSeeder::class,
+      EventTypeSeeder::class,
+      PaymentStatusSeeder::class,
+      LocationSeeder::class,
     ]);
     // \App\Models\User::factory(10)->create();
 

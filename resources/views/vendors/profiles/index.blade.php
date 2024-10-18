@@ -1,6 +1,6 @@
 @extends('layouts.vendors.app')
 
-@push('styles')
+@push('style')
 <style>
   .profile-vendor {
     height: 150px;

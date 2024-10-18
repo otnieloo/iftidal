@@ -9,7 +9,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- TITLE -->
-  <title> Sparic - Laravel Starerkit</title>
+  <title>Amboi - {{ $title ?? 'A platform that brings together vendors and event committees' }}</title>
 
   <!-- FAVICON -->
   <link rel="icon" href="{{asset('build/assets/images/brand/favicon.ico')}}" type="image/x-icon">

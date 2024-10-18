@@ -43,7 +43,7 @@ if (!function_exists("response_errors_default")) {
     $response->status = FALSE;
     $response->status_code = 500;
     $response->data = [];
-    $response->message = "Terjadi kesalahan server!";
+    $response->message = "Sorry we have a something wrong on server!";
 
     return $response;
   }
@@ -86,7 +86,21 @@ if (!function_exists("form_delete")) {
     $html .= "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
     $html .= "<input type='hidden' name='_method' value='DELETE'>";
 
-    $html .= "<button class='btn btn-danger btn-sm' type='button' onclick=\"CORE.promptForm('$formID', 'Yakin ingin menghapus data ini?')\">Hapus</button>";
+    $html .= "<button class='btn btn-danger btn-sm' type='button' onclick=\"CORE.promptForm('$formID', 'Sure for deleted this data?')\"><i class='fa-solid fa-trash'></i></button>";
+    $html .= "</form>";
+
+    return $html;
+  }
+}
+
+if (!function_exists("form_custom")) {
+  function form_custom($formID, $route, $icon, $color, $message, $method = "PUT")
+  {
+    $html = "<form class='d-inline ms-2' id='$formID' action='$route' method='POST' with-submit-crud>";
+    $html .= "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
+    $html .= "<input type='hidden' name='_method' value='$method'>";
+
+    $html .= "<button class='btn btn-$color btn-sm' type='button' onclick=\"CORE.promptForm('$formID', '$message')\"><i class='$icon'></i></button>";
     $html .= "</form>";
 
     return $html;
@@ -121,5 +135,11 @@ if (!function_exists("myr_currency")) {
     $formatted_amount = 'RM ' . number_format($amount, 2, '.', ',');
 
     return $formatted_amount;
+  }
+}
+
+if (!function_exists("is_role")) {
+  function is_role($role_name) {
+    return auth()->user()->role->role_name == $role_name;
   }
 }
