@@ -37,6 +37,8 @@
   @livewireStyles
 
 
+
+
 </head>
 
 <body class="app sidebar-mini ltr">

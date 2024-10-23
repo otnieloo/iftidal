@@ -18,11 +18,17 @@ class UploadImageController extends Controller
    */
   public function process(Request $request)
   {
+
     if ($request->has('tmp_video')) {
 
       $file = $request->file('tmp_video')->store('tmp');
     } else {
-      $file = $request->file('tmp')[0]->store('tmp');
+
+      if (is_array($request->file('tmp'))) {
+        $file = $request->file('tmp')[0]->store('tmp');
+      } else {
+        $file = $request->file('tmp')->store('tmp');
+      }
     }
 
 
@@ -56,7 +62,6 @@ class UploadImageController extends Controller
 
 
     $filePath = '';
-
     if ($request->has('video')) {
       // Get the file path from storage (this depends on your setup, you can use a database to map IDs)
       $filePath = public_path('storage/' . $request->id);

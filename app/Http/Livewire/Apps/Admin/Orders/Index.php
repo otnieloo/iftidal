@@ -10,23 +10,23 @@ class Index extends Component
 {
   use WithPagination;
 
-  private function get_order()
+
+  public bool $all_order = true;
+
+
+
+  public function change_tab($all_order)
   {
-    return Order::query()
-      ->with([
-        "user",
-        "type",
-        "location",
-        "payment_status",
-        "status"
-      ])
-      ->where("order_status_id", ">", 1)
-      ->orderBy("id", "DESC")
-      ->paginate(20);
+    if ($this->all_order != $all_order) {
+      $this->all_order = $all_order;
+      $this->dispatchBrowserEvent('refresh-datatable', ['all_order' => $this->all_order]);
+    }
   }
 
-	public function render()
-	{
-		return view('livewire.apps.admin.orders.index');
-	}
+
+
+  public function render()
+  {
+    return view('livewire.apps.admin.orders.index');
+  }
 }

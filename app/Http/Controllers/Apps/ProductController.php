@@ -248,10 +248,10 @@ class ProductController extends Controller
   public function approve(Product $product)
   {
     Product::query()
-    ->where("id", $product->id)
-    ->update([
-      "product_status_id" => 2
-    ]);
+      ->where("id", $product->id)
+      ->update([
+        "product_status_id" => 2
+      ]);
 
     $response = \response_success_default(__("Product has been approved!"), $product->id, \route("app.products.index"));
     return response_json($response);
@@ -265,10 +265,10 @@ class ProductController extends Controller
   public function decline(Product $product)
   {
     Product::query()
-    ->where("id", $product->id)
-    ->update([
-      "product_status_id" => 3
-    ]);
+      ->where("id", $product->id)
+      ->update([
+        "product_status_id" => 3
+      ]);
 
     $response = \response_success_default(__("Product has been declined!"), $product->id, \route("app.products.index"));
     return response_json($response);

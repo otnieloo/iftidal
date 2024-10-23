@@ -42,7 +42,8 @@
 
 
                 <div class="mt-5">
-                  Don't have an account? <a href="{{ route('register.vendor.index') }}">Register as Vendor</a> or <a href="{{ route('register.user.index') }}">Register as User</a>
+                  Don't have an account? <a href="{{ route('register.vendor.index') }}">Register as Vendor</a> or <a
+                    href="{{ route('register.user.index') }}">Register as User</a>
                 </div>
 
               </div>

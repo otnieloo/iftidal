@@ -22,16 +22,19 @@
 
       <div class="col-lg-6 col-md-12">
         <x-forms.input-grid col1="12" col2="12" label="{{ __('Company Name') }}" name="company_name"
-          value="{{ $vendor->company_name ?? '' }}" placeholder="{{ __('Company Name') }}"></x-forms.input-grid>
+          value="{{ $vendor->company_name ?? '' }}" placeholder="{{ __('Company Name') }}" id="company_name">
+        </x-forms.input-grid>
 
         <x-forms.input-grid col1="12" col2="12" label="{{ __('Company phone') }}" name="company_phone"
-          value="{{ $vendor->company_phone ?? '' }}" placeholder="{{ __('Company Phone') }}"></x-forms.input-grid>
+          value="{{ $vendor->company_phone ?? '' }}" placeholder="{{ __('Company Phone') }}" id="company_phone">
+        </x-forms.input-grid>
 
         <x-forms.input-grid col1="12" col2="12" label="{{ __('Company Email') }}" name="company_email"
-          value="{{ $vendor->company_email ?? '' }}" placeholder="{{ __('Company Email') }}"></x-forms.input-grid>
+          value="{{ $vendor->company_email ?? '' }}" placeholder="{{ __('Company Email') }}" id="company_email">
+        </x-forms.input-grid>
 
         <x-forms.textarea-grid label="{{ __('Company Adress') }}" name="company_address" required="true"
-          palceholder="{{ __('Company Adress') }}" value="{{ $vendor->company_address ?? '' }}">
+          palceholder="{{ __('Company Adress') }}" value="{{ $vendor->company_address ?? '' }}" id="company_address">
           </x-forms.input-grid>
       </div>
 
@@ -41,7 +44,9 @@
           <label>{{ __("Company Business") }}</label>
           <select name="vendor_business_id" class="form-control">
             @foreach ($vendor_businesses as $item)
-              <option {{ $vendor->vendor_business_id == $item->id ? 'selected' : '' }} value="{{ $item->id }}">{{ $item->vendor_business }}</option>
+            <option {{ isset($vendor) && $vendor->vendor_business_id == $item->id ? 'selected' : '' }} value="{{
+              $item->id }}">{{
+              $item->vendor_business }}</option>
             @endforeach
           </select>
           <div></div>
@@ -51,7 +56,9 @@
           <label>{{ __("Company Categories") }}</label>
           <select name="vendor_category_id" class="form-control">
             @foreach ($vendor_categories as $item)
-              <option {{ $vendor->vendor_category_id == $item->id ? 'selected' : '' }} value="{{ $item->id }}">{{ "$item->parent_category > $item->vendor_category" }}</option>
+            <option {{ isset($vendor) && $vendor->vendor_category_id == $item->id ? 'selected' : '' }} value="{{
+              $item->id }}">{{
+              "$item->parent_category > $item->vendor_category" }}</option>
             @endforeach
           </select>
           <div></div>
@@ -82,17 +89,20 @@
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <x-forms.input-grid col1="12" col2="12" label="{{ __('Contact Person Name') }}" name="contact_person_name"
-          value="{{ $vendor->contact_person_name ?? '' }}" placeholder="{{ __('Contact Person Name') }}">
+          value="{{ $vendor->contact_person_name ?? '' }}" placeholder="{{ __('Contact Person Name') }}"
+          id="contact_person_name">
         </x-forms.input-grid>
       </div>
       <div class="col-lg-6 col-md-12">
         <x-forms.input-grid col1="12" col2="12" label="{{ __('Contact Person Phone') }}" name="contact_person_phone"
-          value="{{ $vendor->contact_person_phone ?? '' }}" placeholder="{{ __('Contact Person Phone') }}">
+          value="{{ $vendor->contact_person_phone ?? '' }}" placeholder="{{ __('Contact Person Phone') }}"
+          id="contact_person_phone">
         </x-forms.input-grid>
       </div>
       <div class="col-lg-6 col-md-12">
         <x-forms.input-grid col1="12" col2="12" label="{{ __('Contact Person Email') }}" name="contact_person_email"
-          value="{{ $vendor->contact_person_email ?? '' }}" placeholder="{{ __('Contact Person Email') }}">
+          value="{{ $vendor->contact_person_email ?? '' }}" placeholder="{{ __('Contact Person Email') }}"
+          id="contact_person_email">
         </x-forms.input-grid>
       </div>
 
@@ -104,12 +114,12 @@
 
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <x-forms.input-grid col1="12" col2="12" label="Email" name="email" type="email"
+        <x-forms.input-grid col1="12" col2="12" label="Email" name="email" type="email" id="email"
           value="{{ $vendor->user->email ?? '' }}" placeholder="Email"></x-forms.input-grid>
       </div>
       <div class="col-lg-6 col-md-12">
-        <x-forms.input-grid col1="12" col2="12" label="Name" name="name" value="{{ $vendor->user->name ?? '' }}"
-          placeholder="Name"></x-forms.input-grid>
+        <x-forms.input-grid col1="12" col2="12" label="Name" name="name" id="name"
+          value="{{ $vendor->user->name ?? '' }}" placeholder="Name"></x-forms.input-grid>
       </div>
 
       <div class="col-lg-6 col-md-12">
@@ -119,7 +129,7 @@
           </div>
           <div class="col-12">
             <div class="input-group">
-              <input type="password" name="password" class="form-control">
+              <input type="password" name="password" class="form-control" id="password">
               <span class="input-group-text">
                 <div class="form-check">
                   <input class="form-check-input togglepassword" type="checkbox">

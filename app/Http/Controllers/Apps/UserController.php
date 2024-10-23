@@ -48,6 +48,7 @@ class UserController extends Controller
       $data[] = $row;
     }
 
+
     $output = [
       "draw" => $request->draw,
       "recordsTotal" => $count,

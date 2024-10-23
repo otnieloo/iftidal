@@ -5,17 +5,25 @@ namespace App\Http\Controllers\Apps\Vendor;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+
+
+
+
+
   /**
    * Display a listing of the resource.
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index(Request $request, OrderService $orderService)
   {
+
+
     return $this->view_admin("vendors.orders.index", __("List Order"), [], TRUE);
   }
 
@@ -46,14 +54,15 @@ class OrderController extends Controller
    */
   public function show(Order $order)
   {
+
+    $vendorId = auth()->user()->id;
+
     $data = [
-      "order" => $order,
-      "order_products" => OrderProduct::query()
-      ->with(["product"])
-      ->where("order_id", $order->id)
-      ->where("vendor_id", auth()->user()->vendor_id)
-      ->get()
+      "order" => $order->load(['user', 'location', 'type', 'order_products' => function ($q) use ($vendorId) {
+        $q->with('product')->where('vendor_id', $vendorId);
+      }]),
     ];
+
 
     return $this->view_admin("vendors.orders.show", __("Detail Order"), $data);
   }

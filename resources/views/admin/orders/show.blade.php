@@ -1,4 +1,4 @@
-@extends('layouts.vendors.app')
+@extends('layouts.admin.app')
 
 @section('content')
 
@@ -6,57 +6,48 @@
   <div class="card-body">
 
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-lg-6 col-md-12 col-sm-12">
         <table class="table">
           <tr>
-            <th>{{ __('Customer') }}</th>
+            <th>{{ __('Customer Name') }}</th>
             <td>: {{ $order->user->name }}</td>
           </tr>
           <tr>
-            <th>{{ __('Event Type') }}</th>
+            <th>{{ __('Date Joined') }}</th>
+            <td>: {{ date('j F Y', strtotime($order->user->created_at)) }}</td>
+          </tr>
+          <tr>
+            <th>{{ __('Order Date') }}</th>
+            <td>: {{ date('j F Y', strtotime($order->created_at)) }}</td>
+          </tr>
+          <tr>
+            <th>{{ __('Type of Event') }}</th>
             <td>: {{ $order->type->event_type }}</td>
           </tr>
-          <tr>
-            <th>{{ __('Event Name') }}</th>
-            <td>: {{ $order->event_name }}</td>
-          </tr>
-          <tr>
-            <th>{{ __('Location') }}</th>
-            <td>: {{ $order->location->location }}</td>
-          </tr>
-          <tr>
-            <th>{{ __('Category') }}</th>
-            <td>:
-              <ul>
-                @foreach ($vendor_categories as $item)
-                  <li>{{ $item->category-> }}</li>
-                @endforeach
-              </ul>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="col-md-6">
 
-        <table class="table">
           <tr>
-            <th>{{ __('Event Date') }}</th>
+            <th>{{ __('Date of Event') }}</th>
             <td>: {{ date('j F Y', strtotime($order->event_date)) }}</td>
           </tr>
-          <tr>
-            <th>{{ __('Event Time') }}</th>
-            <td>: {{ date("H:i", strtotime("$order->event_date $order->event_start_time")) }} - {{ date("H:i",
-              strtotime("$order->event_date $order->event_end_time")) }}</td>
-          </tr>
-          <tr>
-            <th>{{ __("Budget") }}</th>
-            <td>:
-              RM. {{ number_format($order->event_start_budget) }} - RM. {{ number_format($order->event_end_budget) }}
-            </td>
-          </tr>
-        </table>
 
+          <tr>
+            <th>{{ __('Event Period') }}</th>
+            <td>: {{ $order->event_start_time . ' - ' . $order->event_end_time }}</td>
+          </tr>
+
+          <tr>
+            <th>{{ __('Event Location') }}</th>
+            <td>: {{ $order->location->location }}</td>
+          </tr>
+
+          <tr>
+            <th>{{ __('Est. Number of Guest') }}</th>
+            <td>: {{ $order->event_guest_count }}</td>
+          </tr>
+
+        </table>
       </div>
+
     </div>
 
   </div>
@@ -71,26 +62,83 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th>{{ __("Vendor") }}</th>
+          <th>{{ __("No.") }}</th>
           <th>{{ __("Product") }}</th>
-          <th>{{ __("Price Unit") }}</th>
+          <th>{{ __("Unit Price") }}</th>
           <th>{{ __("Qty") }}</th>
-          <th>{{ __("Discount") }}</th>
-          <th>{{ __("Grand Total") }}</th>
+          <th>{{ __("Total Price") }}</th>
+          <th>{{ __("SKU") }}</th>
         </tr>
       </thead>
       <tbody>
-        @foreach ($order_products as $item)
+        @foreach ($order->order_products as $order_product)
+
         <tr>
-          <td>{{ $item->vendor->company_name }}</td>
-          <td>RM. {{ number_format($item->product_sell_price) }}</td>
-          <td>{{ number_format($item->qty) }}</td>
-          <td>RM. {{ number_format($item->product_discount_price) }}</td>
-          <td>RM. {{ number_format($item->grand_total) }}</td>
+          <td>{{ $loop->iteration }}</td>
+          <td>
+            <div>
+              <div class="d-flex flex-wrap gap-3 align-items-center">
+                <img src="{{ $order_product->product->product_image }}" alt="Product Image"
+                  style="width:150px;height:120px;object-fit: cover;">
+                <div>{{ $order_product->product_name }}</div>
+              </div>
+
+            </div>
+          </td>
+
+          <td>RM. {{ number_format($order_product->product_sell_price) }}</td>
+          <td>{{ $order_product->qty }}</td>
+          <td>RM. {{ number_format($order_product->grand_total) }}</td>
+          <td>{{ $order_product->product->product_sku }}</td>
+
+          {{-- <td>RM. {{ number_format($item->grand_total) }}</td> --}}
         </tr>
         @endforeach
+
+
+        <tr>
+          <td colspan="4" class="text-end">Total ({{ count($order->order_products) }} Products)</td>
+          <td colspan="2" class="text-center fw-bold">RM. {{ number_format($order->grand_total) }}</td>
+        </tr>
+
+
+        <tr>
+          <td colspan="4" class="text-end">Discount / Promo</td>
+          <td colspan="2" class="text-center text-muted">RM. {{ number_format($order->total_discount) }}</td>
+        </tr>
+
+        <tr>
+          <td colspan="4" class="text-end fw-bold">Total Order Value</td>
+          <td colspan="2" class="text-center fw-bold">
+            RM. {{ number_format($order->grand_total - $order->total_discount)
+            }}</td>
+        </tr>
+
+
+
       </tbody>
     </table>
+
+    <div class="border-top-dashed "></div>
+
+    <div class="text-center py-5">
+
+      <div class="text-muted">Reminder: Kindly double check before commiting order.</div>
+
+      <div class="d-flex justify-content-center my-3">
+        <input type="checkbox" name="termscondition">
+        <div>Aggree the <a href="#">terms and policy</a></div>
+      </div>
+
+
+      <button class="btn btn-secondary">Reject</button>
+      <button class="btn btn-primary">Print Order</button>
+      <button class="btn criteria-selected">Commit Order</button>
+
+
+
+    </div>
+
 
   </div>
 </div>

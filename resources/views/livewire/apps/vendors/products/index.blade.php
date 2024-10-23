@@ -109,13 +109,10 @@
 
 
     window.addEventListener('refresh-datatable', event => {
-
         const isProduct = event.detail.is_product;
         if(isProduct){
-            console.log('Call product')
             CORE.dataTableServer("tableProduct", "/vendor/products/get");
         }else {
-            console.log('Call services')
             CORE.dataTableServer("tableService", "/vendor/services/get");
         }
     })

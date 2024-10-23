@@ -123,17 +123,17 @@ class ProductService extends BaseService
         $productImage = [];
 
         foreach ($request->tmp as $tmp) {
-          [$newImage, $movedFile] = move_tmp_file($tmp, 'public/product/image');
+          [$newImage, $movedFile] = move_tmp_file($tmp, 'product/image');
           $productImage[] = [
             'product_id' => $product->id,
-            'product_image' => basename($newImage)
+            'product_image' => $newImage
           ];
         }
 
         ProductImage::insert($productImage);
         Product::query()
-        ->where("id", $product->id)
-        ->update(["product_image" => $productImage[0]["product_image"]]);
+          ->where("id", $product->id)
+          ->update(["product_image" => $productImage[0]["product_image"]]);
       }
 
       // Insert product package
@@ -213,11 +213,8 @@ class ProductService extends BaseService
         Storage::delete($product->product_video);
       }
 
-      // dd($values);
-      $product->update($values);
 
-
-      // Insert product images
+      // Product image process
       if ($request->has('tmp')) {
         $productImage = [];
 
@@ -239,10 +236,15 @@ class ProductService extends BaseService
           }
         }
 
+
+        // If there is a new image uplaod 
+        // store to database
         if (count($productImage)) {
           ProductImage::insert($productImage);
         }
 
+        // If there is product image are deleted
+        // Delete from DB & Storage
         if ($deletedIdProductImages->count()) {
           $listProductImageId = [];
 
@@ -252,12 +254,13 @@ class ProductService extends BaseService
           }
 
           ProductImage::whereIn('id', $listProductImageId)->delete();
-          Product::query()
-          ->where("id", $product->id)
-          ->update(["product_image" => $productImage[0]["product_image"]]);
         }
+
+        $values['product_image'] = $productImages->first()['product_image'];
       }
 
+
+      $product->update($values);
 
 
       // Insert product package

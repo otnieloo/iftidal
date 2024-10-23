@@ -139,7 +139,8 @@ if (!function_exists("myr_currency")) {
 }
 
 if (!function_exists("is_role")) {
-  function is_role($role_name) {
+  function is_role($role_name)
+  {
     return auth()->user()->role->role_name == $role_name;
   }
 }

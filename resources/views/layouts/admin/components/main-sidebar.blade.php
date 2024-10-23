@@ -49,6 +49,7 @@
                     <ul class="sidemenu-list">
                       <li><a href="{{ route('app.vendors.index') }}" class="slide-item">Vendors</a></li>
                       <li><a href="{{ route('app.products.index') }}" class="slide-item">Product & Services</a></li>
+                      <li><a href="{{ route('app.orders.index') }}" class="slide-item">Orders</a></li>
                     </ul>
                   </div>
                 </div>

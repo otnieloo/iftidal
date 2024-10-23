@@ -82,8 +82,8 @@ class VendorService extends BaseService
     try {
       $values = $request->validated();
 
-      [$newImage, $movedFile] = move_tmp_file($values['tmp'], 'logo');
-      $values['logo'] = $newImage;
+      [$newImage, $movedFile]   = move_tmp_file($values['tmp'], 'logo');
+      $values['logo']           = $newImage;
 
 
       $values['vendor_status_id'] = 3;
@@ -99,8 +99,6 @@ class VendorService extends BaseService
         'user_status_id' => 3,
         'email_verified_at' => date("Y-m-d H:i:s"),
       ];
-
-
 
       $user = $this->create_user($user_data);
 

@@ -282,11 +282,19 @@ const CORE = {
       window.setTimeout(() => (window.location.href = response.next_url), 1500);
     } else if (request.status == 400) {
       const response = await request.json();
-      CORE.sweet("error", "Fails!", "The input you entered is incorrect! Please check your input again.");
+      CORE.sweet(
+        "error",
+        "Fails!",
+        "The input you entered is incorrect! Please check your input again."
+      );
       CORE.insertValidationErrors(response.data);
     } else if (request.status == 422) {
       const response = await request.json();
-      CORE.sweet("error", "Fails!", "The input you entered is incorrect! Please check your input again.");
+      CORE.sweet(
+        "error",
+        "Fails!",
+        "The input you entered is incorrect! Please check your input again."
+      );
       CORE.insertValidationErrorsNew(response.errors);
     } else {
       const response = await request.json();
@@ -469,7 +477,7 @@ const CORE = {
   onerrorBannerVendor(target) {
     target.onerror = null;
     target.src = `${CORE.baseUrl}/assets/images/images-empty.png`;
-  }
+  },
 };
 
 CORE.init();

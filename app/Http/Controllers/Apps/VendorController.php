@@ -182,16 +182,16 @@ class VendorController extends Controller
   public function approve(Vendor $vendor)
   {
     Vendor::query()
-    ->where("id", $vendor->id)
-    ->update([
-      "vendor_status_id" => 3,
-    ]);
+      ->where("id", $vendor->id)
+      ->update([
+        "vendor_status_id" => 3,
+      ]);
 
     User::query()
-    ->where("vendor_id", $vendor->id)
-    ->update([
-      "user_status_id" => 3,
-    ]);
+      ->where("vendor_id", $vendor->id)
+      ->update([
+        "user_status_id" => 3,
+      ]);
 
     $response = response_success_default(__("Vendor has been approved!"), FALSE, url()->previous());
     return response_json($response);
@@ -205,16 +205,16 @@ class VendorController extends Controller
   public function decline(Vendor $vendor)
   {
     Vendor::query()
-    ->where("id", $vendor->id)
-    ->update([
-      "vendor_status_id" => 4,
-    ]);
+      ->where("id", $vendor->id)
+      ->update([
+        "vendor_status_id" => 4,
+      ]);
 
     User::query()
-    ->where("vendor_id", $vendor->id)
-    ->update([
-      "user_status_id" => 4,
-    ]);
+      ->where("vendor_id", $vendor->id)
+      ->update([
+        "user_status_id" => 4,
+      ]);
 
     $response = response_success_default(__("Vendor has been declined!"), FALSE, url()->previous());
     return response_json($response);

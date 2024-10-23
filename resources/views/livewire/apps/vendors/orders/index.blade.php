@@ -1,45 +1,55 @@
 <div>
+  <!-- ROW -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between ">
+          <div>
+            <ul class="nav nav-pills nav-pills-circle" id="tabs_2" role="tablist">
 
-  <div class="card">
-    <div class="card-body table-responsive">
-
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>{{ __("Customer") }}</th>
-            <th>{{ __("Event Name") }}</th>
-            <th>{{ __("Event Type") }}</th>
-            <th>{{ __("Event Date") }}</th>
-            <th>{{ __("Time") }}</th>
-            <th>{{ __("Location") }}</th> 
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @forelse ($orders as $item)
-            <tr>
-              <td>{{ $item->user->name }}</td>
-              <td>{{ $item->event_name }}</td>
-              <td>{{ $item->type->event_type }}</td>
-              <td>{{ date('j F Y', strtotime($item->event_date)) }}</td>
-              <td>{{ date("H:i", strtotime("$item->event_date $item->event_start_time")) }} - {{ date("H:i", strtotime("$item->event_date $item->event_end_time")) }}</td>
-              <td>{{ $item->location->location }}</td>
-              <td>
-                <a href="{{ route('vendor.orders.show', $item->id) }}">
-                  <i class="fa-solid fa-eye"></i>
+              <li class="nav-item">
+                <a class="nav-link p-2 border m-2 {{ $all_order ? 'active show' : '' }}" id="tab1" data-bs-toggle="tab"
+                  href="#tabs_2_3" role="tab" aria-selected="{{ $all_order ? true : false }}"
+                  wire:click="change_tab(true)">
+                  <span class="nav-link-icon d-block">All Order</span>
                 </a>
-                {{-- <a href="{{ route('app.orders.edit', $item->id) }}" class="btn btn-info btn-sm"><i class="fa-solid fa-pen"></i></a> --}}
-              </td>
-            </tr>
-          @empty
-            <tr>
-              <td colspan="7" class="text-center">{{ __("No Orders Found") }}</td>
-            </tr>
-          @endforelse
-        </tbody>
-      </table>
+              </li>
 
+              <li class="nav-item">
+                <a class="nav-link border p-2 m-2 {{ !$all_order ? 'active show' : '' }}" id="tab2" data-bs-toggle="tab"
+                  href="#tabs_2_1" role="tab" aria-selected="{{ !$all_order ? true : false }}"
+                  wire:click="change_tab(false)">
+                  <span class="nav-link-icon d-block">New Order</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+
+          <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">{{__('Add
+            Product') }}</button>
+
+        </div>
+
+
+        <div class="card-body table-responsive">
+
+          @if($all_order)
+          @livewire('apps.vendors.orders.all-order')
+          @else
+          @livewire('apps.vendors.orders.new-order')
+          @endif
+
+
+        </div>
+      </div>
     </div>
   </div>
-
+  <!-- END ROW -->
 </div>
+
+
+
+@push('script')
+<script src="{{ asset('assets/js/apps/order.js') }}"></script>
+@endpush

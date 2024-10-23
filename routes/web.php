@@ -42,7 +42,7 @@ Route::get('/', function () {
 Route::get("/login", [LoginController::class, "index"])->name("login");
 Route::post("/login", [LoginController::class, "store"])->name("login.store");
 
-Route::get("/oauth/google", function() {
+Route::get("/oauth/google", function () {
   return Socialite::driver('google')->redirect();
 })->name("login.google");
 
@@ -109,6 +109,8 @@ Route::middleware(["auth", "check_maintanance", "verified", "check_session_token
   Route::put("/app/products/{product}/approve", [ProductController::class, "approve"])->name("app.products.approve");
   Route::put("/app/products/{product}/decline", [ProductController::class, "decline"])->name("app.products.decline");
 
+
+  Route::get('/app/orders/get', [OrderController::class, 'data']);
   Route::get("/app/orders", [OrderController::class, "index"])->name("app.orders.index");
   Route::get("/app/orders/{order}", [OrderController::class, "show"])->name("app.orders.show");
 });

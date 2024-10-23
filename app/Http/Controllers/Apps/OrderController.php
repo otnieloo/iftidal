@@ -6,10 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderVendorCategory;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use App\Services\OrderService;
 
 class OrderController extends Controller
 {
+
+  public function data(Request $request, OrderService $orderService)
+  {
+    $data = $orderService->dataTable($request);
+
+    return response()->json($data);
+  }
+
+
   /**
    * Display a listing of the resource.
    *
@@ -48,10 +59,9 @@ class OrderController extends Controller
   public function show(Order $order)
   {
     $data = [
-      "order" => $order,
-      "order_products" => OrderProduct::query()->with(["vendor"])->where("order_id", $order->id)->get(),
-      "vendor_categories" => OrderVendorCategory::query()->with(["category"])->where("order_id", $order->id)->get()
+      "order" => $order->load(['user', 'location', 'type', 'order_products.product']),
     ];
+
 
     return $this->view_admin("admin.orders.show", __("Order Details"), $data);
   }

@@ -7,21 +7,27 @@ if (inputPackage && productPackage.value.length > 0) {
   const package = JSON.parse(productPackage.value);
   const checkBox = document.querySelectorAll(`[name="package_type"]`);
 
-  if (package.package_type == 1) {
+  if (package?.package_type == 1) {
     checkBox[0].checked = true;
 
-    document.querySelector(`[name="minimum_qty_1"]`).value = package.minimum_qty;
-    document.querySelector(`[name="package_price_percent_1"]`).value = package.value;
-  } else if (package.package_type == 2) {
+    document.querySelector(`[name="minimum_qty_1"]`).value =
+      package.minimum_qty;
+    document.querySelector(`[name="package_price_percent_1"]`).value =
+      package.value;
+  } else if (package?.package_type == 2) {
     checkBox[1].checked = true;
 
-    document.querySelector(`[name="minimum_qty_2"]`).value = package.minimum_qty;
-    document.querySelector(`[name="package_price_percent_2"]`).value = package.value;
-  } else if (package.package_type == 3) {
+    document.querySelector(`[name="minimum_qty_2"]`).value =
+      package.minimum_qty;
+    document.querySelector(`[name="package_price_percent_2"]`).value =
+      package.value;
+  } else if (package?.package_type == 3) {
     checkBox[2].checked = true;
 
-    document.querySelector(`[name="minimum_qty_3"]`).value = package.minimum_qty;
-    document.querySelector(`[name="package_price_percent_3"]`).value = package.value;
+    document.querySelector(`[name="minimum_qty_3"]`).value =
+      package.minimum_qty;
+    document.querySelector(`[name="package_price_percent_3"]`).value =
+      package.value;
   }
 }
 

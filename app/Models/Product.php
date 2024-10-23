@@ -27,10 +27,10 @@ class Product extends Model
     return $this->hasOne(ProductPackage::class, "product_id", "id");
   }
 
-  public function productImage() : Attribute
+  public function productImage(): Attribute
   {
     return new Attribute(
-      get: fn($value) => asset("storage/product/image/$value"),
+      get: fn($value) => asset("storage/{$value}"),
     );
   }
 }

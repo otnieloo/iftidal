@@ -140,13 +140,13 @@ class LoginService extends BaseService
     $error = FALSE;
     $this->trans_begin();
 
-    try  {
+    try {
       $get_account = Socialite::driver("google")->user();
       // dd($get_account);
 
       $get_user = User::query()
-      ->where("email", $get_account->email)
-      ->first();
+        ->where("email", $get_account->email)
+        ->first();
 
       if ($get_user) {
         $user = $get_user;
@@ -158,13 +158,13 @@ class LoginService extends BaseService
           ];
 
           User::query()
-          ->where("id", $user->id)
-          ->update($values);
+            ->where("id", $user->id)
+            ->update($values);
         }
       } else {
         $array_name = explode(" ", $get_account->getName());
         do {
-          $username = $array_name[0].rand(1000, 9999);
+          $username = $array_name[0] . rand(1000, 9999);
           $check_exists = User::query()->where("username", $username)->exists();
         } while ($check_exists);
 

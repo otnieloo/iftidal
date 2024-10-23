@@ -28,20 +28,19 @@ class Step4 extends Component
   {
     $this->order_id = $order_id;
     $order_vendor_category_id = OrderVendorCategory::query()
-    ->where("order_id", $order_id)
-    ->get()
-    ->map(fn($order) => $order->vendor_category_id)
-    ->toArray();
+      ->where("order_id", $order_id)
+      ->get()
+      ->map(fn($order) => $order->vendor_category_id)
+      ->toArray();
+
 
     $this->categories = VendorCategory::query()
-    ->with([
-      "vendors",
-      "parent_category"
-    ])
-    ->whereIn("id", $order_vendor_category_id)
-    ->get();
-
-    // dd($this->categories[0]->parent_category);
+      ->with([
+        "vendors",
+        "parent_category"
+      ])
+      ->whereIn("id", $order_vendor_category_id)
+      ->get();
   }
 
   public function show_product($id)
@@ -53,28 +52,28 @@ class Step4 extends Component
   public function show_vendor($id)
   {
     $this->vendor = Vendor::query()
-    ->with([
-      "category",
-      "category.parent_category",
-    ])
-    ->where("id", $id)
-    ->first();
+      ->with([
+        "category",
+        "category.parent_category",
+      ])
+      ->where("id", $id)
+      ->first();
 
     // $order_products = OrderProduct::query()
     // ->where("order_id", $this->order_id)
     // ->get();
 
     $this->products = Product::query()
-    ->with(["product_images", "product_package"])
-    ->where("vendor_id", $this->vendor->id)
-    ->where("product_service", 0)
-    ->get();
+      ->with(["product_images", "product_package"])
+      ->where("vendor_id", $this->vendor->id)
+      ->where("product_service", 0)
+      ->get();
 
     $this->services = Product::query()
-    ->with(["product_images"])
-    ->where("vendor_id", $this->vendor->id)
-    ->where("product_service", 1)
-    ->get();
+      ->with(["product_images"])
+      ->where("vendor_id", $this->vendor->id)
+      ->where("product_service", 1)
+      ->get();
 
     $detail_product = $this->products->map(function ($product) {
       return [
