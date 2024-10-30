@@ -31,16 +31,8 @@
 
         </div>
 
-
         <div class="card-body table-responsive">
-
-          @if($all_order)
-          @livewire('apps.admin.orders.all-order')
-          @else
-          @livewire('apps.admin.orders.new-order')
-          @endif
-
-
+          @livewire('apps.admin.orders.order')
         </div>
       </div>
     </div>

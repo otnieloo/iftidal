@@ -15,6 +15,7 @@ class OrderController extends Controller
 
   public function data(Request $request, OrderService $orderService)
   {
+
     $data = $orderService->dataTable($request);
 
     return response()->json($data);

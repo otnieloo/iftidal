@@ -37,6 +37,7 @@
                     <ul class="sidemenu-list">
                       <li class="side-menu-label1"><a href="javascript:void(0)">Submenu items</a></li>
                       <li><a href="{{ route('user.events.create') }}" class="slide-item">Event Setup</a></li>
+                      <li><a href="{{ route('user.orders.index') }}" class="slide-item">Order</a></li>
                     </ul>
                   </div>
                 </div>

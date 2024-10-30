@@ -11,10 +11,6 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
 
-
-
-
-
   /**
    * Display a listing of the resource.
    *
@@ -22,8 +18,6 @@ class OrderController extends Controller
    */
   public function index(Request $request, OrderService $orderService)
   {
-
-
     return $this->view_admin("vendors.orders.index", __("List Order"), [], TRUE);
   }
 

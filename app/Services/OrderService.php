@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OrderService
 {
@@ -11,8 +12,12 @@ class OrderService
     public function dataTable(Request $request)
     {
 
+
         // Check the role
-        $vendorId = $request->user()->vendor_id;
+        $user       = request()->user();
+        $vendorId   = $user->vendor_id;
+        $isCustomer = $user->role_id === 3;
+
 
 
         $columns = ['orders.id', 'users.name', 'orders.event_name', 'locations.location', 'orders.event_date', 'orders.grand_total'];
@@ -45,6 +50,11 @@ class OrderService
             });
         }
 
+
+        if ($isCustomer) {
+            $query->where('user_id', $user->id);
+        }
+
         $query = $query->orderBy($orderByName, $orderBy)
             ->paginate((int) $pageLength);
 
@@ -55,7 +65,9 @@ class OrderService
             $row[] = "<input type='checkbox' class='order-checkbox' value='{$item->id}' />";
             $row[] = $item->id;
             $row[] = 'ORDER ID';
-            $row[] = $item->event_name;
+            if (!$isCustomer) {
+                $row[] = $item->name;
+            }
             $row[] = $item->location;
             $row[] = $item->event_date;
             $row[] = $item->grand_total;
