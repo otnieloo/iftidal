@@ -35,6 +35,8 @@
         @else
         {{ __("Uncategory") }}
         @endif
+        <br>
+        <button onclick="CORE.showModal('modalPreview')" class="btn btn-info btn-sm mt-2">Preview Customer</button>
       </p>
     </div>
 
@@ -131,6 +133,32 @@
       <div class="tab-pane container fade" id="clientsTab">...</div>
     </div>
 
+  </div>
+</div>
+
+<div class="modal fade" id="modalPreview">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Preview Customer</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        
+        @include('users.events.modals.vendor-detail')
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
   </div>
 </div>
 

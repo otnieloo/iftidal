@@ -1,7 +1,7 @@
 $(function () {
   const nextPageButton = document.querySelector(".next-page-order-button");
 
-  const dataTable = () => {
+  const dataTable = (allOrder = true) => {
     $(`#table`).DataTable({
       ajax: {
         url: `${CORE.baseUrl}/app/orders/get`,
@@ -9,6 +9,7 @@ $(function () {
           return {
             ...d,
             page: d.start / d.length + 1,
+            allOrder: allOrder ? "all_order" : "new_order",
           };
         },
       },
@@ -23,9 +24,12 @@ $(function () {
 
             if (checked) {
               const vendor = nextPageButton.dataset.vendor;
+              const user = nextPageButton.dataset.user;
 
               if (vendor) {
                 nextPageButton.dataset.href = `${CORE.baseUrl}/vendor/orders/${value}`;
+              } else if (user) {
+                nextPageButton.dataset.href = `${CORE.baseUrl}/user/orders/${value}`;
               } else {
                 nextPageButton.dataset.href = `${CORE.baseUrl}/app/orders/${value}`;
               }
@@ -56,9 +60,12 @@ $(function () {
     document.location = href;
   });
 
-  window.addEventListener("refresh-datatable", (event) => {
+  window.addEventListener("refresh-datatable", async (event) => {
     const allOrder = event.detail.all_order;
+    console.log(allOrder);
 
-    dataTable();
+    await $(`#table`).DataTable().destroy();
+
+    dataTable(allOrder);
   });
 });

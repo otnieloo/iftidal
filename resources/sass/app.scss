@@ -1,2 +1,13 @@
 @import "../assets/scss/style.scss";
 @import "../assets/scss/plugins.scss";
+
+.list-group-category.active {
+    background-color: #FFE8A3;
+    color: black;
+}
+
+.list-group-category:hover {
+    cursor: pointer;
+    background-color: #FFE8A3 !important;
+    color: black;
+}

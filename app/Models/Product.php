@@ -33,4 +33,19 @@ class Product extends Model
       get: fn($value) => asset("storage/{$value}"),
     );
   }
+
+  public function order_items()
+  {
+    return $this->hasMany(OrderProduct::class, "product_id", "id");
+  }
+
+  public function status()
+  {
+    return $this->belongsTo(ProductStatus::class, "product_status_id", "id");
+  }
+
+  public function variations()
+  {
+    return $this->hasMany(ProductVariation::class, "product_id", "id");
+  }
 }

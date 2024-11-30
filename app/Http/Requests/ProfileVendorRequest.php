@@ -44,7 +44,13 @@ class ProfileVendorRequest extends FormRequest
       ],
       "company_banner_logo" => [
         "nullable", "image", "max:5048"
-      ]
+      ],
+      "latitude" => [
+        "string", "max:100"
+      ],
+      "longitude" => [
+        "string", "max:100"
+      ],
     ];
   }
 }

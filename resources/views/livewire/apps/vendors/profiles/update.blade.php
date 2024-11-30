@@ -40,6 +40,13 @@
       <div></div>
     </div>
   </div>
+
+  <div class="my-3">
+    <input type="hidden" name="latitude" value="{{ $vendor->latitude ?? '3.1351092' }}">
+    <input type="hidden" name="longitude" value="{{ $vendor->longitude ?? '101.6127829' }}">
+    <div id="maps" style="height: 200px;"></div>
+  </div>
+
   <div class="row align-items-end my-3">
     <div class="col-md-2">
       <label>{{ __("Company's Description") }}</label>
@@ -70,3 +77,8 @@
   </div>
 
 </div>
+
+@push('script')
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script src="{{ asset('assets/js/vendors/profile.js?v=' . time()) }}"></script>
+@endpush

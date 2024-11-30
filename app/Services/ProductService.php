@@ -5,9 +5,12 @@ namespace App\Services;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\VendorRequest;
 use App\Models\Product;
+use App\Models\ProductGuarantee;
 use App\Models\ProductImage;
 use App\Models\ProductPackage;
+use App\Models\ProductPaymentRelease;
 use App\Models\ProductStatus;
+use App\Models\ProductVariation;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Services\Cores\BaseService;
@@ -28,27 +31,28 @@ class ProductService extends BaseService
   {
     if ($is_service) {
       $column_search = ["products.product_name", "products.product_sell_price", "products.product_sell_price", "products.product_slot", "pl.product_level", "ps.product_status"];
-      $column_order = [NULL, "products.product_name", "products.product_sell_price", "products.product_sell_price", "pc.product_condition", "ps.product_status"];
+      $column_order = [NULL, "products.product_name", NULL, "order_items_sum_grand_total", "products.product_sell_price", "products.product_slot", "pl.product_level", "ps.product_status"];
 
       $query = Product::query()
-        ->select('products.*', 'pl.product_level', 'ps.product_status')
+        ->select('products.*', 'pl.product_level', 'ps.product_status', 'ps.color')
+        ->withSum("order_items", "grand_total")
         ->join("product_levels as pl", "pl.id", "products.product_level_id")
         ->join("product_statuses as ps", "ps.id", "products.product_status_id")
         ->where('products.product_service', 1);
     } else {
       $column_search = ["products.product_name", "products.product_sell_price", "products.product_sell_price", "products.product_stock", "pc.product_condition", "ps.product_status"];
-      $column_order = [NULL, "products.product_name", "products.product_sell_price", "products.product_sell_price", "products.product_stock", "pc.product_condition", "ps.product_status"];
+      $column_order = [NULL, "products.product_name", NULL, "order_items_sum_grand_total", "products.product_sell_price", "products.product_stock", "variations_count"];
 
       $query = Product::query()
-        ->select('products.*', 'pc.product_condition', 'ps.product_status')
+        ->select('products.*', 'pc.product_condition', 'ps.product_status', 'ps.color')
+        ->withSum("order_items", "grand_total")
+        ->withCount("variations")
         ->join("product_conditions as pc", "pc.id", "products.product_condition_id")
         ->join("product_statuses as ps", "ps.id", "products.product_status_id")
         ->where('products.product_service', 0);
     }
 
     $order = ["products.id" => "DESC"];
-
-
 
     $results = $query
       ->where(function ($query) use ($request, $column_search) {
@@ -72,8 +76,6 @@ class ProductService extends BaseService
     } else {
       $results = $results->orderBy(key($order), $order[key($order)]);
     }
-
-
 
     return $results;
   }
@@ -106,6 +108,15 @@ class ProductService extends BaseService
         $values["vendor_id"] = auth()->user()->vendor_id;
       }
 
+      $variations = $request->variations;
+      unset($values["variations"]);
+
+      $payment_release = ProductPaymentRelease::find($request->payment_release_id);
+      $values["payment_release"] = $payment_release->payment_release;
+
+      $product_guarantee = ProductGuarantee::find($request->product_guarantee_id);
+      $values["product_guarantee"] = $product_guarantee->product_guarantee;
+
       if ($request->has('tmp_video')) {
         [$newImage, $movedFile] = move_tmp_file($values['tmp_video'], 'product/video');
         $values['product_video'] = $newImage;
@@ -114,8 +125,17 @@ class ProductService extends BaseService
       $productStatusId = ProductStatus::where('product_status', 'pending')->first();
       $values['product_status_id'] = $productStatusId->id;
       $values['product_service'] = $request->has('product_condition_id') ? 0 : 1;
+      // dd($variations);
 
       $product = Product::create($values);
+
+      foreach ($variations as $variation) {
+        $values = [
+          "product_id" => $product->id,
+          "variation" => $variation
+        ];
+        ProductVariation::create($values);
+      }
 
       // Insert product images
       if ($request->has('tmp')) {
@@ -206,6 +226,17 @@ class ProductService extends BaseService
         $values["vendor_id"] = auth()->user()->vendor_id;
       }
 
+      $variations = $request->variations;
+      unset($values["variations"]);
+      unset($values["tmp"]);
+      unset($values["package_type"]);
+
+      $payment_release = ProductPaymentRelease::find($request->payment_release_id);
+      $values["payment_release"] = $payment_release->payment_release;
+
+      $product_guarantee = ProductGuarantee::find($request->product_guarantee_id);
+      $values["product_guarantee"] = $product_guarantee->product_guarantee;
+
       if ($request->has('tmp_video')) {
         [$newImage, $movedFile] = move_tmp_file($values['tmp_video'], 'product/video');
         $values['product_video'] = $newImage;
@@ -228,7 +259,7 @@ class ProductService extends BaseService
           // Check if this new image
           if (str_contains($tmp, 'tmp')) {
 
-            [$newImage, $movedFile] = move_tmp_file($tmp, 'product/image');
+            [$newImage, $movedFile] = move_tmp_file($tmp, 'public/product/image');
             $productImage[] = [
               'product_id' => $product->id,
               'product_image' => $newImage
@@ -237,7 +268,7 @@ class ProductService extends BaseService
         }
 
 
-        // If there is a new image uplaod 
+        // If there is a new image uplaod
         // store to database
         if (count($productImage)) {
           ProductImage::insert($productImage);
@@ -260,9 +291,18 @@ class ProductService extends BaseService
       }
 
 
-      $product->update($values);
+      Product::query()->where("id", $product->id)->update($values);
 
+      ProductVariation::query()->where("product_id", $product->id)->delete();
 
+      foreach ($variations as $variation) {
+        $values = [
+          "product_id" => $product->id,
+          "variation" => $variation
+        ];
+
+        ProductVariation::create($values);
+      }
       // Insert product package
       if ($request->has('package_type') && $request->package_type) {
         $packageType = $request->package_type;

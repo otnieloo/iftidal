@@ -159,3 +159,25 @@ if (qtyCart.length) {
     qty.addEventListener("change", function (e) {});
   }
 }
+
+const countdownElement = document.getElementById("countdown");
+let timeInSeconds = 300; // Set countdown time in seconds (e.g., 300 seconds = 5 minutes)
+
+function updateCountdown() {
+  const minutes = Math.floor(timeInSeconds / 60);
+  const seconds = timeInSeconds % 60;
+
+  countdownElement.textContent = `${minutes
+    .toString()
+    .padStart(2, "0")} minutes ${seconds.toString().padStart(2, "0")} seconds`;
+
+  if (timeInSeconds > 0) {
+    timeInSeconds--;
+  } else {
+    clearInterval(interval);
+    alert("Countdown complete!");
+  }
+}
+if (countdownElement) {
+  const interval = setInterval(updateCountdown, 1000);
+}

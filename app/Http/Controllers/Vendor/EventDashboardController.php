@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Apps\User;
+namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class EventController extends Controller
+class EventDashboardController extends Controller
 {
   /**
    * Display a listing of the resource.
@@ -14,7 +16,24 @@ class EventController extends Controller
    */
   public function index()
   {
-    return $this->view_admin("users.events.index", "Events", [], TRUE);
+    $start_date_string = str_replace(' ', '+', request()->query("start"));
+    $end_date_string = str_replace(' ', '+', request()->query("end"));
+
+    $start_date = Carbon::parse($start_date_string)->format("Y-m-d");
+    $end_date = Carbon::parse($end_date_string)->format("Y-m-d");
+
+    $get_events = Order::query()
+    ->select([
+      "event_name", "event_date", "event_start_time",
+    ])
+    ->whereHas("order_products", function($query) {
+      return $query->where("vendor_id", auth()->user()->vendor_id);
+    })
+    ->whereBetween("event_date", [$start_date, $end_date])
+    ->get();
+
+    $response = response_data($get_events);
+    return response_json($response);
   }
 
   /**
@@ -24,11 +43,7 @@ class EventController extends Controller
    */
   public function create()
   {
-    // return $this->view_admin("user.event.event-setup", "Setup Event", [
-    //   'product' => false,
-    //   'vendor' => false
-    // ], TRUE);
-    return $this->view_admin("users.events.create", "Setup Event", [], TRUE);
+    //
   }
 
   /**

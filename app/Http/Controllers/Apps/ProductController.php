@@ -7,8 +7,11 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductCondition;
+use App\Models\ProductGuarantee;
 use App\Models\ProductLevel;
 use App\Models\ProductPackage;
+use App\Models\ProductPaymentRelease;
+use App\Models\ProductVariation;
 use App\Models\Vendor;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
@@ -43,23 +46,32 @@ class ProductController extends Controller
     foreach ($products as $product) {
       $no++;
       $row = [];
-      $row[] = $no;
+      $row[] = '
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="product_id[]" value=' . $product->id . '>
+        </div>
+      ';
       $row[] = $product->product_name;
-      $row[] = myr_currency($product->product_sell_price);
-      $row[] = myr_currency($product->product_capital_price);
-      $row[] = $product->product_slot;
-      $row[] = $product->product_level;
-      $row[] = $product->product_status;
 
-      $button = "<a href='" . route('app.products.edit', $product->id) . "' class='btn btn-info btn-sm'><i class='fa-solid fa-pen-to-square'></i></a>";
-      $button .= form_delete("formProduct$product->id", route("app.products.destroy", $product->id));
-
+      $button = '
+        <a href="' . route('app.services.edit', $product->id) . '" class="btn btn-info btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+        <a class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></a>
+      ';
       if ($product->product_status_id == 1 && is_role("Super Admin")) {
         $button .= form_custom("formApproveProduct$product->id", route("app.products.approve", $product->id), "fa-solid fa-check", "success", __("Approve this product?"));
         $button .= form_custom("formDeclineProduct$product->id", route("app.products.decline", $product->id), "fa-solid fa-xmark", "danger", __("Decline this product?"));
       }
-
       $row[] = $button;
+
+      $row[] = myr_currency($product->order_items_sum_grand_total);
+      $row[] = myr_currency($product->product_sell_price);
+      $row[] = $product->product_slot;
+      $row[] = $product->product_level;
+      $row[] = $product->product_status;
+
+      $button = "<a href='" . route('app.products.edit', $product->id) . "' class='btn btn-info btn-sm'>Edit</a>";
+      $button .= form_delete("formProduct$product->id", route("app.products.destroy", $product->id));
+
       $data[] = $row;
     }
 
@@ -90,26 +102,38 @@ class ProductController extends Controller
 
 
     foreach ($products as $product) {
+      // dd($product);
+
       $no++;
       $row = [];
-      $row[] = $no;
+      $row[] = '
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="product_id[]" value=' . $product->id . '>
+        </div>
+      ';
       $row[] = $product->product_name;
-      $row[] = myr_currency($product->product_sell_price);
+
+      $button = '
+        <a href="' . route('app.products.edit', $product->id) . '" class="btn btn-info btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+        <a class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></a>
+      ';
+
+      if ($product->product_status_id == 1 && is_role("Super Admin")) {
+        $button .= form_custom("formApproveProduct$product->id", route("app.products.approve", $product->id), "fa-solid fa-check", "success", __("Approve this product?"));
+        $button .= form_custom("formDeclineProduct$product->id", route("app.products.decline", $product->id), "fa-solid fa-xmark", "danger", __("Decline this product?"));
+      }
+      $row[] = $button;
+
+      $row[] = myr_currency($product->order_items_sum_grand_total);
       $row[] = myr_currency($product->product_sell_price);
       $row[] = $product->product_stock;
       $row[] = $product->product_condition;
       $row[] = $product->product_status;
 
 
-      $button = "<a href='" . route('app.products.edit', $product->id) . "' class='btn btn-info btn-sm'><i class='fa-solid fa-pen-to-square'></i></a>";
+      $button = "<a href='" . route('app.products.edit', $product->id) . "' class='btn btn-info btn-sm'>Edit</a>";
       $button .= form_delete("formProduct$product->id", route("app.products.destroy", $product->id));
 
-      if ($product->product_status_id == 1 && is_role("Super Admin")) {
-        $button .= form_custom("formApproveProduct$product->id", route("app.products.approve", $product->id), "fa-solid fa-check", "success", __("Approve this product?"));
-        $button .= form_custom("formDeclineProduct$product->id", route("app.products.decline", $product->id), "fa-solid fa-xmark", "danger", __("Decline this product?"));
-      }
-
-      $row[] = $button;
       $data[] = $row;
     }
 
@@ -147,6 +171,9 @@ class ProductController extends Controller
     $sub_categories = ProductCategory::where('parent_category', 0)->get();
     $product_levels = ProductLevel::all();
     $conditions = ProductCondition::all();
+    $payment_releases = ProductPaymentRelease::all();
+    $guarantees = ProductGuarantee::all();
+
     $type = request()->segment(2);
 
     return $this->view_admin("admin.product.create", "Create Product", [
@@ -155,7 +182,8 @@ class ProductController extends Controller
       'conditions' => $conditions,
       'type' => $type,
       'product_levels' => $product_levels,
-
+      'payment_releases' => $payment_releases,
+      'guarantees' => $guarantees
     ], TRUE);
   }
 
@@ -194,6 +222,12 @@ class ProductController extends Controller
     $conditions = ProductCondition::all();
     $product_levels = ProductLevel::all();
     $package = ProductPackage::query()->where("product_id", $product->id)->first();
+    $payment_releases = ProductPaymentRelease::all();
+    $guarantees = ProductGuarantee::all();
+    $variations = ProductVariation::query()
+      ->select(["variation"])
+      ->where('product_id', $product->id)
+      ->get();
 
     $type = request()->segment(2);
 
@@ -204,7 +238,10 @@ class ProductController extends Controller
       'product' => $product->load('product_images', 'product_package'),
       'type' => $type,
       'product_levels' => $product_levels,
-      "package" => $package
+      "package" => $package,
+      'payment_releases' => $payment_releases,
+      'guarantees' => $guarantees,
+      'variations' => $variations
     ], TRUE);
   }
 

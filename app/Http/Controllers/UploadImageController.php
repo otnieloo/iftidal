@@ -73,6 +73,7 @@ class UploadImageController extends Controller
       $filePath = public_path('storage/' . $productImage->product_image);
     }
 
+    // dd(basename($filePath));
     // Check if the file exists
     if (file_exists($filePath)) {
       // Return the file as a response

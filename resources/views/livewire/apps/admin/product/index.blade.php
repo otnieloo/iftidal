@@ -34,9 +34,9 @@
 
         <div class="card-body">
           @if($is_product)
-          @livewire('apps.admin.product.product')
+            @livewire('apps.admin.product.product')
           @else
-          @livewire('apps.admin.product.service')
+            @livewire('apps.admin.product.service')
           @endif
         </div>
       </div>

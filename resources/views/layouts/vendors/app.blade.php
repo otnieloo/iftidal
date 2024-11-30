@@ -17,6 +17,7 @@
 
   <!-- BOOTSTRAP CSS -->
   <link id="style" href="{{asset('build/assets/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
 
   <!-- APP SCSS -->
   @vite(['resources/sass/app.scss'])
@@ -95,7 +96,7 @@
   <script src="{{asset('build/assets/plugins/jquery/jquery.min.js')}}"></script>
 
   <!-- BOOTSTRAP5 BUNDLE JS -->
-  <script src="{{asset('build/assets/plugins/bootstrap/popper.min.js')}}"></script>
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
   <script src="{{asset('build/assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
 
   <!-- PERFECT-SCROLLBAR JS  -->

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Apps\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileVendorRequest;
+use App\Models\Product;
 use App\Models\Vendor;
 use App\Models\VendorBussiness;
 use App\Models\VendorCategory;
@@ -36,7 +37,11 @@ class ProfileController extends Controller
       "vendor_businesses" => VendorBussiness::all(),
       "vendor_categories" => VendorCategory::all(),
       "vendor_types" => VendorType::all(),
+
+      "products" => Product::query()->where("vendor_id", auth()->user()->vendor_id)->where("product_service", 0)->get(),
+      "services" => Product::query()->where("vendor_id", auth()->user()->vendor_id)->where("product_service", 1)->get(),
     ];
+    $data["product_details"] = array_merge($data["products"]->toArray(), $data["services"]->toArray());
     // dd($data["vendor"]);
 
     return $this->view_admin("vendors.profiles.index", "Profile", $data, TRUE);

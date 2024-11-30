@@ -19,22 +19,15 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   var calendar = new FullCalendar.Calendar(calendarEl, {
-    headerToolbar: {
-      left: "prev,next today",
-      center: "title",
-      right: "dayGridMonth,timeGridWeek,timeGridDay",
-    },
-
-    // defaultView: 'month',
+        // defaultView: 'month',
     navLinks: true, // can click day/week names to navigate views
     businessHours: true, // display business hours
-    editable: true,
-    selectable: true,
+    editable: false,
+    selectable: false,
     selectMirror: true,
     eventClick: function (arg) {
-      // Event
+      alert("TEST");
     },
-    editable: true,
     dayMaxEvents: true, // allow "more" link when too many events
     events: events,
   });

@@ -34,7 +34,7 @@ class ProductRequest extends FormRequest
       'product_sell_price' => ['required', 'numeric'],
       'product_sku' => ['nullable'],
       'product_slot' => ['nullable'],
-      'product_stock' => ['nullable'],
+      // 'product_stock' => [$this->has("product_condition_id") ? 'required' : 'nullable'],
       'product_description' => ['required'],
       'tmp' => ['required', 'array'],
       'tmp.*' => ['required'],
@@ -43,7 +43,19 @@ class ProductRequest extends FormRequest
       'minimum_qty' => ['nullable', 'numeric'],
       'package_price_percent' => ['nullable', 'numeric'],
       'package_price_per_product' => ['nullable', 'numeric'],
-      'package_price_total' => ['nullable', 'numeric']
+      'package_price_total' => ['nullable', 'numeric'],
+
+      'variations' => [
+        "required", 'array'
+      ],
+
+      'payment_release_id' => [
+        'required', 'exists:product_payment_releases,id'
+      ],
+
+      'product_guarantee_id' => [
+        'required', 'exists:product_guarantees,id'
+      ]
     ];
   }
 }

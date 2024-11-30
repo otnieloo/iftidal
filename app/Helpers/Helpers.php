@@ -132,7 +132,7 @@ if (!function_exists("move_tmp_file")) {
 if (!function_exists("myr_currency")) {
   function myr_currency($amount)
   {
-    $formatted_amount = 'RM ' . number_format($amount, 2, '.', ',');
+    $formatted_amount = 'RM ' . number_format( (int) $amount, 2, '.', ',');
 
     return $formatted_amount;
   }

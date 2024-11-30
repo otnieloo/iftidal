@@ -20,6 +20,6 @@ class Index extends Component
 
     public function render()
     {
-        return view('livewire..apps.users.orders.index');
+        return view('livewire.apps.users.orders.index');
     }
 }

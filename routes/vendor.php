@@ -4,10 +4,15 @@ use App\Http\Controllers\Apps\Vendor\DashboardController;
 use App\Http\Controllers\Apps\Vendor\OrderController;
 use App\Http\Controllers\Apps\Vendor\ProductController;
 use App\Http\Controllers\Apps\Vendor\ProfileController;
+use App\Http\Controllers\Vendor\EventDashboardController;
+use App\Http\Controllers\Vendor\ReportDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(["auth", "check_division:2"])->group(function() {
   Route::get("/dashboard", DashboardController::class)->name("vendor.dashboard.index");
+
+  Route::get("/dashboard/events", [EventDashboardController::class, "index"])->name("vendor.dashboard.get-events");
+  Route::get("/dashboard/graphs", [ReportDashboardController::class, "get_graphs"])->name("vendor.dashboard.get-graphs");
 
   Route::get("/profiles", [ProfileController::class, "index"])->name("vendor.profiles.index");
   Route::put("/profiles", [ProfileController::class, "update"])->name("vendor.profiles.update");

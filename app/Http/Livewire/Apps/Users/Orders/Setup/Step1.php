@@ -22,31 +22,41 @@ class Step1 extends Component
 
   protected $rules = [
     "event_name" => [
-      "required", "string", "max:200"
+      "required",
+      "string",
+      "max:200"
     ],
     "event_type_id" => [
-      "required", "exists:event_types,id"
+      "required",
+      "exists:event_types,id"
     ],
     "event_date" => [
-      "required", "date_format:Y-m-d"
+      "required",
+      "date_format:Y-m-d"
     ],
     "event_start_time" => [
-      "required", "date_format:H:i"
+      "required",
+      "date_format:H:i"
     ],
     "event_end_time" => [
-      "required", "date_format:H:i"
+      "required",
+      "date_format:H:i"
     ],
     "location_id" => [
-      "required", "exists:locations,id"
+      "required",
+      "exists:locations,id"
     ],
     "event_guest_count" => [
-      "required", "numeric"
+      "required",
+      "numeric"
     ],
     "event_start_budget" => [
-      "required", "numeric"
+      "required",
+      "numeric"
     ],
     "event_end_budget" => [
-      "required", "numeric"
+      "required",
+      "numeric"
     ],
   ];
 
@@ -94,8 +104,8 @@ class Step1 extends Component
 
     if ($this->order) {
       Order::query()
-      ->where("id", $this->order->id)
-      ->update($values);
+        ->where("id", $this->order->id)
+        ->update($values);
 
       $order = $this->order;
     } else {

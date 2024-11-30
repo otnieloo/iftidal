@@ -16,25 +16,28 @@ class DatabaseSeeder extends Seeder
   public function run()
   {
     $this->call([
-      RoleSeed::class,
-      UserStatusSeeder::class,
-      UserSeed::class,
-      ModuleSeeder::class,
-      ProjectSettingSeed::class,
-      VendorStatusSeeder::class,
-      VendorSeeder::class,
-      ProductConditionSeeder::class,
-      ProductLevelSeeder::class,
-      ProductCategorySeeder::class,
-      ProductStatusSeeder::class,
-      VendorTypeSeeder::class,
-      VendorBusinessedSeeder::class,
-      VendorCategorySeeder::class,
+      // RoleSeed::class,
+      // UserStatusSeeder::class,
+      // UserSeed::class,
+      // ModuleSeeder::class,
+      // ProjectSettingSeed::class,
+      // VendorStatusSeeder::class,
+      // VendorSeeder::class,
+      // ProductConditionSeeder::class,
+      // ProductLevelSeeder::class,
+      // ProductCategorySeeder::class,
+      // ProductStatusSeeder::class,
+      // VendorTypeSeeder::class,
+      // VendorBusinessedSeeder::class,
+      // VendorCategorySeeder::class,
 
-      OrderStatusSeeder::class,
-      EventTypeSeeder::class,
-      PaymentStatusSeeder::class,
-      LocationSeeder::class,
+      // OrderStatusSeeder::class,
+      // EventTypeSeeder::class,
+      // PaymentStatusSeeder::class,
+      // LocationSeeder::class,
+
+      ProductPaymentReleaseSeeder::class,
+      ProductGuaranteeSeeder::class,
     ]);
     // \App\Models\User::factory(10)->create();
 

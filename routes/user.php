@@ -15,7 +15,6 @@ Route::middleware(["auth", "check_division:3"])->group(function () {
   Route::get("/events/create", [EventController::class, "create"])->name("user.events.create");
   Route::post("/events/cart", [CartController::class, "store"])->name("user.events.cart.store");
 
-
   Route::get("/orders", [OrderController::class, "index"])->name("user.orders.index");
   Route::get("/orders/{order}", [OrderController::class, "show"])->name("user.orders.show");
 });

@@ -14,30 +14,35 @@
             <div class="row">
               <!-- col -->
               <div class="col-lg-4">
-                <ul class="treeview ">
-                  <li>
-                    <a href="javascript:void(0);">
-                      Food
-                    </a>
-                    <ul>
-                      <li>
-                        <div class="d-flex align-items-center">
-                          <input type="checkbox" class="criteria-control" value="terms" name="terms">
-                          <label for="" style="margin-top:10px;">Makanan
-                            Ringan</label>
-                        </div>
-                      </li>
 
-                      <li>
-                        <div class="d-flex align-items-center">
-                          <input type="checkbox" class="criteria-control" value="terms" name="terms">
-                          <label for="" style="margin-top:10px;">Makanan
-                            Basah</label>
-                        </div>
-                      </li>
-
-                    </ul>
+                <h5 class="fw-bold">Category</h5>
+                <ul class="list-group">
+                  <li
+                    class="list-group-item list-group-category active d-flex align-items-center justify-content-between"
+                    aria-current="true">
+                    <div>A second item</div>
+                    <span class="badge bg-success">1</span>
                   </li>
+                  <li class="list-group-item list-group-category d-flex align-items-center justify-content-between">
+                    <div>A second item</div>
+                    <span class="badge bg-success">1</span>
+                  </li>
+
+                  <li class="list-group-item list-group-category d-flex align-items-center justify-content-between">
+                    <div>A second item</div>
+                    <span class="badge bg-success">1</span>
+                  </li>
+
+                  <li class="list-group-item list-group-category d-flex align-items-center justify-content-between">
+                    <div>A second item</div>
+                    <span class="badge bg-success">1</span>
+                  </li>
+
+                  <li class="list-group-item list-group-category d-flex align-items-center justify-content-between">
+                    <div>A second item</div>
+                    <span class="badge bg-success">1</span>
+                  </li>
+
 
                 </ul>
               </div>
@@ -45,27 +50,27 @@
 
               <!-- col -->
               <div class="col-lg-4">
-                <ul class="treeview ">
-                  <li>
-                    <a href="javascript:void(0);">
-                      Drink
-                    </a>
-                    <ul>
-                      <li>
-                        <div class="d-flex align-items-center">
-                          <input type="checkbox" class="criteria-control" value="terms" name="terms">
-                          <label for="" style="margin-top:10px;">Soda</label>
-                        </div>
-                      </li>
+                <h5 class="fw-bold">Sub Category</h5>
 
-                      <li>
-                        <div class="d-flex align-items-center">
-                          <input type="checkbox" class="criteria-control" value="terms" name="terms">
-                          <label for="" style="margin-top:10px;">Air Putih</label>
-                        </div>
-                      </li>
+                <ul class="list-group">
+                  <li class="list-group-item d-flex align-items-center">
+                    <input type="checkbox">
+                    <div>Sub Category</div>
+                  </li>
 
-                    </ul>
+                  <li class="list-group-item d-flex align-items-center">
+                    <input type="checkbox">
+                    <div>Sub Category</div>
+                  </li>
+
+                  <li class="list-group-item d-flex align-items-center">
+                    <input type="checkbox">
+                    <div>Sub Category</div>
+                  </li>
+
+                  <li class="list-group-item d-flex align-items-center">
+                    <input type="checkbox">
+                    <div>Sub Category</div>
                   </li>
 
                 </ul>

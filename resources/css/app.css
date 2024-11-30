@@ -1,38 +1,34 @@
 @import "../assets/switcher/css/switcher.css";
 @import "../assets/switcher/demo.css";
 
-
-
 .event-summary {
-    display: flex;
-    gap: 1rem;
+  display: flex;
+  gap: 1rem;
 }
 
 .event-summary .badges {
-    padding: .5rem 3rem;
-
+  padding: 0.5rem 3rem;
 }
 
-.event-summary .badges:nth-child(odd){
-    background: #ffcd29d8;
-
+.event-summary .badges:nth-child(odd) {
+  background: #ffcd29d8;
 }
 
-
-
-.event-summary .badges:nth-child(even){
-    background: #ffe8a3d7;
+.event-summary .badges:nth-child(even) {
+  background: #ffe8a3d7;
 }
-
-
 
 .criteria-selected {
-    background: #FFCD29 !important;
+  background: #ffcd29 !important;
 }
 
-
 .button-wizzard {
-    width: 100%;
+  width: 100%;
+}
+
+.wizzard-action {
+  margin-top: 4rem;
+  margin-bottom: 2rem;
 }
 
 .wizzard-action {
@@ -41,105 +37,120 @@
 }
 
 .prev {
-    background-color: rgba(128, 128, 128, 0.822) !important;
-    border-color: rgba(128, 128, 128, 0.822) !important;
+  background-color: rgba(128, 128, 128, 0.822) !important;
+  border-color: rgba(128, 128, 128, 0.822) !important;
 }
 .prev:hover {
-    background-color: gray !important;
-    border-color: gray !important;
-
+  background-color: gray !important;
+  border-color: gray !important;
 }
 
 .register-href {
-    color:skyblue !important;
+  color: skyblue !important;
 }
 
 .listing-text {
-    color: skyblue;
+  color: skyblue;
 }
 
 .text-secondary {
-    color: #009999 !important;
+  color: #009999 !important;
 }
 
 .btn-gray {
-    background-color: #757575;
+  background-color: #757575;
 }
 
 .vendor-search {
-    cursor: pointer;
-    margin-bottom: 1rem;
-    padding: .5rem 1rem;
-
+  cursor: pointer;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .vendor-search:hover {
-    background: #dbdbdb;
+  background: #dbdbdb;
 }
 
-
 .product-cart {
-    padding:1rem 2rem;
+  padding: 1rem 2rem;
 }
 
 .qty-button {
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: gray;
-    width: 20px;
-    height: 20px;
-    border-radius: 100%;
-    color:white;
-    font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: gray;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  color: white;
+  font-weight: bold;
 }
 
 .qty-input {
-    width: 40%;
-    margin-left: .5rem;
-    margin-right: .5rem;
-    background-color: #FFE8A3 !important;
-    color:black;
+  width: 40%;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  background-color: #ffe8a3 !important;
+  color: black;
 }
 
 .gap-1 {
-    gap: 1rem;
+  gap: 1rem;
 }
 
 .gap-2 {
-    gap: 2rem;
+  gap: 2rem;
 }
 
 .gap-3 {
-    gap: 3rem;
+  gap: 3rem;
 }
 
-
 .progress-container {
-    background-color: #009999 !important;
-    width:300px;
-    border-radius: 3px;
+  background-color: #009999 !important;
+  width: 300px;
+  border-radius: 3px;
 }
 
 .progress-sub-container {
-    background-color: #FFCD29 !important;
-    border-radius: 3px;
-
+  background-color: #ffcd29 !important;
+  border-radius: 3px;
 }
 
 .container-review {
-    border-bottom: 3px solid rgb(226, 226, 226);
+  border-bottom: 3px solid rgb(226, 226, 226);
 }
 
-.voucher-container {
-    border-top: 4px solid gray;
-}
 
 .border-top-dashed {
-    border-top:2px dashed gray;
+  border-top: 2px dashed gray;
 }
 
 .default-select {
-    border-radius: 0;
+  border-radius: 0;
+}
+
+
+.cart-body {
+  padding: 0 !important;
+}
+
+.table .table-heading-one {
+  color: #757575 !important;
+  font-weight: bolder;
+  font-size: 17 px;
+}
+
+
+.list-group-category.active {
+  background-color: #FFE8A3;
+  color: black;
+}
+
+.list-group-category:hover {
+  cursor: pointer;
+  background-color: #FFE8A3 !important;
+  color: black;
 }

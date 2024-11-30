@@ -120,7 +120,8 @@
       <div class="col-12">
         <div class="row align-items-center">
           <div class="col-lg-5 col-md-12 d-flex" style="gap:1rem;">
-            <img src="{{ $vendor->logo }}" onerror="CORE.onerrorProfileVendor(this)" style="width: 60px;height:60px;object-fit:cover" alt="">
+            <img src="{{ $vendor->logo }}" onerror="CORE.onerrorProfileVendor(this)"
+              style="width: 60px;height:60px;object-fit:cover" alt="">
             {{-- <div style="width: 60px;height:60px;background:skyblue;border-radius:7px;"></div> --}}
             <div>
               <h3 class="fw-bold" style="margin-bottom: 0;">{{ $vendor->company_name }}</h3>

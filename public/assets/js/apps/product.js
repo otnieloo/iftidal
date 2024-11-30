@@ -161,3 +161,23 @@ productDescription.addEventListener("keyup", function (e) {
     porductDescriptionWord.textContent = `${maxChars}/${maxChars}`; // Correct display if cut off
   }
 });
+
+const choices = new Choices("#selectVariations", {
+  removeItemButton: true, // Bisa hapus pilihan
+  addChoices: true,
+  duplicateItemsAllowed: false, // Hindari duplikasi item
+  maxItemCount: 10, // Maksimal 10 pilihan
+  placeholderValue: "Select or type options...",
+});
+
+const listVariations = JSON.parse(document.querySelector("#listVariations").value);
+
+let variations = [];
+listVariations.forEach((variation) => {
+  variations.push({
+    value: variation.variation,
+    label: variation.variation,
+    selected: true,
+  });
+})
+choices.setChoices(variations, "value", "label", true);

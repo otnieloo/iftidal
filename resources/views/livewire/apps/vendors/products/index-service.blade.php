@@ -2,14 +2,18 @@
   <table class="table table-bordered text-nowrap border-bottom" id="tableService">
     <thead>
       <tr>
-        <th>No</th>
+        <th>
+          <div class="form-check form-check-sm">
+            <input class="form-check-input" type="checkbox" id="checkAll" />
+          </div>
+        </th>
         <th>Service (s)</th>
+        <th data-orderable="false"></th>
         <th>Sales</th>
         <th>Session Price</th>
         <th>Slot</th>
         <th>Level</th>
-        <th>Status</th>
-        <th>Action</th>
+        <th data-orderable="false">Status</th>
       </tr>
     </thead>
     <tbody></tbody>
