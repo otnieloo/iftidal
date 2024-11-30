@@ -13,6 +13,7 @@
           <div class="card">
             <div>
               <div id="owl-demo2" class="owl-carousel owl-carousel-icons2">
+
                 @foreach ($product->product_images as $image)
 
                 <div class="item">

@@ -143,7 +143,7 @@ class ProductService extends BaseService
         $productImage = [];
 
         foreach ($request->tmp as $tmp) {
-          [$newImage, $movedFile] = move_tmp_file($tmp, 'product/image');
+          [$newImage, $movedFile] = move_tmp_file($tmp, 'public/product/image');
           $productImage[] = [
             'product_id' => $product->id,
             'product_image' => $newImage

@@ -59,10 +59,6 @@ class ProductController extends Controller
       $row[] = $product->product_level;
       $row[] = '<p class="text-' . $product->color . '">' . $product->product_status . '</p>';
 
-      $button = "<a href='" . route('vendor.products.edit', $product->id) . "' class='btn btn-info btn-sm'><i class='fa-solid fa-pen-to-square'></i></a>";
-      // $button .= form_delete("formProduct$product->id", route("vendor.products.destroy", $product->id));
-
-      $row[] = $button;
       $data[] = $row;
     }
 

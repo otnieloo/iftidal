@@ -67,10 +67,7 @@ class ProductController extends Controller
       $row[] = myr_currency($product->product_sell_price);
       $row[] = $product->product_slot;
       $row[] = $product->product_level;
-      $row[] = $product->product_status;
-
-      $button = "<a href='" . route('app.products.edit', $product->id) . "' class='btn btn-info btn-sm'>Edit</a>";
-      $button .= form_delete("formProduct$product->id", route("app.products.destroy", $product->id));
+      $row[] = '<p class="text-' . $product->color . '">' . $product->product_status . '</p>';
 
       $data[] = $row;
     }
@@ -127,12 +124,8 @@ class ProductController extends Controller
       $row[] = myr_currency($product->order_items_sum_grand_total);
       $row[] = myr_currency($product->product_sell_price);
       $row[] = $product->product_stock;
-      $row[] = $product->product_condition;
-      $row[] = $product->product_status;
-
-
-      $button = "<a href='" . route('app.products.edit', $product->id) . "' class='btn btn-info btn-sm'>Edit</a>";
-      $button .= form_delete("formProduct$product->id", route("app.products.destroy", $product->id));
+      $row[] = $product->variations_count;
+      $row[] = '<p class="text-' . $product->color . '">' . $product->product_status . '</p>';
 
       $data[] = $row;
     }
