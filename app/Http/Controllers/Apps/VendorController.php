@@ -76,7 +76,7 @@ class VendorController extends Controller
   public function index()
   {
 
-    return $this->view_admin("admin.vendors.index", "Vendor Management", [], TRUE);
+    return $this->view("admin.vendors.index", "Vendor Management", [], TRUE);
   }
 
   /**
@@ -88,7 +88,7 @@ class VendorController extends Controller
     $vendor_businesses = VendorBussiness::all();
     $vendor_categories = VendorCategory::query()->whereNotNull("parent_category_id")->get();
 
-    return $this->view_admin("admin.vendors.create", "Tambah Vendor", [
+    return $this->view("admin.vendors.create", "Tambah Vendor", [
       "type" => "create",
       "vendor_businesses" => $vendor_businesses,
       "vendor_categories" => $vendor_categories
@@ -125,7 +125,7 @@ class VendorController extends Controller
       "vendor_types" => VendorType::all(),
     ];
 
-    return $this->view_admin("admin.vendors.show", "Detail Vendor", $data);
+    return $this->view("admin.vendors.show", "Detail Vendor", $data);
   }
 
   /**
@@ -138,7 +138,7 @@ class VendorController extends Controller
     $vendor_businesses = VendorBussiness::all();
     $vendor_categories = VendorCategory::query()->whereNotNull("parent_category_id")->get();
 
-    return $this->view_admin("admin.vendors.edit", "Edit Vendor", [
+    return $this->view("admin.vendors.edit", "Edit Vendor", [
       "vendor" => $vendor,
       "type" => "edit",
       "vendor_businesses" => $vendor_businesses,

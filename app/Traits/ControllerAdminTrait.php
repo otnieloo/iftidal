@@ -1,42 +1,45 @@
-<?php namespace App\Traits;
+<?php
+namespace App\Traits;
 
 trait ControllerAdminTrait
 {
-  protected function view_admin($view_name, $title, $data = [], $first_page = FALSE)
-  {
-    $data['title'] = $title;
-    // dd($view_name);
+    protected function view($view_name, $title, $data = [], $first_page = FALSE)
+    {
+        $data['title'] = $title;
+        // dd($view_name);
 
-    $current_url = url()->current();
-    $list_query_string = \request()->query();
-    $query_string = "?";
-    $delimiter = "";
-    foreach ($list_query_string as $key => $value) {
-        $query_string .= "$delimiter$key=$value";
-        $delimiter = "&";
+        $current_url = url()->current();
+        $list_query_string = \request()->query();
+        $query_string = "?";
+        $delimiter = "";
+        foreach ($list_query_string as $key => $value) {
+            $query_string .= "$delimiter$key=$value";
+            $delimiter = "&";
+        }
+        $full_url = "$current_url$query_string";
+
+        $type_breadcrumb = \Illuminate\Support\Str::random(6);
+        if (isset($data["type_breadcrumb"])) {
+            $type_breadcrumb = $data["type_breadcrumb"];
+        }
+        $data["breadcrumb"] = $this->draw_breadcrumb($title, $full_url, $type_breadcrumb, $first_page);
+        // dd($data);
+
+        return view($view_name, $data);
     }
-    $full_url = "$current_url$query_string";
 
-    $type_breadcrumb = \Illuminate\Support\Str::random(6);
-    if (isset($data["type_breadcrumb"])) {
-        $type_breadcrumb = $data["type_breadcrumb"];
-    }
-    $data["breadcrumb"] = $this->draw_breadcrumb($title, $full_url, $type_breadcrumb, $first_page);
-    // dd($data);
-
-    return view($view_name, $data);
-  }
-
-  private function push_breadcrumb($title, $link, $type, $delete = FALSE)
+    private function push_breadcrumb($title, $link, $type, $delete = FALSE)
     {
         $breadcrumb = session("breadcrumb");
 
         if ($delete) {
-            $breadcrumb = [[
-                "link" => $link,
-                "title" => $title,
-                "type" => $type
-            ]];
+            $breadcrumb = [
+                [
+                    "link" => $link,
+                    "title" => $title,
+                    "type" => $type
+                ]
+            ];
 
             session(["breadcrumb" => $breadcrumb]);
         } else {

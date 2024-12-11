@@ -49,7 +49,7 @@ class ProductController extends Controller
       $row[] = $product->product_name;
 
       $row[] = '
-        <a href="'. route('vendor.services.edit', $product->id) .'" class="btn btn-info btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+        <a href="' . route('vendor.services.edit', $product->id) . '" class="btn btn-info btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
         <a class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></a>
       ';
 
@@ -95,13 +95,13 @@ class ProductController extends Controller
       $row = [];
       $row[] = '
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="product_id[]" value='. $product->id .'>
+          <input class="form-check-input" type="checkbox" name="product_id[]" value=' . $product->id . '>
         </div>
       ';
       $row[] = $product->product_name;
 
       $row[] = '
-        <a href="'. route('vendor.products.edit', $product->id) .'" class="btn btn-info btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+        <a href="' . route('vendor.products.edit', $product->id) . '" class="btn btn-info btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
         <a class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can"></i></a>
       ';
 
@@ -109,7 +109,7 @@ class ProductController extends Controller
       $row[] = myr_currency($product->product_sell_price);
       $row[] = $product->product_stock;
       $row[] = $product->variations_count;
-      $row[] = '<p class="text-'. $product->color .'">'. $product->product_status .'</p>';
+      $row[] = '<p class="text-' . $product->color . '">' . $product->product_status . '</p>';
 
       $data[] = $row;
     }
@@ -130,7 +130,7 @@ class ProductController extends Controller
    */
   public function index()
   {
-    return $this->view_admin("vendors.products.index", "Product Management", [], TRUE);
+    return $this->view("vendors.products.index", "Product Management", [], TRUE);
   }
 
   /**
@@ -147,7 +147,7 @@ class ProductController extends Controller
     $guarantees = ProductGuarantee::all();
     $type = request()->segment(2);
 
-    return $this->view_admin("vendors.products.create", "Create Product", [
+    return $this->view("vendors.products.create", "Create Product", [
       'categories' => $categories,
       'sub_categories' => $sub_categories,
       'conditions' => $conditions,
@@ -217,7 +217,7 @@ class ProductController extends Controller
       'variations' => $variations,
     ];
 
-    return $this->view_admin("vendors.products.edit", "Edit Product", $data, TRUE);
+    return $this->view("vendors.products.edit", "Edit Product", $data, TRUE);
   }
 
   /**

@@ -44,7 +44,8 @@
   <div class="my-3">
     <input type="hidden" name="latitude" value="{{ $vendor->latitude ?? '3.1351092' }}">
     <input type="hidden" name="longitude" value="{{ $vendor->longitude ?? '101.6127829' }}">
-    <div id="maps" style="height: 200px;"></div>
+
+    <div id="maps" style="height: 200px; width: 100%;"></div>
   </div>
 
   <div class="row align-items-end my-3">

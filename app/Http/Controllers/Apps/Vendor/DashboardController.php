@@ -24,6 +24,6 @@ class DashboardController extends Controller
       "customers" => OrderProduct::query()->where("vendor_id", auth()->user()->vendor_id)->orderBy("user_id")->get(),
     ];
 
-    return $this->view_admin("vendors.index", "Dashboard", $data, TRUE);
+    return $this->view("vendors.index", "Dashboard", $data, TRUE);
   }
 }

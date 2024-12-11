@@ -67,6 +67,7 @@
   <div class="tab-content">
     <div id="form" class="tab-pane" role="tabpanel" aria-labelledby="form">
       @include('user.event.step.form')
+
     </div>
 
     <div id="criteria" class="tab-pane" role="tabpanel" aria-labelledby="criteria">

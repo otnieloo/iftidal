@@ -267,7 +267,6 @@ class ProductService extends BaseService
           }
         }
 
-
         // If there is a new image uplaod
         // store to database
         if (count($productImage)) {

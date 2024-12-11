@@ -1,4 +1,4 @@
-@if ($product)
+@if ($product ?? null)
 <div class="card">
   <div class="card-body">
     <div class="row">
@@ -113,7 +113,7 @@
 </div>
 @endif
 
-@if ($vendor)
+@if ($vendor ?? null)
 
 <div class="card">
   <div class="card-body px-5">

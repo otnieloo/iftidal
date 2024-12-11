@@ -7,7 +7,9 @@
 }
 
 .event-summary .badges {
-  padding: 0.5rem 3rem;
+  padding: .3rem 2.5rem;
+  border-radius: 4px;
+  font-weight: 600;
 }
 
 .event-summary .badges:nth-child(odd) {

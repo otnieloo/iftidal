@@ -45,7 +45,7 @@
         <a class="nav-link active" data-bs-toggle="pill" href="#aboutTab">About</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="pill" href="#editTab">Edit Profile</a>
+        <a class="nav-link" data-bs-toggle="pill" href="#editTab" onclick="Profile.map.invalidateSize()">Edit Profile</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="pill" href="#statusTab">Status</a>
@@ -148,7 +148,6 @@
 
       <!-- Modal body -->
       <div class="modal-body">
-        
         @include('users.events.modals.vendor-detail')
 
       </div>

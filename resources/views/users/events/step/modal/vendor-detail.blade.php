@@ -21,9 +21,9 @@
                     <div class="col-lg-6 col-md-12 d-flex" style="gap:1rem;">
                         <div style="width: 120px;height:120px;background:blue;"></div>
                         <div>
-                            <h2 class="fw-bolder">Vendor Name</h2>
-                            <h5 class="text-muted">Vendor Category</h5>
-                            <h5 class="text-muted">Vendor Sub Category</h5>
+                            <h2 class="fw-bolder" id="vendor-modal-company-name">Vendor Name</h2>
+                            <h5 class="text-muted" id="vendor-modal-category">Vendor Category</h5>
+                            <h5 class="text-muted" id="vendor-modal-subcategory">Vendor Sub Category</h5>
                         </div>
                     </div>
 
@@ -100,10 +100,10 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab011">
 
-                        <div class="row product-container">
+                        <div class="row product-container" id="product-container">
 
 
-                            @for ($i=0; $i < 8; $i++) <div class="col-lg-3 product-cart">
+                            <div class="col-lg-3 product-cart">
 
                                 <div>
                                     <div class="card custom-card overflow-hidden">
@@ -220,59 +220,59 @@
                                         style="width: 100%;">Detail</button>
                                     <button class="btn btn-info" style="width: 100%;">Add to cart</button>
                                 </div>
+                            </div>
+
+
                         </div>
-                        @endfor
 
                     </div>
-
-                </div>
-                <div class="tab-pane" id="tab21">
-                    <p> Et harum quidem rerum facilis est et expedita distinctio.
-                        Nam
-                        libero tempore, cum soluta nobis est eligendi optio cumque
-                        nihil
-                        impedit quo minus id quod maxime placeat facere possimus,
-                        omnis
-                        voluptas assumenda est, omnis dolor repellendus. </p>
-                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
-                        qui
-                        blanditiis praesentium voluptatum deleniti atque corrupti
-                        quos
-                        dolores et quas molestias excepturi sint occaecati
-                        cupiditate
-                        non provident, similique sunt in culpa qui officia deserunt
-                        mollitia animi, id est laborum et dolorum fuga.</p>
-                </div>
-                <div class="tab-pane" id="tab31">
-                    <p>Temporibus autem quibusdam et aut officiis debitis aut rerum
-                        necessitatibus saepe eveniet ut et voluptates repudiandae
-                        sint
-                        et molestiae non recusandae</p>
-                    <p> Et harum quidem rerum facilis est et expedita distinctio.
-                        Nam
-                        libero tempore, cum soluta nobis est eligendi optio cumque
-                        nihil
-                        impedit quo minus id quod maxime placeat facere possimus,
-                        omnis
-                        voluptas assumenda est, omnis dolor repellendus. </p>
-                </div>
-                <div class="tab-pane" id="tab41">
-                    <p>On the other hand, we denounce with righteous indignation and
-                        dislike men who are so beguiled and demoralized by the
-                        charms of
-                        pleasure of the moment, so blinded by desire</p>
-                    <p>Nam libero tempore, cum soluta nobis est eligendi optio
-                        cumque
-                        nihil impedit quo minus id quod maxime placeat facere
-                        possimus,
-                        omnis voluptas assumenda est, omnis dolor repellendus.
-                        Temporibus autem quibusdam et aut officiis debitis aut rerum
-                        necessitatibus </p>
+                    <div class="tab-pane" id="tab21">
+                        <p> Et harum quidem rerum facilis est et expedita distinctio.
+                            Nam
+                            libero tempore, cum soluta nobis est eligendi optio cumque
+                            nihil
+                            impedit quo minus id quod maxime placeat facere possimus,
+                            omnis
+                            voluptas assumenda est, omnis dolor repellendus. </p>
+                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                            qui
+                            blanditiis praesentium voluptatum deleniti atque corrupti
+                            quos
+                            dolores et quas molestias excepturi sint occaecati
+                            cupiditate
+                            non provident, similique sunt in culpa qui officia deserunt
+                            mollitia animi, id est laborum et dolorum fuga.</p>
+                    </div>
+                    <div class="tab-pane" id="tab31">
+                        <p>Temporibus autem quibusdam et aut officiis debitis aut rerum
+                            necessitatibus saepe eveniet ut et voluptates repudiandae
+                            sint
+                            et molestiae non recusandae</p>
+                        <p> Et harum quidem rerum facilis est et expedita distinctio.
+                            Nam
+                            libero tempore, cum soluta nobis est eligendi optio cumque
+                            nihil
+                            impedit quo minus id quod maxime placeat facere possimus,
+                            omnis
+                            voluptas assumenda est, omnis dolor repellendus. </p>
+                    </div>
+                    <div class="tab-pane" id="tab41">
+                        <p>On the other hand, we denounce with righteous indignation and
+                            dislike men who are so beguiled and demoralized by the
+                            charms of
+                            pleasure of the moment, so blinded by desire</p>
+                        <p>Nam libero tempore, cum soluta nobis est eligendi optio
+                            cumque
+                            nihil impedit quo minus id quod maxime placeat facere
+                            possimus,
+                            omnis voluptas assumenda est, omnis dolor repellendus.
+                            Temporibus autem quibusdam et aut officiis debitis aut rerum
+                            necessitatibus </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 

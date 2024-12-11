@@ -23,10 +23,15 @@ class Vendor extends Model
     return $this->belongsTo(VendorCategory::class, "vendor_category_id", "id");
   }
 
+  public function product(){
+    return $this->hasMany(Product::class);
+  }
+
   public function logo(): Attribute
   {
     return new Attribute(
-      get: fn($value) => !empty ($value) ? asset("assets/images/vendors-logo/$value") : NULL,
+      get: fn($value) => !empty ($value) ? asset("storage/$value") : NULL,
+      // get: fn($value) => !empty ($value) ? asset("assets/images/vendors-logo/$value") : NULL,
     );
   }
 

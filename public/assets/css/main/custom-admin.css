@@ -52,3 +52,14 @@
     transform: rotate(360deg);
   }
 }
+
+.list-group-category.active {
+  background-color: #FFE8A3;
+  color: black;
+}
+
+.list-group-category:hover {
+  cursor: pointer;
+  background-color: #FFE8A3 !important;
+  color: black;
+}

@@ -66,28 +66,28 @@
 
   <div class="tab-content">
     <div id="form" class="tab-pane" role="tabpanel" aria-labelledby="form">
-      {{-- @include('user.event.step.form') --}}
-      @livewire('apps.users.orders.setup.step1')
+      @include('users.events.step.form')
+      {{-- @livewire('apps.users.orders.setup.step1') --}}
     </div>
 
     <div id="criteria" class="tab-pane" role="tabpanel" aria-labelledby="criteria">
-      {{-- @include('user.event.step.criteria') --}}
-      @livewire('apps.users.orders.setup.step2')
+      @include('users.events.step.criteria')
+      {{-- @livewire('apps.users.orders.setup.step2') --}}
     </div>
 
     <div id="summary" class="tab-pane" role="tabpanel" aria-labelledby="summary">
-      {{-- @include('user.event.step.summary') --}}
-      @livewire('apps.users.orders.setup.step3')
+      @include('users.events.step.summary')
+      {{-- @livewire('apps.users.orders.setup.step3') --}}
     </div>
 
     <div id="vendorsearch" class="tab-pane" role="tabpanel" aria-labelledby="vendorsearch">
-      {{-- @include('user.event.step.vendor-search') --}}
-      @livewire('apps.users.orders.setup.step4')
+      @include('users.events.step.vendor-search')
+      {{-- @livewire('apps.users.orders.setup.step4') --}}
     </div>
 
     <div id="cart" class="tab-pane" role="tabpanel" aria-labelledby="cart">
-      {{-- @include('user.event.step.cart') --}}
-      @livewire('apps.users.orders.setup.step5')
+      @include('users.events.step.cart')
+      {{-- @livewire('apps.users.orders.setup.step5') --}}
     </div>
   </div>
 </div>
@@ -126,6 +126,7 @@
 <script src="{{asset('build/assets/plugins/gallery/lg-hash.js')}}"></script>
 <script src="{{asset('build/assets/plugins/gallery/lg-share.js')}}"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/dayjs.min.js"></script>
 <script src="{{ asset('assets/js/apps/event.js') }}"></script>
 <script src="{{ asset('assets/js/apps/setup-event.js?v=' . time()) }}"></script>
 

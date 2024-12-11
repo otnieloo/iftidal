@@ -18,9 +18,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\Facades\Alert;
-use App\Http\Livewire\Apps\Admin\Product\Index as ProductLivewire;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use App\Http\Livewire\Apps\Event\Index as EventSetupLivewire;
 use Laravel\Socialite\Facades\Socialite;
 
 /*
@@ -116,7 +113,6 @@ Route::middleware(["auth", "check_maintanance", "verified", "check_session_token
 });
 
 Route::get('app/event-setup', [EventController::class, 'index']);
-
 
 
 Route::get('/loadimage', [UploadImageController::class, 'load']);

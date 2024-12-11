@@ -1,24 +1,44 @@
-const Order = {
-  orderId: 1,
+let event_name = document.querySelector(`[name="event_name"]`);
+let event_type_id = document.querySelector(`[name="event_type_id"]`);
+let event_date = document.querySelector(`[name="event_date"]`);
+let event_start_time = document.querySelector(`[name="event_start_time"]`);
+let event_end_time = document.querySelector(`[name="event_end_time"]`);
+let location_id = document.querySelector(`[name="location_id"]`);
+let event_guest_count = document.querySelector(`[name="event_guest_count"]`);
+let event_start_budget = document.querySelector(`[name="event_start_budget"]`);
+let event_end_budget = document.querySelector(`[name="event_end_budget"]`);
+let vendor_range = document.querySelector(`[name="vendor_range"]`);
+let latitude = document.querySelector(`#latitudeUser`);
+let longitude = document.querySelector(`#longitudeUser`);
 
-  setOrderId(orderId) {
-    Order.orderId = orderId;
+const Order = {
+  orderID: 0,
+  allowLocation: false,
+
+  next() {
+    $("#smartwizard").smartWizard("next");
   },
 
-  async addToCart(id, detail = false) {
-    let qty = parseInt(document.querySelector(`#inputQty${id}`).value);
-    if (detail) {
-      qty = parseInt(document.querySelector(`#inputQtyDetail${id}`).value);
-    }
-
-    if (qty > 0) {
-      const payload = {
-        order_id: Order.orderId,
-        product_id: id,
-        qty: qty,
+  async storeStep1() {
+    if (Order.allowLocation) {
+      let payload = {
+        event_name: event_name.value,
+        event_type_id: event_type_id.value,
+        event_date: event_date.value,
+        event_start_time: event_start_time.value,
+        event_end_time: event_end_time.value,
+        location_id: location_id.value,
+        event_guest_count: event_guest_count.value,
+        event_start_budget: event_start_budget.value,
+        event_end_budget: event_end_budget.value,
+        vendor_range: vendor_range.value,
+        latitude: latitude.value,
+        longitude: longitude.value,
+        order_id: Order.orderID,
       };
 
-      const request = await fetch(`/user/events/cart`, {
+      document.querySelector(`#sectionValidationError`).classList.add("d-none");
+      const request = await fetch(`/user/events/step1`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,57 +48,528 @@ const Order = {
         body: JSON.stringify(payload),
       });
 
-      // console.log(await request.json());
-      if (request.status == 200) {
-        CORE.sweet("success", "Success!", "Product added to cart successfully!");
-      } else if (request.status == 403) {
-        const response = await request.json();
-        CORE.sweet("error", "Fails!", response.message);
-      } else {
-        CORE.sweet("error", "Fails!", "Something went wrong, please try again!");
+      switch (request.status) {
+        case 200:
+          let responseSuccess = await request.json();
+          Order.orderID = responseSuccess.data.id;
+          $("#smartwizard").smartWizard("next");
+          break;
+        case 400:
+          const response = await request.json();
+          CORE.sweet("error", "Fails!", response.message);
+          Order.inserValidationError(response.data);
+          break;
+        default:
+          CORE.sweet("error", "Fails!", "Something went wrong!");
+          break;
       }
     } else {
-      CORE.sweet("error", "Fails!", "You must enter a valid quantity!");
+      CORE.sweet("error", "Fails!", "You must allow the location!");
     }
   },
 
-  step5InitOrder() {
-    Livewire.on("step5-success-get-order", function() {
-      $("#smartwizard").smartWizard("next");
-    });
-    Livewire.on("step5-success-checkout", function() {
-      CORE.sweet("success", "Success!", "Order created successfully!");
+  inserValidationError(dataErrors) {
+    const listInput = document.querySelectorAll(".form-control");
+    // console.log(listInput);
+    const listNameError = Object.keys(dataErrors);
 
-      setTimeout(() => {
-        window.location = `/user/events`;
-      }, 2000);
-    });
-    Livewire.on("step5-fails-checkout", function(message) {
-      CORE.sweet("error", "Fails!", message);
+    listInput.forEach((input) => {
+      let validationID = "";
+      if (input.hasAttribute("data-validation-id")) {
+        validationID = input.getAttribute("data-validation-id");
+      }
+      let inputName = input.name;
+      let findInput = listNameError.find(
+        (d) => d == inputName || d == validationID
+      );
+
+      // console.log(findInput);
+      if (findInput) {
+        input.classList.add("is-invalid");
+        input.nextElementSibling.innerHTML = `<small class="text-danger">${dataErrors[findInput][0]}</small>`;
+      } else {
+        input.nextElementSibling.innerHTML = ``;
+        input.classList.remove("is-invalid");
+      }
     });
   },
 
-  step4InitOrder() {
-    Livewire.emit("step4_set_order", Order.orderId);
-    Livewire.on("step4-success-get-vendor", function() {
-      Order.initImageProduct();
-      Order.initCartQty();
+  changeCategory(index) {
+    const navsCategories = document.querySelectorAll(".list-group-category");
+    const navsSubCategories = document.querySelectorAll(".list-sub-categories");
+
+    navsCategories.forEach((nav) => {
+      nav.classList.remove("active");
+    });
+    navsSubCategories.forEach((nav) => {
+      nav.classList.add("d-none");
+    });
+
+    navsCategories[index].classList.add("active");
+    navsSubCategories[index].classList.remove("d-none");
+  },
+
+  async storeStep2(next = true) {
+    let subCategoryIds = [];
+    const listCheckbox = document.querySelectorAll(
+      ".input-checkbox-subcategories"
+    );
+
+    listCheckbox.forEach((checkbox) => {
+      if (checkbox.checked) {
+        subCategoryIds.push(checkbox.value);
+      }
+    });
+
+    if (subCategoryIds.length > 0) {
+      const payload = {
+        order_id: Order.orderID,
+        vendor_category_ids: subCategoryIds,
+      };
+
+      const request = await fetch(`/user/events/step2`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "X-CSRF-TOKEN": CORE.csrfToken,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      switch (request.status) {
+        case 200:
+          let responseSuccess = await request.json();
+          Order.drawOrder(
+            responseSuccess.data.order,
+            responseSuccess.data.categories
+          );
+          if (next) {
+            $("#smartwizard").smartWizard("next");
+          }
+          break;
+        case 400:
+          const response = await request.json();
+          CORE.sweet("error", "Fails!", response.message);
+          break;
+        default:
+          CORE.sweet("error", "Fails!", "Something went wrong!");
+          break;
+      }
+    } else {
+      CORE.sweet("error", "Fails!", "Please select at least one category!");
+    }
+  },
+
+  drawOrder(order, categories) {
+    document.querySelector("#textEventName").innerHTML = order.event_name;
+    document.querySelector("#textEventType").innerHTML = order.event_type;
+    document.querySelector("#textEventPeriod").innerHTML =
+      dayjs(order.event_date + " " + order.event_start_time).format("hh A") +
+      " - " +
+      dayjs(order.event_date + " " + order.event_end_time).format("hh A");
+    document.querySelector("#textEventDate").innerHTML = dayjs(
+      order.event_date
+    ).format("MMMM DD YYYY");
+    document.querySelector("#textSetLocation").innerHTML = order.location;
+    document.querySelector("#textEstGuest").innerHTML = order.event_guest_count;
+    document.querySelector(
+      "#textRangeBudget"
+    ).innerHTML = `RM. ${order.event_start_budget} - RM. ${order.event_end_budget}`;
+
+    let template = document.querySelector("#rowOrderCategories");
+    let html = "";
+
+    categories.forEach((category) => {
+      html += `<div class="row">
+                <div class="col-lg-2 col-md-12 text-end text-muted">${category.vendor_category}</div>
+                <div class="col-lg-8 col-md-12 event-summary">`;
+      category.subs.forEach((sub) => {
+        html += `<div class="badges">${sub.vendor_category}</div>`;
+      });
+      html += `</div>`;
+      html += `</div>`;
+    });
+
+    template.innerHTML = html;
+  },
+
+  async nextStep3(next = true) {
+    const request = await fetch(`/user/events/step4`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-CSRF-TOKEN": CORE.csrfToken,
+      },
+      body: JSON.stringify({
+        order_id: Order.orderID,
+      }),
+    });
+
+    if (request.status == 200) {
+      const response = await request.json();
+
+      this.drawVendorSearch(response.data);
+
+      if (next) {
+        $("#smartwizard").smartWizard("next");
+      }
+    } else if (request.status == 404) {
+      CORE.sweet("error", "Fails!", "Vendor not found!");
+    } else {
+      CORE.sweet("error", "Fails!", "Something error!");
+    }
+  },
+
+  drawVendorSearch(data) {
+    let headerTab = "";
+    let bodyTab = "";
+    const vendorSearchContainer = document.getElementById(
+      "vendorsearchcontainer"
+    );
+
+    data.forEach((d, index) => {
+      const categoryName = d.vendor_category.split(" ")[0].toLowerCase();
+      const parentCategory = d.parent_category.vendor_category;
+      const category = d.vendor_category;
+
+      headerTab += `<li style="max-width: 110%;" class="nav-item text-center">
+            <a class="nav-link ${
+              index == 0 ? "active" : ""
+            } w-100" id="tab-${categoryName}" data-bs-toggle="tab" href="#${categoryName}" role="tab"
+              aria-controls="home" aria-selected="true">${d.vendor_category}</a>
+          </li>`;
+
+      const vendors = d.vendors;
+
+      bodyTab += `<div class="tab-pane fade ${
+        index == 0 ? "show active" : ""
+      } p-0" id="${categoryName}" role="tabpanel" aria-labelledby="home-${categoryName}">`;
+
+      vendors.forEach((vendor) => {
+        bodyTab += `<div class="row vendor-search my-3" onClick="Product.openModalDetailVendor(${vendor.vendor_id})">
+              <div class="col-lg-6 col-md-12 d-flex" style="gap:1rem;">
+
+                <span class="avatar avatar-xxl brround cover-image"
+                  style="background: url('${vendor.logo}') center center;">
+                  <span class="avatar-icons bg-blue"><i class="fe fe-check fs-12"></i></span>
+                </span>
+
+                <div>
+                  <h3 class="fw-bold" style="margin-bottom: 0;">${vendor.vendor_name}</h3>
+                  <div class="text-muted">${parentCategory} : ${category}</div>
+                  <div class="text-muted">Location: English</div>
+                </div>
+              </div>
+
+              <div class="col-lg-6 col-md-12 d-flex justify-content-between">
+                <div class="text-center">
+                  <i class="fe fe-check"></i>
+                  <div class="text-muted">Listing</div>
+                  <div class="text-secondary fs-4 fw-bold">25</div>
+                </div>
+
+                <div class="text-center">
+                  <i class="fe fe-star"></i>
+                  <div class="text-muted">Level</div>
+                  <div class="text-secondary fs-4 fw-bold">25</div>
+                </div>
+
+                <div class="text-center">
+                  <i class="fe fe-star"></i>
+                  <div class="text-muted">Ratings</div>
+                  <div class="text-secondary fs-4 fw-bold">25</div>
+                </div>
+
+                <div class="text-center">
+                  <i class="fe fe-star"></i>
+                  <div class="text-muted">Matched</div>
+                  <div class="text-secondary fs-4 fw-bold">25</div>
+                </div>
+              </div>
+
+            </div>`;
+      });
+
+      bodyTab += `</div>`;
+    });
+
+    const element = `
+      <div class="col-lg-2 col-md-12">
+        <ul class="nav nav-pills flex-column" id="myTab4" role="tablist">
+          ${headerTab}
+        </ul>
+      </div>
+      <div class="col-lg-10 col-md-12">
+        <div class="tab-content border p-3" id="myTab3Content">
+        ${bodyTab}
+        </div>
+      </div>`;
+
+    vendorSearchContainer.innerHTML = element;
+  },
+
+  async nextStep4() {
+    try {
+      const request = await fetch("/user/events/listorder");
+      const status = request.status;
+
+      if (status === 200) {
+        const response = await request.json();
+        const { data } = response;
+
+        Product.drawCart(data);
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Internal Server Error",
+        text: "Please try again later",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    }
+  },
+
+  initGetLongLat() {
+    const latitudeInput = document.getElementById("latitudeUser");
+    const longitudeInput = document.getElementById("longitudeUser");
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          // Ambil latitude dan longitude
+          const lat = position.coords.latitude;
+          const long = position.coords.longitude;
+
+          // Simpan di input field
+          latitudeInput.value = lat;
+          longitudeInput.value = long;
+          Order.allowLocation = true;
+        },
+        (error) => {
+          console.error("Error getting location:", error.message);
+          alert("Gagal mengambil lokasi. Pastikan izin lokasi diaktifkan!");
+        }
+      );
+    } else {
+      alert("Geolocation tidak didukung di browser Anda!");
+    }
+  },
+
+  async initTransaction() {
+    try {
+      const request = await fetch(`/user/events/checkevent`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      const status = request.status;
+      const response = await request.json();
+
+      if (status === 200) {
+        // Do all here
+
+        if (response.data.length) {
+          let { data } = response;
+          data = data[0];
+
+          Order.orderID = data.id;
+
+          event_name.value = data.event_name;
+          event_type_id.value = data.event_type_id;
+          event_date.value = data.event_date;
+          event_start_time.value = removeSecond(data.event_start_time);
+          event_end_time.value = removeSecond(data.event_end_time);
+          location_id.value = data.location_id;
+          event_start_budget.value = data.event_start_budget;
+          event_end_budget.value = data.event_end_budget;
+          vendor_range.value = data.vendor_range;
+
+          removeSecond(data.event_start_time);
+
+          $("#event_number_guest").val(data.event_guest_count);
+          $("#event_number_guest").trigger("change");
+
+          if (data.order_vendor_category.length) {
+            const listCriteria = document.querySelectorAll(
+              ".input-checkbox-subcategories"
+            );
+
+            listCriteria.forEach((checkbox) => {
+              const criteriaId = checkbox.value;
+
+              const selected = data.order_vendor_category.filter(
+                (c) => c.vendor_category_id == criteriaId
+              );
+
+              if (selected.length) {
+                checkbox.checked = true;
+              }
+            });
+
+            Order.storeStep2(false);
+            Order.nextStep3(false);
+            Order.nextStep4();
+          }
+        }
+      }
+    } catch (e) {
+      console.log(e);
+      // Error handling here
+      alert("failed connect to server");
+    }
+  },
+
+  checkout() {
+    const buttonCheckout = document.getElementById("button-checkout");
+
+    buttonCheckout.addEventListener("click", async function () {
+      buttonCheckout.innerHTML = "Loading";
+
+      try {
+        const request = await fetch("/user/events/checkout");
+        const status = request.status;
+
+        if (status === 200) {
+          const response = await request.json();
+          const { data } = response;
+
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action =
+            "https://uatpaymenthub.infinpay.com/api/pymt/pw/v1.1/payment";
+          document.body.appendChild(form);
+
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = "jwt";
+          input.value = data.jwt;
+          form.appendChild(input);
+
+          console.log(form);
+          form.submit();
+        } else {
+          CORE.showToast("error", "Internal server error");
+        }
+      } catch (e) {
+        CORE.showToast("error", "Internal server error");
+      }
+    });
+  },
+};
+
+const Product = {
+  products: [],
+
+  openModalDetailVendor: async (vendorId) => {
+    //Fetch product by vendor id
+    const request = await fetch(`/user/products?vendor_id=${vendorId}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    const response = await request.json();
+
+    const status = request.status;
+
+    if (status === 200) {
+      const datas = response.data;
+
+      Product.products = datas;
+
+      let element = "";
+      datas.forEach((data) => {
+        const images = data.product_images;
+        let listElementImages = ``;
+
+        if (images.length) {
+          images.forEach((image) => {
+            listElementImages += `<div class="item">
+            <div class="card custom-card overflow-hidden mb-0 ">
+                <a href="#">
+                <img src="${image.product_image}" class="w-100" style="height:70px;" alt="img"></a>
+            </div>
+          </div>`;
+          });
+        }
+
+        element += `<div class="col-lg-3 product-cart">
+        <div>
+            <div class="card custom-card overflow-hidden">
+                <div>
+                    <a href="javascript:void(0)">
+                      <img src="${
+                        data.product_image
+                      }" alt="img" class="cover-image br-7 w-100" style="height:230px;">
+                    </a>
+                </div>
+            </div>
+            <div class="card">
+                <div>
+                    <div id="owl-demo2" class="owl-carousel owl-carousel-icons2">
+                        ${listElementImages}
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+        <div class="text-center">
+            <h6 class="fw-bold">${data.product_name}</h6>
+            <div>${data.product_description}</div>
+            <select name="event_type_id" id="event_type_id" class="form-control form-select default-select">
+                <option value="0">Select Type Of Event</option>
+            </select>
+      
+        </div>
+      
+        <div class="d-flex mt-3 justify-content-between">
+            <div>
+                <div class="fw-bold">${data.product_sell_price}</div>
+                <div style="width: 100px;">per unit</div>
+            </div>
+      
+            <div class="d-flex align-items-center justify-content-end">
+                <div class="qty-button" no-update-cart="true">-</div>
+                <input type="number" class="form-control qty-input" no-update-cart="true" 
+                data-max="${data.product_stock || 0}" data-id="${data.id}">
+                <div class="qty-button" no-update-cart="true">+</div>
+            </div>
+        </div>
+      
+      
+        <div class="d-flex mt-3 justify-content-between">
+            <div class="fw-bold">Total</div>
+            <div class="total-price-cart">RM 0</div>
+        </div>
+      
+        <div class="d-flex" style="gap:.5rem;">
+            <button class="btn btn-gray button-detail-product"
+                style="width: 100%;">Detail</button>
+            <button class="btn btn-info add-to-cart-button" style="width: 100%;">Add to cart</button>
+        </div>
+      </div>`;
+      });
+
+      const productContainer = document.getElementById("product-container");
+
+      productContainer.innerHTML = "";
+      productContainer.innerHTML = element;
+
+      Product.initImageProduct();
+      Product.initQtyCart();
+
       CORE.showModal("modalDetailVendor");
-    });
-
-    Livewire.on("step4-success-get-product", function() {
-      CORE.closeModal("modalDetailVendor");
-      CORE.showModal("modalDetailProduct");
-      Order.initCartQty();
-    });
+    }
   },
 
-  closeModalProduct() {
-    CORE.closeModal("modalDetailProduct");
-    CORE.showModal("modalDetailVendor");
-  },
-
-  initImageProduct() {
+  initImageProduct: () => {
     var owl = $(".owl-carousel-icons2");
     owl.owlCarousel({
       loop: true,
@@ -110,215 +601,293 @@ const Order = {
     });
   },
 
-  changeImageProduct(url, id) {
-    document.querySelector(`#${id}`).src = url;
-  },
+  initQtyCart: () => {
+    const qtyCarts = document.querySelectorAll(".qty-input");
 
-  initCartQty() {
-    const products = JSON.parse(document.querySelector("#listDataProduct").value);
-    const qtyCart = document.querySelectorAll(".qty-input");
+    qtyCarts.forEach((qty) => {
+      const minusButton = qty.previousElementSibling;
+      const plusButton = qty.nextElementSibling;
+      let max = qty?.dataset?.max || 0;
+      let productId = qty.getAttribute("data-id");
+      let type = qty.dataset.type || "product";
 
-    if (qtyCart.length) {
-      for (const qty of qtyCart) {
-        const minusButton = qty.previousElementSibling;
-        const plusButton = qty.nextElementSibling;
-        let max = qty?.dataset?.max || 10;
-        let id = qty.getAttribute("data-id");
+      // console.log(plusButton);
+      // console.log(minusButton);
 
-        qty.addEventListener("keyup", function() {
-          const product = products.find(pro => pro.id == id);
-
-          if (parseInt(qty.value) > max) {
-            qty.value = max;
-          }
-
-          const totalQty = parseInt(qty.value);
-          let totalProduct = parseInt(product.price) * totalQty;
-
-          // console.log(product);
-          if (product.package && totalQty > parseInt(product.package.minimum_qty)) {
-            let valuePackage = parseInt(product.package.value);
-
-            if (product.package.package_type == 1) {
-              let discount = totalProduct * (valuePackage / 100);
-              totalProduct -= discount;
-            } else if (product.package.package_type == 2) {
-              let discount = valuePackage;
-              totalProduct -= discount;
-            } else {
-              totalProduct = valuePackage * totalQty;
-            }
-          }
-
-          document.querySelector(`#totalPriceProduct${id}`).innerHTML = totalProduct;
-        });
-
-        minusButton.addEventListener("click", function (e) {
-          let value = parseInt(qty.value || 0);
-          // console.log(product);
-
-          if (value !== parseInt(1)) {
-            qty.value = value - 1;
-          }
-
-          const product = products.find(pro => pro.id == id);
-          let totalQty = parseInt(qty.value);
-          let totalProduct = parseInt(product.price) * totalQty;
-
-          if (product.package && totalQty > product.package.minimum_qty) {
-            let valuePackage = parseInt(product.package.value);
-
-            if (product.package.package_type == 1) {
-              let discount = totalProduct * (valuePackage / 100);
-              totalProduct -= discount;
-            } else if (product.package.package_type == 2) {
-              let discount = valuePackage;
-              totalProduct -= discount;
-            } else {
-              totalProduct = valuePackage * totalQty;
-            }
-          }
-
-          document.querySelector(`#totalPriceProduct${id}`).innerHTML = totalProduct;
-        });
-
-        plusButton.addEventListener("click", function (e) {
-          let value = parseInt(qty.value || 0);
-
-          if (value !== parseInt(max)) {
-            qty.value = value + 1;
-          }
-
-          const product = products.find(pro => pro.id == id);
-          let totalQty = parseInt(qty.value);
-          let totalProduct = parseInt(product.price) * totalQty;
-
-          if (product.package && totalQty > product.package.minimum_qty) {
-            let valuePackage = parseInt(product.package.value);
-
-            if (product.package.package_type == 1) {
-              let discount = totalProduct * (valuePackage / 100);
-              totalProduct -= discount;
-            } else if (product.package.package_type == 2) {
-              let discount = valuePackage;
-              totalProduct -= discount;
-            } else {
-              totalProduct = valuePackage * totalQty;
-            }
-          }
-
-          document.querySelector(`#totalPriceProduct${id}`).innerHTML = totalProduct;
-        });
-
-        qty.addEventListener("change", function (e) {});
+      if (max === null) {
+        max = 0;
       }
-    }
-  },
 
-  step3InitOrder() {
-    Livewire.emit("step3_set_order", Order.orderId);
-    Livewire.on("step3-success-get-data", function() {
-      $("#smartwizard").smartWizard("next");
-      Order.drawListCategory();
-    });
-  },
+      let totalElement =
+        qty.parentElement.parentElement.nextElementSibling.querySelector(
+          ".total-price-cart"
+        );
+      let addToCartButton =
+        qty.parentElement.parentElement.nextElementSibling.nextElementSibling.querySelector(
+          ".add-to-cart-button"
+        );
 
-  initStep2Success() {
-    Livewire.on("step2-success", function () {
-      Order.step3InitOrder();
-      Order.step4InitOrder();
-    });
-  },
+      const product = Product.products.find((pro) => pro.id == productId);
 
-  next2() {
-    const checkboxs = document.querySelectorAll(".checkbox-category");
-    let category_ids = [];
+      qty.addEventListener("keyup", function () {
+        let value = parseInt(qty.value || 0);
 
-    checkboxs.forEach((ch) => {
-      if (ch.checked) {
-        category_ids.push(ch.value);
-      }
-    });
+        if (value < 0) value = 0;
 
-    if (category_ids.length > 0) {
-      Livewire.emit("save", category_ids);
-    } else {
-      CORE.sweet("error", "Your must choice minimal 1 category!");
-    }
-  },
+        if (value > parseInt(max)) {
+          value = max;
+        }
 
-  next3() {
-    $("#smartwizard").smartWizard("next");
-  },
+        let getAttributeUpdateCart = this.getAttribute("no-update-cart");
 
-  next4() {
-    Livewire.emit("step5_set_order", Order.orderId);
-    Order.step5InitOrder();
-  },
+        if (!getAttributeUpdateCart) {
+          Product.updateCart(value, productId, type);
+        }
 
-  drawListCategory() {
-    const template = document.querySelector("#listCategoryEvent");
-    let html = "";
-    let categories = JSON.parse(
-      document.querySelector("#InputListCategory").value
-    );
-    let categoryIds = JSON.parse(
-      document.querySelector("#InputCategoryIds").value
-    );
-
-    // console.log(categoryIds);
-    categories.forEach((category) => {
-      html += `<div class="col-lg-4">`;
-      html += `<ul class="treeview ">`;
-      html += `<li>`;
-
-      html += `<a href="javascript:void(0);">`;
-      html += `${category.vendor_category}`;
-      html += `</a>`;
-
-      html += `<ul>`;
-      category.subs.forEach((sub) => {
-        let checked = categoryIds.find((d) => d == sub.id) ? "checked" : "";
-
-        html += `<li>
-                  <div class="d-flex align-items-center">
-                    <input type="checkbox" class="criteria-control checkbox-category" value="${sub.id}" ${checked}>
-                    <label for="" style="margin-top:10px;">${sub.vendor_category}</label>
-                  </div>
-                </li>`;
+        totalProduct = Product.calculateTotal(product, value);
+        qty.value = value;
+        totalElement.innerHTML = CORE.formatToMYR(totalProduct);
       });
-      html += `</ul>`;
 
-      html += `</li>`;
-      html += `</ul>`;
-      html += `</div>`;
+      minusButton.addEventListener("click", function (e) {
+        let value = parseInt(qty.value || 0);
+
+        if (value <= 0) return;
+
+        value -= 1;
+
+        let getAttributeUpdateCart = this.getAttribute("no-update-cart");
+
+        if (!getAttributeUpdateCart) {
+          Product.updateCart(value, productId, type);
+        }
+
+        totalProduct = Product.calculateTotal(product, value);
+        qty.value = value;
+        totalElement.innerHTML = CORE.formatToMYR(totalProduct);
+      });
+
+      plusButton.addEventListener("click", function (e) {
+        let value = parseInt(qty.value || 0);
+
+        if (value >= parseInt(max)) {
+          return;
+        }
+
+        value += 1;
+        
+        let getAttributeUpdateCart = this.getAttribute("no-update-cart");
+
+        if (!getAttributeUpdateCart) {
+          Product.updateCart(value, productId, type);
+        }
+
+        totalProduct = Product.calculateTotal(product, value);
+        qty.value = value;
+        totalElement.innerHTML = CORE.formatToMYR(totalProduct);
+      });
+
+      if (addToCartButton) {
+        addToCartButton.addEventListener("click", async function (e) {
+          let value = parseInt(qty.value || 0);
+
+          if (value <= 0) {
+            Swal.fire({
+              icon: "warning",
+              title: "Please input qty first",
+              toast: true,
+              showConfirmButton: false,
+              time: 1000,
+              position: "bottom-right",
+            });
+
+            return;
+          }
+
+          // Send Data To Server
+          Product.updateCart(qty.value, productId, type);
+        });
+      }
     });
-
-    template.innerHTML = html;
-    $(".treeview").treed();
   },
 
-  step2InitOrder() {
-    Order.initStep2Success();
-
-    Livewire.emit("step2_set_order", Order.orderId);
-    Livewire.on("step2-draw-category", function () {
-      Order.drawListCategory();
+  updateCart: CORE.debounce(async (qty, productId, type) => {
+    const request = await fetch(`/user/events/addtocart`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-CSRF-TOKEN": CORE.csrfToken,
+      },
+      body: JSON.stringify({
+        qty,
+        product_id: productId,
+        type,
+      }),
     });
+
+    const status = request.status;
+
+    if (status === 200) {
+      CORE.showToast("success", "Product has ben added to cart");
+    }
+  }, 350),
+
+  calculateTotal(product, value) {
+    let totalProduct = parseInt(product.product_sell_price) * value;
+    const productPackage = product.product_package;
+
+    if (productPackage && value >= productPackage.minimum_qty) {
+      let valuePackage = parseInt(productPackage.value);
+
+      if (product.product_package.package_type == 1) {
+        let discount = totalProduct * (valuePackage / 100);
+        totalProduct -= discount;
+      } else if (product.product_package.package_type == 2) {
+        let discount = valuePackage;
+        totalProduct -= discount;
+      } else {
+        totalProduct = valuePackage * value;
+      }
+    }
+
+    return totalProduct;
   },
 
-  initStep1Success() {
-    Livewire.on("step1-success", function (orderId) {
-      Order.setOrderId(orderId);
-      $("#smartwizard").smartWizard("next");
+  drawCart(datas) {
+    const cartContainer = document.getElementById("cartContainer");
 
-      Order.step2InitOrder();
-    });
+    let element = ``;
+    let totalDiscount = 0;
+    let countProduct = 0;
+    let grandTotal = 0;
+
+    console.log(datas);
+
+    for (const data in datas) {
+      countProduct++;
+
+      const d = datas[data];
+      const products = d.products;
+      const companyName = d.company_name;
+      totalDiscount = d.total_discount;
+      grandTotal = d.grand_total;
+      let productElement = ``;
+      products.forEach((product) => {
+        Product.products.push(product);
+
+        const stock = product.product_stock || 0;
+
+        productElement += `<tr>
+              <td class="text-center" style="width: 5%;">
+                <input type="checkbox" checked>
+              </td>
+              <td style="width: 25%;">
+                <div class="d-flex gap-3 align-items-center">
+                  <img src="${product.image}"
+                    class="avatar avatar-xxl br-7" alt="person-image">
+                  <div>${product.product_name}</div>
+                </div>
+              </td>
+              <td class="text-center" style="width: 10%;">Variaton A</td>
+              <td class="text-center" style="width: 15%;">
+                <div>
+                  ${CORE.formatToMYR(product.product_sell_price)}
+                </div>
+              </td>
+              <td class="text-center" style="width: 25%;">
+                <div class="d-flex align-items-center justify-content-center">
+                  <div class="qty-button">-</div>
+                  <input type="text" class="form-control qty-input" 
+                  value="${product.qty}" 
+                  data-max="${stock}" 
+                  data-id="${product.id}" data-type="cart">
+                  <div class="qty-button">+</div>
+                </div>
+              </td>
+              <td class="text-center" style="width: 15%;">
+                <div>
+                  <span class="total-price-cart">
+                  ${CORE.formatToMYR(product.grand_total)}
+                  </span>
+                </div>
+              </td>
+              <td class="text-center">
+                <i class="fa-solid fa-trash" 
+                onClick="Product.removeProductFromCart(${
+                  d.order_product_id
+                })"></i>
+              </td>
+            </tr>`;
+      });
+
+      element += `<div class="card">
+      <div class="card-body cart-body">
+        <div class="table-responsive">
+          <table class="table text-nowrap text-md-nowrap mb-0">
+            <thead>
+              <tr style="background-color:#E6E6E6;">
+                <th class="text-center">
+                  <input type="checkbox">
+                </th>
+                <th colspan="6">
+                  <div class="fw-bold">${companyName}</div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              ${productElement}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+    }
+
+    document.getElementById("totalDiscount").innerHTML =
+      CORE.formatToMYR(totalDiscount);
+    document.getElementById("grandTotal").innerHTML =
+      CORE.formatToMYR(grandTotal);
+
+    cartContainer.innerHTML = "";
+    cartContainer.innerHTML = element;
+
+    Product.initQtyCart();
   },
 
-  init() {
-    Order.initStep1Success();
+  removeProductFromCart(orderProductId) {
+    CORE.promptUser("Delete product from cart?", async () => {
+      const request = await fetch(`/user/events/${orderProductId}`, {
+        method: "DELETE",
+        headers: {
+          "X-CSRF-TOKEN": CORE.csrfToken,
+        },
+        body: JSON.stringify({
+          _method: "DELETE",
+        }),
+      });
+
+      const status = request.status;
+
+      if (status == 200) {
+        CORE.sweet("success", "Success!", "Product deleted!");
+        Order.nextStep4();
+      } else {
+        CORE.sweet("error", "Fails!", "Failed to delete product!");
+      }
+    });
   },
 };
 
-Order.init();
+function removeSecond(date) {
+  if (date == "") return;
+  const d = date.split(":");
+
+  return d[0] + ":" + d[1];
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  Order.initGetLongLat();
+  Order.initTransaction();
+  Order.checkout();
+});

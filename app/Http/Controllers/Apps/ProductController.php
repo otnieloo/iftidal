@@ -149,7 +149,7 @@ class ProductController extends Controller
   {
     $vendors = Vendor::all();
 
-    return $this->view_admin("admin.product.index", "Product Management", [
+    return $this->view("admin.product.index", "Product Management", [
       'vendors' => $vendors
     ], TRUE);
   }
@@ -169,7 +169,7 @@ class ProductController extends Controller
 
     $type = request()->segment(2);
 
-    return $this->view_admin("admin.product.create", "Create Product", [
+    return $this->view("admin.product.create", "Create Product", [
       'categories' => $categories,
       'sub_categories' => $sub_categories,
       'conditions' => $conditions,
@@ -224,7 +224,7 @@ class ProductController extends Controller
 
     $type = request()->segment(2);
 
-    return $this->view_admin("admin.product.edit", "Edit Product", [
+    return $this->view("admin.product.edit", "Edit Product", [
       'categories' => $categories,
       'sub_categories' => $sub_categories,
       'conditions' => $conditions,

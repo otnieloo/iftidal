@@ -25,7 +25,7 @@ class CustomerController extends Controller
    */
   public function index()
   {
-    return $this->view_admin("admin.customers.index", "List Customer", [], TRUE);
+    return $this->view("admin.customers.index", "List Customer", [], TRUE);
   }
 
   /**
@@ -39,7 +39,7 @@ class CustomerController extends Controller
       "user_statuses" => UserStatus::all()
     ];
 
-    return $this->view_admin("admin.customers.create", __("Add New Customer"), $data, TRUE);
+    return $this->view("admin.customers.create", __("Add New Customer"), $data, TRUE);
   }
 
   /**
@@ -78,7 +78,7 @@ class CustomerController extends Controller
       "user_statuses" => UserStatus::all(),
     ];
 
-    return $this->view_admin("admin.customers.edit", __("Edit Customer"), $data);
+    return $this->view("admin.customers.edit", __("Edit Customer"), $data);
   }
 
   /**
@@ -107,16 +107,16 @@ class CustomerController extends Controller
 
   /**
    * Verified customer
-   * 
+   *
    * @param User $customer
    */
   public function verified(User $customer)
   {
     User::query()
-    ->where("id", $customer->id)
-    ->update([
-      "email_verified-at" => date('Y-m-d H:i:s'),
-    ]);
+      ->where("id", $customer->id)
+      ->update([
+        "email_verified-at" => date('Y-m-d H:i:s'),
+      ]);
 
     $response = response_success_default(__("Success verified customer!"), FALSE, route('app.customers.index'));
     return response_json($response);

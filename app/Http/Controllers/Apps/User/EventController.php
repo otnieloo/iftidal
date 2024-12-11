@@ -3,10 +3,18 @@
 namespace App\Http\Controllers\Apps\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\EventType;
+use App\Models\Location;
+use App\Models\Order;
+use App\Models\VendorCategory;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
+
+
+
+
   /**
    * Display a listing of the resource.
    *
@@ -14,7 +22,7 @@ class EventController extends Controller
    */
   public function index()
   {
-    return $this->view_admin("users.events.index", "Events", [], TRUE);
+    return $this->view("users.events.index", "Events", [], TRUE);
   }
 
   /**
@@ -24,11 +32,16 @@ class EventController extends Controller
    */
   public function create()
   {
-    // return $this->view_admin("user.event.event-setup", "Setup Event", [
-    //   'product' => false,
-    //   'vendor' => false
-    // ], TRUE);
-    return $this->view_admin("users.events.create", "Setup Event", [], TRUE);
+    $data = [
+      "event_types" => EventType::query()->orderBy("event_type", "ASC")->get(),
+      "locations" => Location::query()->orderBy("location", "ASC")->get(),
+      "categories" => VendorCategory::query()->with(["subs"])->whereNull("parent_category_id")->get(),
+    ];
+    // dd($data["categories"]);
+
+
+    // return $this->view('user.event.event-setup', 'Setup Event', $data, TRUE);
+    return $this->view("users.events.create", "Setup Event", $data, TRUE);
   }
 
   /**

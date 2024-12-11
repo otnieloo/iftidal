@@ -16,6 +16,7 @@ class CheckDivision
    */
   public function handle(Request $request, Closure $next, $division)
   {
+
     if (auth()->check()) {
       $user = auth()->user();
 

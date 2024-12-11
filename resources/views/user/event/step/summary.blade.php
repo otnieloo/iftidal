@@ -9,49 +9,49 @@
           <div class="col-12">
             <div class="row">
               <div class="col-lg-3 col-md-12 text-end text-muted">Name Event</div>
-              <div class="col-lg-8 col-md-12">Razak Sweet 16th </div>
+              <div class="col-lg-8 col-md-12" id="textEventName"> </div>
             </div>
           </div>
 
           <div class="col-12">
             <div class="row">
               <div class="col-lg-3 col-md-12 text-end text-muted">Type of Event</div>
-              <div class="col-lg-8 col-md-12">Razak Sweet 16th </div>
+              <div class="col-lg-8 col-md-12" id="textEventType"> </div>
             </div>
           </div>
 
           <div class="col-12">
             <div class="row">
               <div class="col-lg-3 col-md-12 text-end text-muted">Date of Event</div>
-              <div class="col-lg-8 col-md-12">Razak Sweet 16th </div>
+              <div class="col-lg-8 col-md-12" id="textEventDate"> </div>
             </div>
           </div>
 
           <div class="col-12">
             <div class="row">
               <div class="col-lg-3 col-md-12 text-end text-muted">Event Period</div>
-              <div class="col-lg-8 col-md-12">Razak Sweet 16th </div>
+              <div class="col-lg-8 col-md-12" id="textEventPeriod"> </div>
             </div>
           </div>
 
           <div class="col-12">
             <div class="row">
               <div class="col-lg-3 col-md-12 text-end text-muted">Set Location</div>
-              <div class="col-lg-8 col-md-12">Razak Sweet 16th </div>
+              <div class="col-lg-8 col-md-12" id="textSetLocation"> </div>
             </div>
           </div>
 
           <div class="col-12">
             <div class="row">
               <div class="col-lg-3 col-md-12 text-end text-muted">Est. Number of Guest</div>
-              <div class="col-lg-8 col-md-12">Razak Sweet 16th </div>
+              <div class="col-lg-8 col-md-12" id="textEstGuest"> </div>
             </div>
           </div>
 
           <div class="col-12">
             <div class="row">
               <div class="col-lg-3 col-md-12 text-end ">Range Budget</div>
-              <div class="col-lg-8 col-md-12">RM 900 - RM 800 </div>
+              <div class="col-lg-8 col-md-12" id="textRangeBudget"></div>
             </div>
           </div>
 
@@ -104,6 +104,36 @@
                 <div class="badges">Test</div>
               </div>
             </div>
+
+            <div class="row mt-3">
+              <div class="col-lg-2 col-md-12 text-end text-muted">Accesories</div>
+              <div class="col-lg-8 col-md-12 event-summary">
+                <div class="badges">Test</div>
+                <div class="badges">Test</div>
+                <div class="badges">Test</div>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-lg-2 col-md-12 text-end text-muted">Accesories</div>
+              <div class="col-lg-8 col-md-12 event-summary">
+                <div class="badges">Test</div>
+                <div class="badges">Test</div>
+                <div class="badges">Test</div>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-lg-2 col-md-12 text-end text-muted">Accesories</div>
+              <div class="col-lg-8 col-md-12 event-summary">
+                <div class="badges">Test</div>
+                <div class="badges">Test</div>
+                <div class="badges">Test</div>
+              </div>
+            </div>
+
+
+
           </div>
 
 

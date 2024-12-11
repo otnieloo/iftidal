@@ -1,24 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Apps\Vendor;
+namespace App\Http\Controllers\Apps\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
-use App\Models\OrderProduct;
-use App\Services\OrderService;
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class PaymentController extends Controller
 {
-
   /**
    * Display a listing of the resource.
    *
    * @return \Illuminate\Http\Response
    */
-  public function index(Request $request, OrderService $orderService)
+  public function index()
   {
-    return $this->view("vendors.orders.index", __("List Order"), [], TRUE);
+    //
   }
 
   /**
@@ -39,31 +35,18 @@ class OrderController extends Controller
    */
   public function store(Request $request)
   {
-    //
+    
   }
 
   /**
    * Display the specified resource.
    *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
    */
-  public function show(Order $order)
+  public function show($id)
   {
-
-    $vendorId = auth()->user()->id;
-
-    $data = [
-      "order" => $order->load([
-        'user',
-        'location',
-        'type',
-        'order_products' => function ($q) use ($vendorId) {
-          $q->with('product')->where('vendor_id', $vendorId);
-        }
-      ]),
-    ];
-
-
-    return $this->view("vendors.orders.show", __("Detail Order"), $data);
+    //
   }
 
   /**

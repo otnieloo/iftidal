@@ -30,9 +30,9 @@ class ProfileController extends Controller
   {
     $data = [
       "vendor" => Vendor::query()
-      ->with(["category"])
-      ->where("id", auth()->user()->vendor_id)
-      ->first(),
+        ->with(["category"])
+        ->where("id", auth()->user()->vendor_id)
+        ->first(),
       "user" => auth()->user(),
       "vendor_businesses" => VendorBussiness::all(),
       "vendor_categories" => VendorCategory::all(),
@@ -44,7 +44,7 @@ class ProfileController extends Controller
     $data["product_details"] = array_merge($data["products"]->toArray(), $data["services"]->toArray());
     // dd($data["vendor"]);
 
-    return $this->view_admin("vendors.profiles.index", "Profile", $data, TRUE);
+    return $this->view("vendors.profiles.index", "Profile", $data, TRUE);
   }
 
   /**

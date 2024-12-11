@@ -23,16 +23,13 @@ class DashboardController extends Controller
 
 
     $data = [
-      'vendor'          => Vendor::select('id')->get(),
-      'event'           => $event,
-      'incoming_event'  => $incoming_event,
-      'incoming_guest'  => $event->sum('event_guest_count')
+      'vendor' => Vendor::select('id')->get(),
+      'event' => $event,
+      'incoming_event' => $incoming_event,
+      'incoming_guest' => $event->sum('event_guest_count')
     ];
 
 
-
-
-
-    return $this->view_admin("users.index", "Dashboard", $data, TRUE);
+    return $this->view("users.index", "Dashboard", $data, TRUE);
   }
 }

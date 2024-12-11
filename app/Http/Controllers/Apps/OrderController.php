@@ -29,7 +29,7 @@ class OrderController extends Controller
    */
   public function index()
   {
-    return $this->view_admin("admin.orders.index", __("List Orders"), [], TRUE);
+    return $this->view("admin.orders.index", __("List Orders"), [], TRUE);
   }
 
   /**
@@ -64,7 +64,7 @@ class OrderController extends Controller
     ];
 
 
-    return $this->view_admin("admin.orders.show", __("Order Details"), $data);
+    return $this->view("admin.orders.show", __("Order Details"), $data);
   }
 
   /**

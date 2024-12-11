@@ -66,7 +66,7 @@ class UserController extends Controller
    */
   public function index()
   {
-    return $this->view_admin("admin.users.index", "User Management", [], TRUE);
+    return $this->view("admin.users.index", "User Management", [], TRUE);
   }
 
   /**
@@ -79,7 +79,7 @@ class UserController extends Controller
     $data = [
       "roles" => Role::orderBy("role_name", "ASC")->get()
     ];
-    return $this->view_admin("admin.users.create", "Tambah User", $data);
+    return $this->view("admin.users.create", "Tambah User", $data);
   }
 
   /**
@@ -105,7 +105,7 @@ class UserController extends Controller
     $data = [
       "user" => $user
     ];
-    return $this->view_admin("admin.users.show", "Detail User", $data);
+    return $this->view("admin.users.show", "Detail User", $data);
   }
 
   /**
@@ -121,7 +121,7 @@ class UserController extends Controller
       "roles" => Role::orderBy("role_name", "ASC")->get()
     ];
 
-    return $this->view_admin("admin.users.edit", "Edit User", $data);
+    return $this->view("admin.users.edit", "Edit User", $data);
   }
 
   /**

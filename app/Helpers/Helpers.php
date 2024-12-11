@@ -144,3 +144,30 @@ if (!function_exists("is_role")) {
     return auth()->user()->role->role_name == $role_name;
   }
 }
+
+if (!function_exists("calculate_distance")) {
+  function calculate_distance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo)
+  {
+    $earthRadius = 6371; // Radius Bumi dalam kilometer
+
+    // Konversi derajat ke radian
+    $latFrom = deg2rad($latitudeFrom);
+    $lonFrom = deg2rad($longitudeFrom);
+    $latTo = deg2rad($latitudeTo);
+    $lonTo = deg2rad($longitudeTo);
+
+    // Rumus Haversine
+    $latDelta = $latTo - $latFrom;
+    $lonDelta = $lonTo - $lonFrom;
+
+    $a = sin($latDelta / 2) * sin($latDelta / 2) +
+      cos($latFrom) * cos($latTo) *
+      sin($lonDelta / 2) * sin($lonDelta / 2);
+
+    $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+    $distance = $earthRadius * $c;
+
+    return $distance; // Jarak dalam kilometer
+  }
+}

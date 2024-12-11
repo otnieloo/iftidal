@@ -17,7 +17,7 @@ class ProjectSettingController extends Controller
     $data = [
       "setting" => ProjectSetting::query()->first()
     ];
-    return $this->view_admin("admin.project-settings.index", "Setting", $data, TRUE);
+    return $this->view("admin.project-settings.index", "Setting", $data, TRUE);
   }
 
   /**

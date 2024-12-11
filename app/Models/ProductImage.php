@@ -15,4 +15,11 @@ class ProductImage extends Model
   {
     return $this->belongsTo(Product::class);
   }
+
+  public function productImage(): Attribute
+  {
+    return new Attribute(
+      get: fn($value) => asset("storage/{$value}"),
+    );
+  }
 }

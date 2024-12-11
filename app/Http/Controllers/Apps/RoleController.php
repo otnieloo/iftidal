@@ -23,7 +23,7 @@ class RoleController extends Controller
       "roles" => Role::query()->where("id", "!=", 1)->orderBy("role_name")->get()
     ];
 
-    return $this->view_admin("admin.roles.index", "Role Management", $data);
+    return $this->view("admin.roles.index", "Role Management", $data);
   }
 
   /**
@@ -69,7 +69,7 @@ class RoleController extends Controller
       "user_other" => User::query()->with("role")->where("role_id", "!=", $role->id)->where("id", "!=", 1)->get()
     ];
 
-    return $this->view_admin("admin.roles.show", "Detail Role", $data);
+    return $this->view("admin.roles.show", "Detail Role", $data);
   }
 
   /**

@@ -10,7 +10,7 @@
               Select Criteria
             </h3>
           </div>
-          <div class="card-body" style="height: 60vh;overflow-y:scroll;">
+          <div class="card-body">
             <div class="row">
               <!-- col -->
               <div class="col-lg-4">
@@ -53,6 +53,26 @@
                 <h5 class="fw-bold">Sub Category</h5>
 
                 <ul class="list-group">
+                  <li class="list-group-item d-flex align-items-center">
+                    <input type="checkbox">
+                    <div>Sub Category</div>
+                  </li>
+
+                  <li class="list-group-item d-flex align-items-center">
+                    <input type="checkbox">
+                    <div>Sub Category</div>
+                  </li>
+
+                  <li class="list-group-item d-flex align-items-center">
+                    <input type="checkbox">
+                    <div>Sub Category</div>
+                  </li>
+
+                  <li class="list-group-item d-flex align-items-center">
+                    <input type="checkbox">
+                    <div>Sub Category</div>
+                  </li>
+
                   <li class="list-group-item d-flex align-items-center">
                     <input type="checkbox">
                     <div>Sub Category</div>

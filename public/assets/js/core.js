@@ -478,6 +478,35 @@ const CORE = {
     target.onerror = null;
     target.src = `${CORE.baseUrl}/assets/images/images-empty.png`;
   },
+
+  showToast(icon = "success", title = "Success") {
+    Swal.fire({
+      icon,
+      title,
+      showConfirmButton: false,
+      timer: 1000,
+      toast: true,
+      position: "bottom-right",
+    });
+  },
+
+  formatToMYR(amount) {
+    return new Intl.NumberFormat("ms-MY", {
+      style: "currency",
+      currency: "MYR",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  },
+  debounce: (func, delay) => {
+    let debounceTimer;
+    return function () {
+      const context = this;
+      const args = arguments;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    };
+  },
 };
 
 CORE.init();

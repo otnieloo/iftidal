@@ -17,16 +17,24 @@ const Dashboard = {
           let template = document.querySelector("#cardListMyEvents");
 
           let html = "";
+          let events = [];
           response.data.forEach(event => {
             html += `
             <div class="event-item event-default">
               ${event.event_name}
             </div>
             `;
+
+            let eventData = {
+              title: event.event_name,
+              start: event.event_date + " " + event.event_start_time,
+            };
+
+            events.push(eventData);
           });
           template.innerHTML = html;
 
-          handleSuccessEvent(response);
+          handleSuccessEvent(events);
         } catch (error) {
           handleErrorEvent(error);
         }

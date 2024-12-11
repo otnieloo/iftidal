@@ -20,18 +20,20 @@ const Profile = {
     Profile.map.on("click", function (e) {
       // Get the coordinates where the user clicked
       const latlng = e.latlng;
-  
+
       if (Profile.marker) {
         Profile.map.removeLayer(Profile.marker);
       }
-  
+
       // Create a marker at the clicked location
       Profile.marker = L.marker([latlng.lat, latlng.lng]).addTo(Profile.map);
-  
+
       Profile.latitude.value = latlng.lat;
       Profile.longitude.value = latlng.lng;
     });
   }
 };
 
-Profile.initMaps();
+document.addEventListener("DOMContentLoaded", function() {
+  Profile.initMaps();
+})

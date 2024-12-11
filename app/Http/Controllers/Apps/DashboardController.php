@@ -27,6 +27,6 @@ class DashboardController extends Controller
       "admin_online" => $this->user_service->get_admin_online()
     ];
 
-    return $this->view_admin("admin.index", "Dashboard", $data, TRUE);
+    return $this->view("admin.index", "Dashboard", $data, TRUE);
   }
 }
