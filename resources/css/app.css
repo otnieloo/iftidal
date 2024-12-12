@@ -10,15 +10,20 @@
   padding: .3rem 2.5rem;
   border-radius: 4px;
   font-weight: 600;
+  background: #ffe8a3d7;
 }
 
-.event-summary .badges:nth-child(odd) {
+.event-summary .badges:hover {
+  background: #ffcd29d8;
+}
+
+/* .event-summary .badges:nth-child(odd) {
   background: #ffcd29d8;
 }
 
 .event-summary .badges:nth-child(even) {
   background: #ffe8a3d7;
-}
+} */
 
 .criteria-selected {
   background: #ffcd29 !important;

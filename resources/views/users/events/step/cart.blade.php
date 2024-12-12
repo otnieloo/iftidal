@@ -260,7 +260,7 @@
 
       <div class="col-12 border-top-dashed py-3 mt-3">
         <div class="d-flex gap-3 justify-content-end align-items-center">
-          <div class="fs-6">Total (0 product)</div>
+          <div class="fs-6">Total (<span id="totalProductCart">0</span> product)</div>
           <div class="text-secondary fw-bold fs-6 d-flex align-items-center">
 
             <div id="grandTotal">

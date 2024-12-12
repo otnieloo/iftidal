@@ -196,9 +196,9 @@ class ProductController extends Controller
     $payment_releases = ProductPaymentRelease::all();
     $guarantees = ProductGuarantee::all();
     $variations = ProductVariation::query()
-    ->select(["variation"])
-    ->where('product_id', $product->id)
-    ->get();
+      ->select(["variation"])
+      ->where('product_id', $product->id)
+      ->get();
 
     $package = ProductPackage::query()->where("product_id", $product->id)->first();
 

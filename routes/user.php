@@ -24,7 +24,7 @@ Route::middleware(["auth", "check_division:3"])->group(function () {
   Route::post('/events/addtocart', [OrderController::class, 'add_to_cart']);
   Route::get('/events/listorder', [OrderController::class, 'show_list_order']);
   Route::delete('/events/{orderProduct}', [OrderController::class, 'remove_from_cart']);
-  Route::get('/events/checkout', [OrderController::class, 'checkout']);
+  Route::post('/events/checkout', [OrderController::class, 'checkout']);
 
   Route::post("/events/payment", [PaymentController::class, "store"])->name("user.events.payment.store");
 

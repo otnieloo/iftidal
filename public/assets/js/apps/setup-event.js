@@ -195,7 +195,18 @@ const Order = {
   },
 
   async nextStep3(next = true) {
-    const request = await fetch(`/user/events/step4`, {
+    CORE.closeModal("modalFilter");
+
+    const inputsFilter = document.querySelectorAll(".input-filter-vendor");
+    let queryString = "";
+    let delimiter = "";
+
+    inputsFilter.forEach((input) => {
+      queryString += delimiter + input.name + "=" + input.value;
+      delimiter = "&";
+    });
+
+    const request = await fetch(`/user/events/step4?${queryString}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -432,7 +443,28 @@ const Order = {
       buttonCheckout.innerHTML = "Loading";
 
       try {
-        const request = await fetch("/user/events/checkout");
+        const inputCheckeds = document.querySelectorAll("[name='item_id[]']");
+        let items = "";
+        let delimiter = "";
+
+        inputCheckeds.forEach((input) => {
+          if (input.checked) {
+            items += delimiter + input.value;
+            delimiter = ",";
+          }
+        });
+
+        const request = await fetch("/user/events/checkout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": CORE.csrfToken,
+          },
+          body: JSON.stringify({
+            items: items,
+          })
+        });
         const status = request.status;
 
         if (status === 200) {
@@ -730,6 +762,7 @@ const Product = {
 
     if (status === 200) {
       CORE.showToast("success", "Product has ben added to cart");
+      Product.calculateTotalCart();
     }
   }, 350),
 
@@ -754,6 +787,30 @@ const Product = {
     return totalProduct;
   },
 
+  getPrice(value) {
+    return value.replace("RM&nbsp;", "").replace(".00", "");
+  },
+
+  calculateTotalCart() {
+    const checkedItems = document.querySelectorAll(".item-product-cart");
+    const rowGrandTotal = document.querySelectorAll(".grand-total-each-product");
+    let index = 0;
+    let grandTotal = 0;
+    let totalProduct = 0;
+
+    checkedItems.forEach((item) => {
+      if (item.checked) {
+        totalProduct++;
+        grandTotal += parseInt(Product.getPrice(rowGrandTotal[index].innerHTML));
+        // console.log(Product.getPrice(rowGrandTotal[index].innerHTML));
+      }
+      index++;
+    });
+
+    document.querySelector("#totalProductCart").innerHTML = totalProduct;
+    document.querySelector("#grandTotal").innerHTML = CORE.formatToMYR(grandTotal);
+  },
+
   drawCart(datas) {
     const cartContainer = document.getElementById("cartContainer");
 
@@ -762,7 +819,7 @@ const Product = {
     let countProduct = 0;
     let grandTotal = 0;
 
-    console.log(datas);
+    // console.log(datas);
 
     for (const data in datas) {
       countProduct++;
@@ -780,7 +837,7 @@ const Product = {
 
         productElement += `<tr>
               <td class="text-center" style="width: 5%;">
-                <input type="checkbox" checked>
+                <input type="checkbox" class="item-product-cart" name="item_id[]" value="${product.item_id}" onclick="Product.calculateTotalCart()" checked>
               </td>
               <td style="width: 25%;">
                 <div class="d-flex gap-3 align-items-center">
@@ -807,7 +864,7 @@ const Product = {
               </td>
               <td class="text-center" style="width: 15%;">
                 <div>
-                  <span class="total-price-cart">
+                  <span class="total-price-cart grand-total-each-product">
                   ${CORE.formatToMYR(product.grand_total)}
                   </span>
                 </div>
@@ -853,6 +910,7 @@ const Product = {
     cartContainer.innerHTML = element;
 
     Product.initQtyCart();
+    Product.calculateTotalCart();
   },
 
   removeProductFromCart(orderProductId) {

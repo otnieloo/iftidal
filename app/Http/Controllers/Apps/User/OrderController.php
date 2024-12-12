@@ -193,6 +193,7 @@ class OrderController extends Controller
       $vendorId = $order->vendor_id;
 
       $dataProduct = [
+        'item_id'             => $order->id,
         'product_name'        => $order->product_name,
         'id'                  => $order->product_id,
         'qty'                 => $order->qty,
@@ -235,20 +236,33 @@ class OrderController extends Controller
     $response           = create_response();
     $key                = env('SECRET_INFINPAY');
     $apiKey             = env('API_KEY_INFINPAY');
-    
 
     try{
 
       $order = Order::select('id', 'user_id', 'grand_total')->with(['user:id,email,name', 'order_products' => function($q){
         $q->select('id', 'order_id', 'product_id', 'qty')->with('product:id');
       }])->onCreated()->first();
+
+      $item_ids = explode(",", $request->items);
+
+      OrderProduct::query()
+      ->where("order_id", $order->id)
+      ->whereNotIn("id", $item_ids)
+      ->update([
+        "is_choice" => 0,
+      ]);
+
+      $products = OrderProduct::query()
+      ->where("order_id", $order->id)
+      ->where("is_choice", 1)
+      ->get();
     
     
       // $merchant_reference = Str::random(8) . time() . $order->id;
       $payload = [
         'merchant_code'       => env("MERCHANT_INFINPAY"),
         "merchant_reference"  => $order->order_number,
-        'amount'              => $order->grand_total,
+        'amount'              => $products->sum('grand_total'),
         'currency'            => 'MYR',
         'description'         => "Transaction for transaction number $order->order_number",
         'response_url'        => url("user/events/finishpayment"),
@@ -264,6 +278,7 @@ class OrderController extends Controller
           'online_banking'  => 'true'
         ]
       ];
+      // dd($payload);
 
       $order->update([
         'order_status_id' => 2

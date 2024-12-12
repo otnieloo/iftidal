@@ -7,14 +7,14 @@
 
   <div class="col-12">
 
-    <form action="https://uatpaymenthub.infinpay.com/api/pymt/pw/v1.1/payment" method="post">
+    {{-- <form action="https://uatpaymenthub.infinpay.com/api/pymt/pw/v1.1/payment" method="post">
 
       <input type="hidden" name="jwt"
         value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6ImJkOWFiMjgyYzEwMDQ3MzY5YTA3NmQzN2UzYzFhODMxIn0.eyJtZXJjaGFudF9jb2RlIjoiNDg4MTZmMmY0MzM4NDIzNjhiOTg2MGZjMjg1M2UwMWYiLCJtZXJjaGFudF9yZWZlcmVuY2UiOiJRZmczZERmYzE3MzM4MjU4NDk3IiwiYW1vdW50IjoiMjIwMDAwLjAwIiwiY3VycmVuY3kiOiJNWVIiLCJkZXNjcmlwdGlvbiI6IlRlc3RpbmciLCJyZXNwb25zZV91cmwiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvdXNlci9ldmVudHMvZmluaXNocGF5bWVudCIsInBheW1lbnRfdXBkYXRlX3VybCI6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC91c2VyL2V2ZW50cy9maW5pc2hwYXltZW50IiwiY3VzdG9tZXIiOnsiY3VzdG9tZXJfbmFtZSI6ImJyeWFudCIsImN1c3RvbWVyX2VtYWlsIjoiYnJ5YW50QGdtYWlsLmNvbSJ9LCJlbmFibGVfYXV0b19jYXB0dXJlIjoiZmFsc2UiLCJwYXltZW50X3R5cGUiOnsiY2FyZCI6InRydWUiLCJld2FsbGV0IjoidHJ1ZSIsIm9ubGluZV9iYW5raW5nIjoidHJ1ZSJ9fQ.8m30lAbVCDzDsZx0XApW_9UvViF2N1RWAy8SF42hICI">
 
       <button type="submit">Submit</button>
 
-    </form>
+    </form> --}}
 
 
   </div>

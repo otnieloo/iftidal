@@ -215,6 +215,10 @@ const CORE = {
     });
   },
 
+  deleteComma(value) {
+    return value.replace(/,/g, "");
+  },
+
   promptDeleteFetch(formId, message) {
     Swal.fire({
       title: "Are you sure?",

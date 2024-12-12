@@ -143,9 +143,9 @@ class OrderService extends BaseService
       // Check if order exists
       $order = Order::onCreated()->first();
 
-      if($order){
+      if($order) {
         $order->update($values);
-      }else{
+      } else{
         $order = Order::create($values);
       }
 
@@ -338,6 +338,11 @@ class OrderService extends BaseService
         $vendors = [];
         $get_vendors = Vendor::query()
         ->where("vendor_category_id", $category->id)
+        ->when(request()->filled("start_range_budget"), function($query) {
+          return $query->whereHas("product", function($q) {
+            return $q->whereBetween("product_sell_price", [request()->query("start_range_budget"), request()->query("end_range_budget")]);
+          });
+        })
         ->get();
 
         
@@ -349,21 +354,23 @@ class OrderService extends BaseService
 
           $get_distance = (int) ceil(calculate_distance($latitude_from, $longitude_from, $latitude_to, $longitude_to));
        
-          $vendors[] = [
-            "vendor_name" => $vendor->company_name,
-            "logo" => $vendor->logo,
-            "distance" => $get_distance,
-            "vendor_id" => $vendor->id
-          ];
+          $allow_vendor = FALSE;
+          if (request()->filled("vendor_range_location")) {
+            if ($get_distance <= request()->query("vendor_range_location")) {
+              $allow_vendor = TRUE;
+            }
+          } else {
+            $allow_vendor = TRUE;
+          }
 
-          // if ($get_distance <= $order->vendor_range) {
-          //   $vendors[] = [
-          //     "vendor_name" => $vendor->company_name,
-          //     "logo" => $vendor->logo,
-          //     "distance" => $get_distance,
-          //     "vendor_id" => $vendor->id
-          //   ];
-          // }
+          if ($allow_vendor) {
+            $vendors[] = [
+              "vendor_name" => $vendor->company_name,
+              "logo" => $vendor->logo,
+              "distance" => $get_distance,
+              "vendor_id" => $vendor->id
+            ];
+          }
         }
 
         $category->vendors = $vendors;
@@ -476,9 +483,7 @@ class OrderService extends BaseService
 
 
     $order         = Order::select('id', 'user_id', 'order_status_id')->onCreated()->first();
-
-
-
+    // dd($order);
     
     $order_product = OrderProduct::where('user_id', $order->user_id)->where('order_id', $order->id)->where('product_id', $product_id)->first();
 

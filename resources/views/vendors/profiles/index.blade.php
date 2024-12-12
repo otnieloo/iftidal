@@ -148,6 +148,7 @@
 
       <!-- Modal body -->
       <div class="modal-body">
+
         @include('users.events.modals.vendor-detail')
 
       </div>
