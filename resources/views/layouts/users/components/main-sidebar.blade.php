@@ -22,8 +22,30 @@
           <h3>Main</h3>
         </li>
         <li class="slide">
-          <a href="{{ route('user.dashboard.index') }}" class="side-menu__item"><i
-              class="side-menu__icon ri-home-4-line"></i><span class="side-menu__label">Dashboard</span></a>
+          <a href="{{ route('user.dashboard.index') }}" class="side-menu__item">
+            <i class="side-menu__icon ri-home-4-line"></i>
+            <span class="side-menu__label">Dashboard</span>
+          </a>
+        </li>
+        <li class="slide">
+          <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
+            <i class="side-menu__icon fa-solid fa-database"></i>
+            <span class="side-menu__label">Master Data</span><i class="angle fe fe-chevron-right"></i></a>
+          <ul class="slide-menu">
+            <li class="panel sidetab-menu">
+              <div class="panel-body tabs-menu-body p-0 border-0">
+                <div class="tab-content">
+                  <div class="tab-pane active" id="side29">
+                    <ul class="sidemenu-list">
+                      <li><a href="{{ route('user.events.index') }}" class="slide-item">My Event (s)</a></li>
+                      <li><a href="{{ route('user.vendors.index') }}" class="slide-item">My Vendor (s)</a></li>
+                      <li><a href="#" class="slide-item">My Guest (s)</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
         </li>
         <li class="slide">
           <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
@@ -35,9 +57,10 @@
                 <div class="tab-content">
                   <div class="tab-pane active" id="side29">
                     <ul class="sidemenu-list">
-                      <li class="side-menu-label1"><a href="javascript:void(0)">Submenu items</a></li>
                       <li><a href="{{ route('user.events.create') }}" class="slide-item">Event Setup</a></li>
-                      <li><a href="{{ route('user.orders.index') }}" class="slide-item">Order</a></li>
+                      <li><a href="#" class="slide-item">Event Preparation</a></li>
+                      <li><a href="#" class="slide-item">Event Day</a></li>
+                      <li><a href="{{ route('user.financials.index') }}" class="slide-item">Financial</a></li>
                     </ul>
                   </div>
                 </div>

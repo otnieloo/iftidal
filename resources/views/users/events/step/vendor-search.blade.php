@@ -54,7 +54,7 @@
     <div class="modal-content">
 
       <div class="modal-body" style="background: #E6E6E6;">
-        {{-- @include('users.events.step.modal.product-detail') --}}
+        @include('users.events.step.modal.product-detail')
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-action-modal-product-close"
@@ -72,10 +72,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        
+
         <div class="form-group my-3">
           <label>Vendor Range</label>
-          <input type="text" name="vendor_range_location" class="form-control input-filter-vendor" placeholder="input km...">
+          <input type="text" name="vendor_range_location" class="form-control input-filter-vendor"
+            placeholder="input km...">
         </div>
 
         <div class="form-group my-3">

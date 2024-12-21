@@ -5,6 +5,7 @@ namespace App\Services\Auth;
 use App\Http\Requests\RegisterVendorRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;
+use App\Models\UserBalance;
 use App\Models\Vendor;
 use App\Services\Cores\BaseService;
 use App\Services\Cores\ErrorService;
@@ -116,6 +117,11 @@ class RegisterService extends BaseService
         "password" => Hash::make($request->password),
       ];
       $user = User::create($values_user);
+
+      $values = [
+        "user_id" => $user->id
+      ];
+      UserBalance::create($values);
 
       event(new Registered($user));
     } catch (\Exception $e) {

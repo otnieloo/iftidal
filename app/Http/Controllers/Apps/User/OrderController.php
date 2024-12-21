@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Services\Cores\ErrorService;
 use App\Services\OrderService;
 use Exception;
 use Illuminate\Http\Request;
@@ -173,9 +174,9 @@ class OrderController extends Controller
 
 
   public function show_list_order(Request $request){
-      
+
     $response = create_response();
-    
+
     $orders = Order::select(['id', 'user_id', 'event_type_id', 'total_price_capital', 'total_price_sell', 'total_discount', 'grand_total'])
     ->onCreated()
     ->with(['order_products' => function($q){
@@ -239,7 +240,7 @@ class OrderController extends Controller
 
     try{
 
-      $order = Order::select('id', 'user_id', 'grand_total')->with(['user:id,email,name', 'order_products' => function($q){
+      $order = Order::select('id', 'user_id', 'grand_total', 'order_number')->with(['user:id,email,name', 'order_products' => function($q){
         $q->select('id', 'order_id', 'product_id', 'qty')->with('product:id');
       }])->onCreated()->first();
 
@@ -256,8 +257,8 @@ class OrderController extends Controller
       ->where("order_id", $order->id)
       ->where("is_choice", 1)
       ->get();
-    
-    
+
+
       // $merchant_reference = Str::random(8) . time() . $order->id;
       $payload = [
         'merchant_code'       => env("MERCHANT_INFINPAY"),
@@ -267,6 +268,7 @@ class OrderController extends Controller
         'description'         => "Transaction for transaction number $order->order_number",
         'response_url'        => url("user/events/finishpayment"),
         'payment_update_url'  => url("user/events/finishpayment"),
+        // 'callback_url'        => url("user/events/callback-payment"),
         'customer' => [
           'customer_name'   => $order->user->name,
           'customer_email'  => $order->user->email
@@ -287,10 +289,11 @@ class OrderController extends Controller
       foreach($order->order_products as $order_product){
         $order_product->product->decrement('product_stock', $order_product->qty);
       }
-  
+
       $jwt = JWT::encode($payload, base64_decode($key), 'HS256', $apiKey);
 
     }catch(Exception $e){
+      ErrorService::error($e, "Checkout Order");
       return response()->json($response, 500);
     }
 
@@ -306,13 +309,32 @@ class OrderController extends Controller
   }
 
 
-  public function finish_payment(Request $request){
+  /**
+   * Handle redirect payment
+   *
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+   */
+  public function finish_payment(Request $request)
+  {
+    $response = $this->service->handle_payment($request);
 
-    $key                = env('SECRET_INFINPAY');
-    $decode = JWT::decode($request->jwt, new Key(base64_decode($key), 'HS256'));
+    if ($response->status) {
+      return view('users.redirect');
+    }
 
-
-    return view('users.redirect');
+    return view('users.events.failed-payment');
   }
 
+  /**
+   * Handle callback payment
+   *
+   * @param \Illuminate\Http\Request $request
+   * @return mixed|\Illuminate\Http\JsonResponse
+   */
+  public function callback_payment(Request $request)
+  {
+    $response = $this->service->handle_payment($request);
+    return response_json($response);
+  }
 }

@@ -1,75 +1,70 @@
 <div class="card">
   <div class="card-body">
-    <div class="row">
+    <div class="row product-detail-container">
       <div class="col-lg-3 col-md-12 px-5">
-        <div>
-          <div class="card custom-card overflow-hidden">
-            <div>
-              <a href="javascript:void(0)"><img src="{{asset('build/assets/images/photos/28.jpg')}}" alt="img"
-                  class="cover-image br-7 w-100"></a>
-            </div>
+        <div class="card custom-card overflow-hidden">
+          <div>
+            <a href="javascript:void(0)"><img src="{{asset('build/assets/images/photos/28.jpg')}}" alt="img"
+                class="cover-image br-7 w-100"></a>
           </div>
-          <div class="card">
-            <div>
-              <div id="owl-demo2" class="owl-carousel owl-carousel-icons2">
-                <div class="item">
-                  <div class="card custom-card overflow-hidden mb-0 ">
-                    <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/44.jpg')}}"
-                        class="w-100" alt="img"></a>
-                  </div>
-                </div>
-                <div class="item">
-                  <div class="card custom-card overflow-hidden mb-0 ">
-                    <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/41.jpg')}}"
-                        class="w-100" alt="img"></a>
-                  </div>
-                </div>
-                <div class="item">
-                  <div class="card border-0 custom-card overflow-hidden mb-0 ">
-                    <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/42.jpg')}}"
-                        class="w-100" alt="img"></a>
-                  </div>
-                </div>
-                <div class="item">
-                  <div class="card custom-card overflow-hidden mb-0 ">
-                    <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/43.jpg')}}"
-                        class="w-100" alt="img"></a>
-                  </div>
-                </div>
-                <div class="item">
-                  <div class="card custom-card overflow-hidden mb-0 ">
-                    <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/44.jpg')}}"
-                        class="w-100" alt="img"></a>
-                  </div>
-                </div>
-                <div class="item">
-                  <div class="card border-0 custom-card overflow-hidden mb-0 ">
-                    <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/45.jpg')}}"
-                        class="w-100" alt="img"></a>
-                  </div>
-                </div>
-                <div class="item">
-                  <div class="card custom-card overflow-hidden mb-0 ">
-                    <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/41.jpg')}}"
-                        class="w-100" alt="img"></a>
-                  </div>
-                </div>
-                <div class="item">
-                  <div class="card custom-card overflow-hidden mb-0 ">
-                    <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/43.jpg')}}"
-                        class="w-100" alt="img"></a>
-                  </div>
-                </div>
-                <div class="item">
-                  <div class="card custom-card overflow-hidden mb-0 ">
-                    <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/45.jpg')}}"
-                        class="w-100" alt="img"></a>
-                  </div>
-                </div>
+        </div>
+        <div class="card">
+          <div id="owl-demo2" class="owl-carousel owl-carousel-icons2">
+            <div class="item">
+              <div class="card custom-card overflow-hidden mb-0 ">
+                <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/44.jpg')}}"
+                    class="w-100" alt="img"></a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="card custom-card overflow-hidden mb-0 ">
+                <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/41.jpg')}}"
+                    class="w-100" alt="img"></a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="card border-0 custom-card overflow-hidden mb-0 ">
+                <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/42.jpg')}}"
+                    class="w-100" alt="img"></a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="card custom-card overflow-hidden mb-0 ">
+                <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/43.jpg')}}"
+                    class="w-100" alt="img"></a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="card custom-card overflow-hidden mb-0 ">
+                <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/44.jpg')}}"
+                    class="w-100" alt="img"></a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="card border-0 custom-card overflow-hidden mb-0 ">
+                <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/45.jpg')}}"
+                    class="w-100" alt="img"></a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="card custom-card overflow-hidden mb-0 ">
+                <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/41.jpg')}}"
+                    class="w-100" alt="img"></a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="card custom-card overflow-hidden mb-0 ">
+                <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/43.jpg')}}"
+                    class="w-100" alt="img"></a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="card custom-card overflow-hidden mb-0 ">
+                <a href="{{url('filemanager-details')}}"><img src="{{asset('build/assets/images/photos/45.jpg')}}"
+                    class="w-100" alt="img"></a>
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -133,8 +128,6 @@
           <button class="btn btn-info">Add to cart</button>
         </div>
       </div>
-
-
     </div>
   </div>
 </div>
@@ -147,24 +140,9 @@
       <div class="col-12">
         <h4 class="fw-bold">Product Description</h4>
 
-        <div>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat neque culpa sed recusandae dicta
-          voluptatibus nemo ex libero consectetur asperiores eveniet praesentium illum vitae nisi ab aliquid
-          facilis esse, quod enim assumenda sint ipsam dolorem! Molestias fugiat voluptatibus nemo at nobis
-          blanditiis, quidem sed nulla aperiam soluta illo fuga impedit reprehenderit quis eius reiciendis
-          quos velit earum voluptas quo. Labore quo voluptate est repudiandae aliquid in? Possimus repellat
-          eveniet eaque, cumque nemo odio sunt alias, placeat nobis quia provident perferendis quo vitae
-          quidem? Corporis impedit, voluptatibus, voluptatum officiis perspiciatis debitis aliquid sapiente
-          odio distinctio labore, dolor est nam accusantium beatae?</div>
+        <div class="product-description">
 
-
-        <div>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat neque culpa sed recusandae dicta
-          voluptatibus nemo ex libero consectetur asperiores eveniet praesentium illum vitae nisi ab aliquid
-          facilis esse, quod enim assumenda sint ipsam dolorem! Molestias fugiat voluptatibus nemo at nobis
-          blanditiis, quidem sed nulla aperiam soluta illo fuga impedit reprehenderit quis eius reiciendis
-          quos velit earum voluptas quo. Labore quo voluptate est repudiandae aliquid in? Possimus repellat
-          eveniet eaque, cumque nemo odio sunt alias, placeat nobis quia provident perferendis quo vitae
-          quidem? Corporis impedit, voluptatibus, voluptatum officiis perspiciatis debitis aliquid sapiente
-          odio distinctio labore, dolor est nam accusantium beatae?</div>
+        </div>
       </div>
     </div>
   </div>
@@ -180,7 +158,7 @@
             <div style="width: 60px;height:60px;background:skyblue;border-radius:7px;"></div>
 
             <div>
-              <h3 class="fw-bold" style="margin-bottom: 0;">Vendor Name</h3>
+              <h3 class="fw-bold vendor-modal-company-name" style="margin-bottom: 0;">Vendor Name</h3>
               <div class="text-muted">Vendor Category : Vendor Sub Category</div>
             </div>
           </div>
@@ -502,7 +480,7 @@
 
 
 @push('script')
-  <!-- INTERNAL OWL CAROUSEL JS -->
-  <script src="{{asset('build/assets/plugins/owl-carousel/owl.carousel.js')}}"></script>
-  @vite('resources/assets/js/carousel.js')
+<!-- INTERNAL OWL CAROUSEL JS -->
+<script src="{{asset('build/assets/plugins/owl-carousel/owl.carousel.js')}}"></script>
+@vite('resources/assets/js/carousel.js')
 @endpush

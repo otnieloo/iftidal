@@ -140,8 +140,7 @@
             <div class="mb-0 fw-semibold text-dark">Total Orders</div>
             <h3 class="mt-1 mb-1 text-dark fw-semibold">{{ count($orders) }}</h3>
             <div class="text-muted fs-12 mt-2">
-              <span class="fw-bold fs-12">{{ count($orders->where("created_at", ">=", date("Y-m-d",
-                strtotime("-7day")))) }}</span> New Orders
+              <span class="fw-bold fs-12">{{ count($orders->where("created_at", ">=", date("Y-m-d", strtotime("-7day")))) }}</span> New Orders
             </div>
           </div>
           <i
@@ -255,7 +254,7 @@
       </div>
       <div class="card-body">
 
-        <canvas id="chartGraphSummary"></canvas>
+        <div id="chartGraphSummary"></div>
 
       </div>
     </div>
@@ -290,6 +289,6 @@
 
 @push('script')
 <script src="{{asset('build/assets/plugins/fullcalendar/fullcalendar.min.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1"></script>
 <script src="{{ asset('assets/js/apps/vendor-dashboard.js') }}"></script>
 @endpush

@@ -195,7 +195,9 @@ const Order = {
   },
 
   async nextStep3(next = true) {
-    CORE.closeModal("modalFilter");
+    if (document.querySelector("#modalFilter").classList.contains("show")) {
+      CORE.closeModal("modalFilter");
+    }
 
     const inputsFilter = document.querySelectorAll(".input-filter-vendor");
     let queryString = "";
@@ -463,7 +465,7 @@ const Order = {
           },
           body: JSON.stringify({
             items: items,
-          })
+          }),
         });
         const status = request.status;
 
@@ -483,7 +485,6 @@ const Order = {
           input.value = data.jwt;
           form.appendChild(input);
 
-          console.log(form);
           form.submit();
         } else {
           CORE.showToast("error", "Internal server error");
@@ -512,12 +513,23 @@ const Product = {
     const status = request.status;
 
     if (status === 200) {
-      const datas = response.data;
+      const data = response.data;
 
-      Product.products = datas;
+      const { company_name: companyName, logo } = data;
+
+      const products = data.product;
+      Product.products = products;
+
+      const companyNameElement = document.querySelectorAll(
+        ".vendor-modal-company-name"
+      );
+
+      companyNameElement.forEach((element) => {
+        element.innerHTML = companyName;
+      });
 
       let element = "";
-      datas.forEach((data) => {
+      products.forEach((data) => {
         const images = data.product_images;
         let listElementImages = ``;
 
@@ -532,7 +544,7 @@ const Product = {
           });
         }
 
-        element += `<div class="col-lg-3 product-cart">
+        element += `<div class="col-lg-3 product-cart" data-id="${data.id}">
         <div>
             <div class="card custom-card overflow-hidden">
                 <div>
@@ -544,11 +556,9 @@ const Product = {
                 </div>
             </div>
             <div class="card">
-                <div>
-                    <div id="owl-demo2" class="owl-carousel owl-carousel-icons2">
+                  <div id="owl-demo2" class="owl-carousel owl-carousel-icons2">
                         ${listElementImages}
-                    </div>
-                </div>
+                  </div>
             </div>
         </div>
       
@@ -570,7 +580,7 @@ const Product = {
             <div class="d-flex align-items-center justify-content-end">
                 <div class="qty-button" no-update-cart="true">-</div>
                 <input type="number" class="form-control qty-input" no-update-cart="true" 
-                data-max="${data.product_stock || 0}" data-id="${data.id}">
+                data-max="${data.product_stock || 0}">
                 <div class="qty-button" no-update-cart="true">+</div>
             </div>
         </div>
@@ -595,7 +605,7 @@ const Product = {
       productContainer.innerHTML = element;
 
       Product.initImageProduct();
-      Product.initQtyCart();
+      Product.initProduct();
 
       CORE.showModal("modalDetailVendor");
     }
@@ -633,31 +643,46 @@ const Product = {
     });
   },
 
-  initQtyCart: () => {
+  initProduct: () => {
     const qtyCarts = document.querySelectorAll(".qty-input");
 
     qtyCarts.forEach((qty) => {
       const minusButton = qty.previousElementSibling;
       const plusButton = qty.nextElementSibling;
       let max = qty?.dataset?.max || 0;
-      let productId = qty.getAttribute("data-id");
+      let productCart = qty.closest(".product-cart");
+      let productId = productCart ? productCart.dataset.id : qty.dataset?.id;
       let type = qty.dataset.type || "product";
+      let isDetailProduct = qty.getAttribute("detail-product") || 0;
+      isDetailProduct = parseInt(isDetailProduct);
 
-      // console.log(plusButton);
-      // console.log(minusButton);
+      let addToCartButton = null;
+      let totalElement = null;
+      let detailButton = null;
+      if (qty.parentElement.parentElement.nextElementSibling) {
+        totalElement =
+          qty.parentElement.parentElement.nextElementSibling.querySelector(
+            ".total-price-cart"
+          );
+        addToCartButton =
+          qty.parentElement.parentElement.nextElementSibling.nextElementSibling.querySelector(
+            ".add-to-cart-button"
+          );
 
-      if (max === null) {
-        max = 0;
+        detailButton =
+          qty.parentElement.parentElement.nextElementSibling.nextElementSibling.querySelector(
+            ".button-detail-product"
+          );
       }
 
-      let totalElement =
-        qty.parentElement.parentElement.nextElementSibling.querySelector(
-          ".total-price-cart"
-        );
-      let addToCartButton =
-        qty.parentElement.parentElement.nextElementSibling.nextElementSibling.querySelector(
-          ".add-to-cart-button"
-        );
+      if (isDetailProduct) {
+        addToCartButton =
+          qty.parentElement.parentElement.parentElement.parentElement.nextElementSibling.querySelector(
+            ".add-to-cart-button"
+          );
+
+        console.log(addToCartButton);
+      }
 
       const product = Product.products.find((pro) => pro.id == productId);
 
@@ -676,9 +701,11 @@ const Product = {
           Product.updateCart(value, productId, type);
         }
 
-        totalProduct = Product.calculateTotal(product, value);
         qty.value = value;
-        totalElement.innerHTML = CORE.formatToMYR(totalProduct);
+
+        if (totalElement) {
+          updateTotalElement(value);
+        }
       });
 
       minusButton.addEventListener("click", function (e) {
@@ -689,34 +716,38 @@ const Product = {
         value -= 1;
 
         let getAttributeUpdateCart = this.getAttribute("no-update-cart");
-
         if (!getAttributeUpdateCart) {
           Product.updateCart(value, productId, type);
         }
 
-        totalProduct = Product.calculateTotal(product, value);
         qty.value = value;
-        totalElement.innerHTML = CORE.formatToMYR(totalProduct);
+
+        if (totalElement) {
+          updateTotalElement(value);
+        }
       });
 
       plusButton.addEventListener("click", function (e) {
         let value = parseInt(qty.value || 0);
+
+        console.log(isDetailProduct);
 
         if (value >= parseInt(max)) {
           return;
         }
 
         value += 1;
-        
-        let getAttributeUpdateCart = this.getAttribute("no-update-cart");
 
+        let getAttributeUpdateCart = this.getAttribute("no-update-cart");
         if (!getAttributeUpdateCart) {
           Product.updateCart(value, productId, type);
         }
 
-        totalProduct = Product.calculateTotal(product, value);
         qty.value = value;
-        totalElement.innerHTML = CORE.formatToMYR(totalProduct);
+
+        if (totalElement) {
+          updateTotalElement(value);
+        }
       });
 
       if (addToCartButton) {
@@ -738,6 +769,125 @@ const Product = {
 
           // Send Data To Server
           Product.updateCart(qty.value, productId, type);
+        });
+      }
+
+      const updateTotalElement = (value) => {
+        totalProduct = Product.calculateTotal(product, value);
+        totalElement.innerHTML = CORE.formatToMYR(totalProduct);
+      };
+
+      if (detailButton) {
+        detailButton.addEventListener("click", function (e) {
+          const productImages = product.product_images;
+          let productImagesElement = "";
+          if (productImages) {
+            productImages.forEach((image) => {
+              productImagesElement += `<div class="item">
+              <div class="card custom-card overflow-hidden mb-0">
+                <img src="${image.product_image}" class="w-100" style="height:70px;" alt="img">
+              </div>
+            </div>`;
+            });
+          }
+
+          const detailProductElement = `<div class="col-lg-3 col-md-12 px-5">
+        <div class="card custom-card overflow-hidden">
+          <div>
+            <a href="javascript:void(0)">
+            <img src="${product.product_image}" alt="img"
+                class="cover-image br-7 w-100" style="height:230px;">
+                </a>
+          </div>
+        </div>
+        <div class="card">
+          <div id="owl-demo2" class="owl-carousel owl-carousel-icons2">
+            ${productImagesElement}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-9 col-md-12">
+        <h3 class="fw-bold">${product.product_name}</h3>
+        <div class="product-gallery-rats d-flex">
+          <ul class="product-gallery-rating">
+            <li>
+              <a href="javascript:void(0);"><i class="fa fa-star text-warning"></i></a>
+              <a href="javascript:void(0);"><i class="fa fa-star text-warning"></i></a>
+              <a href="javascript:void(0);"><i class="fa fa-star text-warning"></i></a>
+              <a href="javascript:void(0);"><i class="fa fa-star text-warning"></i></a>
+            </li>
+          </ul>
+          <div class="label-rating ms-2 d-flex gap-2">
+            <div class="text-secondary">79</div>
+            <div>|</div>
+            <div>
+              <span class="fw-bold">45</span>
+              <span class="text-muted">Ratings</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-secondary fw-bold mt-3">RM 150 - RM 250</h3>
+        </div>
+
+        <div class="form-group mt-4">
+          <div class="row">
+            <div class="col-lg-2 col-md-12">
+              <label class="form-label" for="event_type_id">Variation</label>
+            </div>
+            <div class="col-lg-3 col-md-12">
+              <select name="event_type_id" id="event_type_id" class="form-control form-select default-select">
+                <option value="0">Select Type Of Event</option>
+                <option value="blue">Red</option>
+                <option value="red">Blue</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group mt-4">
+          <div class="row">
+            <div class="col-lg-2 col-md-12">
+              <label class="form-label" for="event_type_id">Quantity</label>
+            </div>
+            <div class="col-lg-3 col-md-12">
+              <div class="d-flex align-items-center justify-content-start">
+                <div class="qty-button" no-update-cart="true">-</div>
+                <input type="number" class="form-control qty-input" no-update-cart="true" 
+                data-max="${product.product_stock || 0}" 
+                data-id="${product.id}" detail-product="1">
+                <div class="qty-button" no-update-cart="true">+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex" style="gap:.5rem;">
+          <button class="btn btn-gray">Later</button>
+          <button class="btn btn-info add-to-cart-button">Add to cart</button>
+        </div>
+      </div>`;
+
+          const productDescription = document.querySelector(
+            ".product-description"
+          );
+
+          productDescription.innerHTML = "";
+          productDescription.innerHTML = product.product_description;
+
+          const detailProductContainer = document.querySelector(
+            ".product-detail-container"
+          );
+
+          detailProductContainer.innerHTML = "";
+          detailProductContainer.innerHTML = detailProductElement;
+
+          CORE.showModal("modalDetailProduct");
+
+          Product.initImageProduct();
+          Product.initProduct();
         });
       }
     });
@@ -793,7 +943,9 @@ const Product = {
 
   calculateTotalCart() {
     const checkedItems = document.querySelectorAll(".item-product-cart");
-    const rowGrandTotal = document.querySelectorAll(".grand-total-each-product");
+    const rowGrandTotal = document.querySelectorAll(
+      ".grand-total-each-product"
+    );
     let index = 0;
     let grandTotal = 0;
     let totalProduct = 0;
@@ -801,14 +953,17 @@ const Product = {
     checkedItems.forEach((item) => {
       if (item.checked) {
         totalProduct++;
-        grandTotal += parseInt(Product.getPrice(rowGrandTotal[index].innerHTML));
+        grandTotal += parseInt(
+          Product.getPrice(rowGrandTotal[index].innerHTML)
+        );
         // console.log(Product.getPrice(rowGrandTotal[index].innerHTML));
       }
       index++;
     });
 
     document.querySelector("#totalProductCart").innerHTML = totalProduct;
-    document.querySelector("#grandTotal").innerHTML = CORE.formatToMYR(grandTotal);
+    document.querySelector("#grandTotal").innerHTML =
+      CORE.formatToMYR(grandTotal);
   },
 
   drawCart(datas) {
@@ -837,7 +992,9 @@ const Product = {
 
         productElement += `<tr>
               <td class="text-center" style="width: 5%;">
-                <input type="checkbox" class="item-product-cart" name="item_id[]" value="${product.item_id}" onclick="Product.calculateTotalCart()" checked>
+                <input type="checkbox" class="item-product-cart" name="item_id[]" value="${
+                  product.item_id
+                }" onclick="Product.calculateTotalCart()" checked>
               </td>
               <td style="width: 25%;">
                 <div class="d-flex gap-3 align-items-center">
@@ -909,7 +1066,7 @@ const Product = {
     cartContainer.innerHTML = "";
     cartContainer.innerHTML = element;
 
-    Product.initQtyCart();
+    Product.initProduct();
     Product.calculateTotalCart();
   },
 

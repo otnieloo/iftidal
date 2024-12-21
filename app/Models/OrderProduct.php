@@ -29,4 +29,9 @@ class OrderProduct extends Model
   {
     return $this->belongsTo(ProductCategory::class, "product_category_id", "id");
   }
+
+  public function payment_vendor()
+  {
+    return $this->belongsTo(PaymentVendorStatus::class, "payment_vendor_status_id", "id");
+  }
 }

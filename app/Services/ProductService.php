@@ -101,8 +101,16 @@ class ProductService extends BaseService
    */
   public function store(ProductRequest $request)
   {
+    $response = create_response();
     DB::beginTransaction();
+
     try {
+      if (!$request->has("tmp_video")) {
+        $response->status_code = 403;
+        $response->message = "Missing video!";
+        return $response;
+      }
+
       $values = $request->validated();
       if (auth()->user()->role_id == 2) {
         $values["vendor_id"] = auth()->user()->vendor_id;
@@ -220,7 +228,15 @@ class ProductService extends BaseService
    */
   public function update(ProductRequest $request, Product $product)
   {
+    $response = create_response();
+    
     try {
+      if (!$request->has("tmp_video")) {
+        $response->status_code = 403;
+        $response->message = "Missing video!";
+        return $response;
+      }
+
       $values = $request->validated();
       if (auth()->user()->role_id == 2) {
         $values["vendor_id"] = auth()->user()->vendor_id;

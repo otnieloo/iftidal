@@ -6,6 +6,8 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderVendorCategory;
 use App\Models\Product;
+use App\Models\TransactionHistory;
+use App\Models\UserBalance;
 use App\Models\Vendor;
 use App\Models\VendorCategory;
 use App\Services\Cores\BaseService;
@@ -13,6 +15,7 @@ use App\Services\Cores\ErrorService;
 use App\Supports\OrderSupport;
 use Exception;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -28,9 +31,7 @@ class OrderService extends BaseService
     $vendorId = $user->vendor_id;
     $isCustomer = $user->role_id === 3;
 
-
-
-    $columns = ['orders.id', 'users.name', 'orders.event_name', 'locations.location', 'orders.event_date', 'orders.grand_total'];
+    $columns = ['orders.id', 'users.name', 'orders.order_number', 'orders.event_name', 'locations.location', 'orders.event_date', 'orders.grand_total'];
 
     // Page Information
     $pageLength = $request->length;
@@ -46,6 +47,7 @@ class OrderService extends BaseService
     $query = Order::select($columns)
       ->join('users', 'orders.user_id', 'users.id')
       ->join('locations', 'orders.location_id', 'locations.id')
+      ->where("order_status_id", ">", 1)
       ->where(function ($query) use ($search, $columns) {
         foreach ($columns as $column) {
           $query->orWhere($column, 'like', "%" . $search . "%");
@@ -74,12 +76,12 @@ class OrderService extends BaseService
       $row = array();
       $row[] = "<input type='checkbox' class='order-checkbox' value='{$item->id}' />";
       $row[] = $item->id;
-      $row[] = 'ORDER ID';
+      $row[] = "<a href='". route('app.orders.show', $item->id) ."'>$item->order_number</a>";
       if (!$isCustomer) {
         $row[] = $item->name;
       }
       $row[] = $item->location;
-      $row[] = $item->event_date;
+      $row[] = date('j F Y', strtotime($item->event_date));
       $row[] = $item->grand_total;
 
       $rows[] = $row;
@@ -122,7 +124,6 @@ class OrderService extends BaseService
     try {
       // Need to check first exist oncreated order
       $values = [
-        "order_number"        => (new OrderSupport)->generate_number(),
         "user_id"             => auth()->user()->id,
         "event_name"          => $request->event_name,
         "event_type_id"       => $request->event_type_id,
@@ -146,6 +147,7 @@ class OrderService extends BaseService
       if($order) {
         $order->update($values);
       } else{
+        $values['order_number'] = (new OrderSupport)->generate_number();
         $order = Order::create($values);
       }
 
@@ -345,7 +347,7 @@ class OrderService extends BaseService
         })
         ->get();
 
-        
+
         foreach ($get_vendors as $vendor) {
           $latitude_from = $order->latitude;
           $latitude_to = $vendor->latitude;
@@ -353,7 +355,7 @@ class OrderService extends BaseService
           $longitude_to = $vendor->longitude;
 
           $get_distance = (int) ceil(calculate_distance($latitude_from, $longitude_from, $latitude_to, $longitude_to));
-       
+
           $allow_vendor = FALSE;
           if (request()->filled("vendor_range_location")) {
             if ($get_distance <= request()->query("vendor_range_location")) {
@@ -362,6 +364,7 @@ class OrderService extends BaseService
           } else {
             $allow_vendor = TRUE;
           }
+
 
           if ($allow_vendor) {
             $vendors[] = [
@@ -390,7 +393,7 @@ class OrderService extends BaseService
 
   /**
    * Store payment with infinpay
-   * 
+   *
    * @param \Illuminate\Http\Request $request
    * @return \stdClass
    */
@@ -460,14 +463,18 @@ class OrderService extends BaseService
     return $response;
   }
 
-
-
+  /**
+   * Store to cart
+   *
+   * @param \Illuminate\Http\Request $request
+   * @return mixed|\Illuminate\Http\JsonResponse|\stdClass
+   */
   public function add_to_cart(Request $request){
     $product_id = $request->product_id;
     $qty        = $request->qty;
     $type       = $request->type;
 
-  
+
     $response   = create_response();
 
     $product    = Product::select('id','vendor_id','product_category_id','product_name','product_capital_price','product_sell_price','product_stock')
@@ -484,7 +491,7 @@ class OrderService extends BaseService
 
     $order         = Order::select('id', 'user_id', 'order_status_id')->onCreated()->first();
     // dd($order);
-    
+
     $order_product = OrderProduct::where('user_id', $order->user_id)->where('order_id', $order->id)->where('product_id', $product_id)->first();
 
     if($order_product){
@@ -507,17 +514,18 @@ class OrderService extends BaseService
       'product_sell_price'      => $product->product_sell_price,
       'total_sell_price'        => $product->product_sell_price * $qty,
       'grand_total'             => 0,
-      'qty'                     => $qty
+      'qty'                     => $qty,
+      "payment_vendor_status_id"=> 1,
     ];
 
     //Calculate Discount
     $grandTotal = $product->product_sell_price * $qty;
     $product_package = $product->product_package;
-  
+
     if($product_package && $qty >= $product_package->minimum_qty){
       $discount = 0;
       $value_package = $product_package->value;
-    
+
        if ($product_package->package_type == 1) {
             $discount = $grandTotal * ($value_package / 100);
             $grandTotal -= $discount;
@@ -533,6 +541,7 @@ class OrderService extends BaseService
     }
 
     $data['grand_total'] = $grandTotal;
+    $data['payment_vendor_available'] = $grandTotal;
 
     try{
       if($order_product){
@@ -551,6 +560,123 @@ class OrderService extends BaseService
     $response->status       = TRUE;
     $response->status_code  = 200;
     $response->message      = 'Product has been added to cart';
+
+    return $response;
+  }
+
+  /**
+   * Handle payment callback
+   *
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\stdClass
+   */
+  public function handle_payment(Request $request)
+  {
+    $response = create_response();
+    $error = FALSE;
+
+    // Start Database Transaction
+    $this->trans_begin();
+
+    // Let's start!
+    try  {
+      $key = env('SECRET_INFINPAY');
+      $decode = JWT::decode($request->jwt, new Key(base64_decode($key), 'HS256'));
+
+      if ($decode) {
+        $trx_code = $decode->transaction->result_code;
+
+        if ($trx_code == 0) {
+          $status = $decode->transaction->payment_status;
+
+          if (in_array(env("APP_ENV"), ["local", "staging"])) {
+            $check_status = in_array($status, ["SALES", "Captured"]);
+          } else {
+            $check_status = in_array($status, ["Captured"]);
+          }
+
+          if ($check_status) {
+            $order = Order::query()->where("order_number", $decode->merchant_reference)->first();
+
+            if ($order) {
+              $values = [
+                "payment_status_id" => 3
+              ];
+
+              Order::query()
+                ->where("id", $order->id)
+                ->update($values);
+
+              OrderProduct::query()
+              ->where("order_id", $order->id)
+              ->where("is_choice", 0)
+              ->delete();
+
+              $order_products = OrderProduct::query()
+              ->where("order_id", $order->id)
+              ->where("is_choice", 1)
+              ->get();
+
+              foreach ($order_products as $order_product) {
+                $values = [
+                  "user_id" => auth()->user()->id,
+                  "transaction_history_status_id" => 1,
+                  "transaction_history_type_id" => 1,
+                  "transaction_time" => date("Y-m-d H:i:s"),
+                  "transaction_number" => $order->order_number,
+                  "description" => $order_product->product_name,
+                  "amount" => $order_product->grand_total,
+                  "reference_id" => $order->id,
+                  "route" => "app.orders.show"
+                ];
+
+                TransactionHistory::create($values);
+              }
+
+              UserBalance::query()
+              ->where("user_id", $order->user_id)
+              ->increment("paid_deposit", $order->grand_total);
+            } else {
+              $error = TRUE;
+              $response->message = "Order Not Found!";
+            }
+          } else {
+            $error = TRUE;
+            $response->message = "Order Payment Failed!";
+            $response->status_code = 400;
+          }
+        } else {
+          $error = TRUE;
+          $response->message = "Order Payment Failed!";
+          $response->status_code = 400;
+        }
+      } else {
+        $error = TRUE;
+        $response->message = "Invalid Signature!";
+        $response->status_code = 403;
+      }
+    } catch (Exception $e) {
+      $error = TRUE;
+      if ($e->getCode() == 403) {
+        $response->message = $e->getMessage();
+        $response->status_code = 403;
+      } else {
+        $response = response_errors_default();
+        ErrorService::error($e, "OrderService::handle_payment");
+      }
+    }
+
+    info("Results Payment", (array) $response);
+    // Final check
+    end:
+    if ($error) {
+      // If have error, Rollback database
+      $this->trans_rollback();
+    } else {
+      // Success, commit database and return response success
+      $this->trans_commit();
+      $response = response_success_default("Payment Success!");
+    }
 
     return $response;
   }

@@ -18,7 +18,7 @@
   position: fixed;
   width: 100vw;
   height: 100vh;
-  z-index: 9999;
+  z-index: 99999;
   background-color: rgba(0, 0, 0, .5);
 }
 .lds-ring div {
@@ -62,4 +62,8 @@
   cursor: pointer;
   background-color: #FFE8A3 !important;
   color: black;
+}
+
+.form-select {
+  padding: 0 25px 0 10px;
 }

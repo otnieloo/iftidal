@@ -1,0 +1,55 @@
+.financial-user .icon {
+  font-size: 2rem;
+  height: 50px;
+  width: 50px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-right: 1rem;
+  padding: 30px;
+}
+
+.financial-user .btn-topup {
+  background-color: #ffd700 !important;
+}
+
+.financial-user .icon i {
+  padding: 50px;
+}
+
+.financial-user .nav-tabs {
+  border-bottom: 1px solid #ddd; /* Bottom border */
+  background-color: #f0f0f0; /* Parent background */
+  padding: 5px; /* Padding untuk parent */
+  border-radius: 5px; /* Rounded corners */
+}
+.financial-user .nav-tabs .nav-link {
+  background-color: transparent; /* Transparent default */
+  color: #333; /* Default text color */
+  border: none; /* No border default */
+  margin: 0 5px; /* Margin antar tab */
+  transition: color 0.2s ease; /* Smooth hover effect */
+  font-size: 16px;
+}
+.financial-user .nav-tabs .nav-link.active {
+  background-color: #fff; /* White active tab */
+  border: 1px solid #ddd; /* Border untuk tab aktif */
+  border-radius: 5px; /* Rounded corners untuk active */
+  padding: 8px 15px; /* Padding untuk active */
+  margin-top: -5px; /* Mengangkat tab active */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow untuk efek mengambang */
+  color: #333 !important;
+}
+
+.financial-user .nav-tabs .nav-link:hover {
+  background-color: #fff !important; /* White active tab */
+  border: 1px solid #ddd !important; /* Border untuk tab aktif */
+  color: #333 !important; /* Hover text color sama kayak tab active */
+}
+
+.financial-user .nav-tabs {
+  border-bottom: 1px solid #ddd;
+  /* Bottom border */
+}

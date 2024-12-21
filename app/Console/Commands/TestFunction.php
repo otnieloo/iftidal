@@ -2,7 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Services\OrderService;
+use App\Models\OrderProduct;
+use App\Services\CronService;
 use Illuminate\Console\Command;
 
 class TestFunction extends Command
@@ -24,10 +25,17 @@ class TestFunction extends Command
   /**
    * Execute the console command.
    *
-   * @return int
    */
   public function handle()
   {
-    (new OrderService)->store_payment_infinpay();
+    $order_products = OrderProduct::all();
+
+    foreach ($order_products as $product) {
+      OrderProduct::query()
+      ->where("id", $product->id)
+      ->update([
+        "payment_vendor_available" => $product->grand_total
+      ]);
+    }
   }
 }

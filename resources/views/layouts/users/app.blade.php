@@ -74,8 +74,13 @@
         <div class="side-app">
           <!-- CONTAINER -->
           <div class="main-container container-fluid">
+
             <div style="margin-top: 100px">
-              @yield('content')
+              {!! $breadcrumb !!}
+
+              <div style="margin-top: 20px;">
+                @yield('content')
+              </div>
             </div>
           </div>
         </div>
@@ -119,6 +124,8 @@
   <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@7.1.0/dist/promise.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="{{ asset('vendor/datatables-bs5/datatables.min.js?v=') . random_string(7) }}"></script>
+
+  @include('sweetalert::alert')
 
   <!-- APP JS -->
   @vite('resources/js/app.js')

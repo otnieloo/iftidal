@@ -21,7 +21,9 @@
                     <div class="col-lg-6 col-md-12 d-flex" style="gap:1rem;">
                         <div style="width: 120px;height:120px;background:blue;"></div>
                         <div>
-                            <h2 class="fw-bolder" id="vendor-modal-company-name">Vendor Name</h2>
+                            <h2 class="fw-bolder vendor-modal-company-name">
+                                Vendor Name
+                            </h2>
                             <h5 class="text-muted" id="vendor-modal-category">Vendor Category</h5>
                             <h5 class="text-muted" id="vendor-modal-subcategory">Vendor Sub Category</h5>
                         </div>
@@ -103,124 +105,7 @@
                         <div class="row product-container" id="product-container">
 
 
-                            <div class="col-lg-3 product-cart">
 
-                                <div>
-                                    <div class="card custom-card overflow-hidden">
-                                        <div>
-                                            <a href="javascript:void(0)"><img
-                                                    src="{{asset('build/assets/images/photos/28.jpg')}}" alt="img"
-                                                    class="cover-image br-7 w-100"></a>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div>
-                                            <div id="owl-demo2" class="owl-carousel owl-carousel-icons2">
-                                                <div class="item">
-                                                    <div class="card custom-card overflow-hidden mb-0 ">
-                                                        <a href="{{url('filemanager-details')}}"><img
-                                                                src="{{asset('build/assets/images/photos/44.jpg')}}"
-                                                                class="w-100" alt="img"></a>
-                                                    </div>
-                                                </div>
-                                                <div class="item">
-                                                    <div class="card custom-card overflow-hidden mb-0 ">
-                                                        <a href="{{url('filemanager-details')}}"><img
-                                                                src="{{asset('build/assets/images/photos/41.jpg')}}"
-                                                                class="w-100" alt="img"></a>
-                                                    </div>
-                                                </div>
-                                                <div class="item">
-                                                    <div class="card border-0 custom-card overflow-hidden mb-0 ">
-                                                        <a href="{{url('filemanager-details')}}"><img
-                                                                src="{{asset('build/assets/images/photos/42.jpg')}}"
-                                                                class="w-100" alt="img"></a>
-                                                    </div>
-                                                </div>
-                                                <div class="item">
-                                                    <div class="card custom-card overflow-hidden mb-0 ">
-                                                        <a href="{{url('filemanager-details')}}"><img
-                                                                src="{{asset('build/assets/images/photos/43.jpg')}}"
-                                                                class="w-100" alt="img"></a>
-                                                    </div>
-                                                </div>
-                                                <div class="item">
-                                                    <div class="card custom-card overflow-hidden mb-0 ">
-                                                        <a href="{{url('filemanager-details')}}"><img
-                                                                src="{{asset('build/assets/images/photos/44.jpg')}}"
-                                                                class="w-100" alt="img"></a>
-                                                    </div>
-                                                </div>
-                                                <div class="item">
-                                                    <div class="card border-0 custom-card overflow-hidden mb-0 ">
-                                                        <a href="{{url('filemanager-details')}}"><img
-                                                                src="{{asset('build/assets/images/photos/45.jpg')}}"
-                                                                class="w-100" alt="img"></a>
-                                                    </div>
-                                                </div>
-                                                <div class="item">
-                                                    <div class="card custom-card overflow-hidden mb-0 ">
-                                                        <a href="{{url('filemanager-details')}}"><img
-                                                                src="{{asset('build/assets/images/photos/41.jpg')}}"
-                                                                class="w-100" alt="img"></a>
-                                                    </div>
-                                                </div>
-                                                <div class="item">
-                                                    <div class="card custom-card overflow-hidden mb-0 ">
-                                                        <a href="{{url('filemanager-details')}}"><img
-                                                                src="{{asset('build/assets/images/photos/43.jpg')}}"
-                                                                class="w-100" alt="img"></a>
-                                                    </div>
-                                                </div>
-                                                <div class="item">
-                                                    <div class="card custom-card overflow-hidden mb-0 ">
-                                                        <a href="{{url('filemanager-details')}}"><img
-                                                                src="{{asset('build/assets/images/photos/45.jpg')}}"
-                                                                class="w-100" alt="img"></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="text-center">
-                                    <h6 class="fw-bold">Product Name 1</h6>
-                                    <div>Description of product here</div>
-
-                                    <select name="event_type_id" id="event_type_id"
-                                        class="form-control form-select default-select">
-                                        <option value="0">Select Type Of Event</option>
-                                    </select>
-
-                                </div>
-
-                                <div class="d-flex mt-3 justify-content-between">
-                                    <div>
-                                        <div class="fw-bold">RM 15</div>
-                                        <div style="width: 100px;">per unit</div>
-                                    </div>
-
-                                    <div class="d-flex align-items-center justify-content-end">
-                                        <div class="qty-button">-</div>
-                                        <input type="number" class="form-control qty-input">
-                                        <div class="qty-button">+</div>
-                                    </div>
-                                </div>
-
-
-                                <div class="d-flex mt-3 justify-content-between">
-                                    <div class="fw-bold">Total</div>
-                                    <div>RM 450</div>
-                                </div>
-
-                                <div class="d-flex" style="gap:.5rem;">
-                                    <button class="btn btn-gray button-detail-product"
-                                        style="width: 100%;">Detail</button>
-                                    <button class="btn btn-info" style="width: 100%;">Add to cart</button>
-                                </div>
-                            </div>
 
 
                         </div>

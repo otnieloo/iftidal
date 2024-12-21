@@ -102,11 +102,10 @@
             <div class="row product-container">
 
               @foreach ($products as $item)
-                <div class="col-lg-3 product-cart">
+                <div class="col-lg-3 product-cart my-4">
                   <div>
                     <div class="card custom-card overflow-hidden">
                       <div>
-                        {{-- <a href="javascript:void(0)"><img src="{{asset('build/assets/images/photos/28.jpg')}}" alt="img" class="cover-image br-7 w-100"></a> --}}
                         <a href="javascript:void(0)"><img id="previewImageProduct{{ $item->id }}" src="{{ $item->product_image }}" style="height: 115px; width: 100%; object-fit: cover" alt="img" class="cover-image br-7 w-100"></a>
                       </div>
                     </div>

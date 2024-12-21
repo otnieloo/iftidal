@@ -18,7 +18,6 @@ return new class extends Migration {
       $table->foreignId("user_id")->constrained("users", "id")->restrictOnDelete();
       $table->foreignId("vendor_id")->constrained("vendors", "id")->restrictOnDelete();
       $table->foreignId("product_id")->constrained("products", "id")->restrictOnDelete();
-      $table->foreignId("product_variation_id")->constrained("product_variations")->restrictOnDelete();
       $table->foreignId("product_category_id")->constrained("product_categories", "id")->restrictOnDelete();
       $table->string("product_name");
       $table->bigInteger("qty");

@@ -36,8 +36,16 @@ class DatabaseSeeder extends Seeder
       // PaymentStatusSeeder::class,
       // LocationSeeder::class,
 
-      ProductPaymentReleaseSeeder::class,
-      ProductGuaranteeSeeder::class,
+      // ProductPaymentReleaseSeeder::class,
+      // ProductGuaranteeSeeder::class,
+      // GusetGroupSeeder::class,
+      // GuestStatusSeeder::class,
+      // CountryCodeSeeder::class,
+      // PaymentVendorStatusSeeder::class,
+
+      // TransactionHistoryStatusSeeder::class,
+      // TransactionHistoryTypeSeeder::class
+      UserWithdrawStatusSeeder::class,
     ]);
     // \App\Models\User::factory(10)->create();
 

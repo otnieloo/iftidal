@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Requests\ProfileVendorRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\VendorRequest;
+use App\Models\OrderProduct;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Vendor;
@@ -256,5 +257,39 @@ class VendorService extends BaseService
     }
 
     return $response;
+  }
+
+  public function get_vendor_user(Request $request)
+  {
+    $columns = [
+      "v.company_name", "vc.vendor_category", "o.event_date", "os.order_status",
+      "pv.payment_vendor_status", "order_products.grand_total"
+    ];
+
+    $orderColumnIndex = (int) $request->order[0]['column'] ?? 0;
+    $orderBy = $request->order[0]['dir'] ?? 'desc';
+    $orderByName = $columns[$orderColumnIndex];
+    $page_length = $request->length;
+    $search = $request->search['value'];
+
+    $vendors = OrderProduct::query()
+    ->select($columns)
+    ->join("orders AS o", "order_products.order_id", "=", "o.id")
+    ->join("order_statuses AS os", "o.order_status_id", "=", "os.id")
+    ->join("payment_vendor_statuses AS pv", "order_products.payment_vendor_id", "=", "pv.id")
+    ->join("vendors as v", "order_products.vendor_id", "=", "v.id")
+    ->join("vendor_categories AS vc", "v.vendor_category_id", "=", "vc.id")
+    ->where("o.user_id", auth()->user()->id)
+    ->when($search, function($query) use ($search, $columns) {
+      return $query->where(function ($q) use ($search, $columns) {
+        foreach ($columns as $column) {
+          $q->orWhere($column, 'like', "%" . $search . "%");
+        }
+      });
+    })
+    ->orderBy($orderByName, $orderBy)
+    ->paginate($page_length);
+
+    return $vendors;
   }
 }

@@ -17,6 +17,10 @@ class Product extends Model
     static::addGlobalScope(new VendorScope);
   }
 
+  public function vendor(){
+    return $this->belongsTo(Vendor::class);
+  }
+
   public function product_images()
   {
     return $this->hasMany(ProductImage::class);

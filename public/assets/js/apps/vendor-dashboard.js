@@ -50,53 +50,125 @@ const Dashboard = {
     const request = await fetch(`/vendor/dashboard/graphs?type=${type}`);
     const response = await request.json();
 
-    const summaryNow = response.data.map((data) => data.now);
-    const summaryPrev = response.data.map((data) => data.prev);
+    const summaryNow = response.data.map((data) => parseFloat(data.now));
+    const summaryPrev = response.data.map((data) => parseFloat(data.prev));
 
     if (!Dashboard.chart) {
       const monthName = response.data.map((data) => data.month_name);
+      // console.log(summaryNow);
 
-      const ctx = document.getElementById("chartGraphSummary").getContext("2d");
-      Dashboard.chart = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: monthName,
-          datasets: [
-            {
-              label: "This Month",
-              data: summaryNow,
-              borderColor: "rgba(75, 192, 192, 1)",
-              backgroundColor: "rgba(75, 192, 192, 0.2)",
-              fill: false,
-            },
-            {
-              label: "Last Month",
-              data: summaryPrev,
-              borderColor: "rgba(153, 102, 255, 1)",
-              backgroundColor: "rgba(153, 102, 255, 0.2)",
-              fill: false,
-            },
-          ],
+      const ctx = document.querySelector("#chartGraphSummary");
+      const option = {
+        chart: {
+          height: 400,
+          type: "line",
         },
-        options: {
-          scales: { y: { beginAtZero: true } }, plugins: { tooltip: { mode: 'index', intersect: false } }, hover: { mode: 'nearest', intersect: false }
+        series: [
+          {
+            name: "This Month",
+            type: "column",
+            data: summaryNow,
+          },
+          {
+            name: "Last Month",
+            type: "line",
+            data: summaryPrev,
+          },
+        ],
+        xaxis: {
+          categories: monthName,
+          title: {
+            text: "Months",
+          },
         },
-      });
+        yaxis: {
+          title: {
+            text: "Values",
+          },
+        },
+        colors: ["#00A6B4", "#FFCB00"], // Warna sesuai keinginan
+        stroke: {
+          width: [0, 3], // Lebar garis: 0 buat bar chart, 3 buat line chart
+        },
+        plotOptions: {
+          bar: {
+            columnWidth: "50%", // Lebar kolom bar
+          },
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        legend: {
+          position: "top",
+        },
+      };
+
+      Dashboard.chart = new ApexCharts(ctx, option);
+      Dashboard.chart.render();
+      // Dashboard.chart = new Chart(ctx, {
+      //   type: "line",
+      //   data: {
+      //     labels: monthName,
+      //     datasets: [
+      //       {
+      //         label: "This Month",
+      //         data: summaryNow,
+      //         borderColor: "rgba(75, 192, 192, 1)",
+      //         backgroundColor: "rgba(75, 192, 192, 0.2)",
+      //         fill: false,
+      //       },
+      //       {
+      //         label: "Last Month",
+      //         data: summaryPrev,
+      //         borderColor: "rgba(153, 102, 255, 1)",
+      //         backgroundColor: "rgba(153, 102, 255, 0.2)",
+      //         fill: false,
+      //       },
+      //     ],
+      //   },
+      //   options: {
+      //     scales: { y: { beginAtZero: true } }, plugins: { tooltip: { mode: 'index', intersect: false } }, hover: { mode: 'nearest', intersect: false }
+      //   },
+      // });
     } else {
       let itemName = [];
+      let newSeries = [];
       if (type == "Monthly") {
         itemName = response.data.map((data) => data.month_name);
+        newSeries = [
+          {
+            name: "This Month",
+            type: "column",
+            data: summaryNow,
+          },
+          {
+            name: "Last Month",
+            type: "line",
+            data: summaryPrev,
+          },
+        ];
       } else {
         itemName = response.data.map((data) => data.day);
+        newSeries = [
+          {
+            name: "This Day",
+            type: "column",
+            data: summaryNow,
+          },
+          {
+            name: "Last Day",
+            type: "line",
+            data: summaryPrev,
+          },
+        ];
       }
 
-      Dashboard.chart.data.labels = itemName;
-      Dashboard.chart.data.datasets[0].data = summaryNow;
-      Dashboard.chart.data.datasets[0].label = "This Day";
-
-      Dashboard.chart.data.datasets[1].data = summaryPrev;
-      Dashboard.chart.data.datasets[1].label = "Last Day";
-      Dashboard.chart.update();
+      Dashboard.chart.updateOptions({
+        series: newSeries,
+        xaxis: {
+          categories: itemName,
+        },
+      });
     }
   }
 };
