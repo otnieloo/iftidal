@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\OrderVendor;
 use App\Models\OrderVendorCategory;
 use App\Models\Product;
+use App\Models\ProductVariation;
 use App\Models\TransactionHistory;
 use App\Models\UserBalance;
 use App\Models\Vendor;
@@ -498,7 +500,7 @@ class OrderService extends BaseService
       $totalQty = $type == 'cart' ?   $qty : $order_product->qty + $qty;
       $qty      = $totalQty > $product->product_stock ? $product->product_stock : $totalQty;
     }
-
+    $variation = ProductVariation::query()->where("id", $request->variation_id)->first();
 
 
     $data = [
@@ -508,6 +510,7 @@ class OrderService extends BaseService
       'product_id'              => $product_id,
       'product_category_id'     => $product->product_category_id,
       'product_name'            => $product->product_name,
+      'variation'               => $variation->variation,
       'product_capital_price'   => $product->product_capital_price,
       'total_capital_price'     => $product->product_capital_price * $qty,
       'product_discount_price'  => 0,
@@ -542,6 +545,7 @@ class OrderService extends BaseService
 
     $data['grand_total'] = $grandTotal;
     $data['payment_vendor_available'] = $grandTotal;
+    // dd($data);
 
     try{
       if($order_product){
@@ -636,6 +640,19 @@ class OrderService extends BaseService
               UserBalance::query()
               ->where("user_id", $order->user_id)
               ->increment("paid_deposit", $order->grand_total);
+
+              $vendors = OrderProduct::query()
+              ->where("order_id", $order->id)
+              ->groupBy("vendor_id")
+              ->get();
+
+              foreach ($vendors as $vendor) {
+                OrderVendor::create([
+                  "order_id" => $order->id,
+                  "vendor_id" => $vendor->vendor_id,
+                  "order_vendor_status_id" => 1
+                ]);
+              }
             } else {
               $error = TRUE;
               $response->message = "Order Not Found!";
@@ -676,6 +693,130 @@ class OrderService extends BaseService
       // Success, commit database and return response success
       $this->trans_commit();
       $response = response_success_default("Payment Success!");
+    }
+
+    return $response;
+  }
+
+  /**
+   * Reject order by vendor
+   *
+   * @param \App\Models\Order $order
+   * @return \stdClass
+   */
+  public function reject_order_vendor(Order $order)
+  {
+    $response = create_response();
+    $error = FALSE;
+
+    // Start Database Transaction
+    $this->trans_begin();
+
+    // Let's start!
+    try  {
+      $order_products = OrderProduct::query()
+      ->where("order_id", $order->id)
+      ->where("vendor_id", auth()->user()->vendor_id)
+      ->get();
+
+      foreach ($order_products as $order_product) {
+        OrderProduct::query()
+        ->where("id", $order_product->id)
+        ->update([
+          "order_vendor_status_id" => 6
+        ]);
+
+        UserBalance::query()
+        ->where("user_id", $order_product->user_id)
+        ->increment("credit_balance", $order_product->grand_total);
+      }
+
+      OrderVendor::query()
+      ->where("order_id", $order->id)
+      ->where("vendor_id", auth()->user()->vendor_id)
+      ->update([
+        "order_vendor_status_id" => 6
+      ]);
+    } catch (Exception $e) {
+      $error = TRUE;
+      if ($e->getCode() == 403) {
+        $response->message = $e->getMessage();
+        $response->status_code = 403;
+      } else {
+        $response = response_errors_default();
+        ErrorService::error($e, "OrderService::reject_order_vendor");
+      }
+    }
+
+    // Final check
+    end:
+    if ($error) {
+      // If have error, Rollback database
+      $this->trans_rollback();
+    } else {
+      // Success, commit database and return response success
+      $this->trans_commit();
+      $response = response_success_default("Order has been rejected!", FALSE, route("vendor.orders.show", $order->id));
+    }
+
+    return $response;
+  }
+
+  /**
+   * Commit order by vendor
+   *
+   * @param \App\Models\Order $order
+   * @return \stdClass
+   */
+  public function commit_order_vendor(Order $order)
+  {
+    $response = create_response();
+    $error = FALSE;
+
+    // Start Database Transaction
+    $this->trans_begin();
+
+    // Let's start!
+    try  {
+      $order_products = OrderProduct::query()
+        ->where("order_id", $order->id)
+        ->where("vendor_id", auth()->user()->vendor_id)
+        ->get();
+
+      foreach ($order_products as $order_product) {
+        OrderProduct::query()
+          ->where("id", $order_product->id)
+          ->update([
+            "order_vendor_status_id" => 2
+          ]);
+      }
+
+      OrderVendor::query()
+      ->where("order_id", $order->id)
+      ->where("vendor_id", auth()->user()->vendor_id)
+      ->update([
+        "order_vendor_status_id" => 2
+      ]);
+    } catch (Exception $e) {
+      $error = TRUE;
+      if ($e->getCode() == 403) {
+        $response->message = $e->getMessage();
+        $response->status_code = 403;
+      } else {
+        $response = response_errors_default();
+        ErrorService::error($e, "OrderService::commit_order_vendor");
+      }
+    }
+
+    // Final check
+    end:
+    if ($error) {
+      // If have error, Rollback database
+      $this->trans_rollback();
+    } else {
+      // Success, commit database and return response success
+      $this->trans_commit();
+      $response = response_success_default("Order has commited!", FALSE, route("vendor.orders.show", $order->id));
     }
 
     return $response;

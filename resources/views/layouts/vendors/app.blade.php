@@ -30,6 +30,7 @@
   <!-- ANIMATE CSS -->
   <link href="{{asset('build/assets/iconfonts/animated.css')}}" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('assets/css/main/custom-admin.css?v=') . random_string(7) }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/main/custom-vendor.css?v=') . random_string(7) }}">
 
   <!-- APP CSS -->
   @vite(['resources/css/app.css'])
@@ -118,6 +119,10 @@
   @vite('resources/js/app.js')
 
   @livewireScripts
+  <x-livewire-alert::scripts />
+  <script src="{{ asset('vendor/livewire-alert/livewire-alert.js') }}"></script>
+  <x-livewire-alert::flash />
+  
   <script>
     CORE.init();
   </script>

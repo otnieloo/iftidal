@@ -1,0 +1,122 @@
+.user-create-event .product-container {
+  max-width: 500px;
+  padding: 16px;
+}
+
+.user-create-event .product-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #212121;
+  margin-bottom: 4px;
+}
+
+.user-create-event .rating {
+  color: #ffc107;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+
+.user-create-event .rating-text {
+  color: #212121;
+  margin-left: 4px;
+  font-size: 14px;
+}
+
+.user-create-event .rating-count {
+  color: #666;
+  font-size: 14px;
+  margin-left: 4px;
+}
+
+.user-create-event .price {
+  color: #2e7d32;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.user-create-event .info-label {
+  color: #666;
+  font-size: 14px;
+}
+
+.user-create-event .info-value {
+  color: #212121;
+  font-size: 14px;
+}
+
+.user-create-event .guarantee-icon {
+  color: #2e7d32;
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+.user-create-event .form-select {
+  color: #666;
+  font-size: 14px;
+  padding: 6px 12px;
+}
+
+.user-create-event .quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-create-event .quantity-input {
+  width: 80px;
+  text-align: center;
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.user-create-event .btn-quantity {
+  padding: 4px 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  background: white;
+  color: #666;
+}
+
+.user-create-event .action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.user-create-event .btn {
+  font-size: 14px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.user-create-event .btn-later {
+  background-color: #757575;
+  color: white;
+  border: none;
+  min-width: 80px;
+}
+
+.user-create-event .btn-cart {
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  flex-grow: 1;
+}
+
+.user-create-event .btn-share {
+  background-color: #424242;
+  color: white;
+  border: none;
+  min-width: 80px;
+}
+
+.user-create-event .info-row {
+  margin-bottom: 12px;
+}

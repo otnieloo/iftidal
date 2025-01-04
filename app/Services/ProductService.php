@@ -229,7 +229,7 @@ class ProductService extends BaseService
   public function update(ProductRequest $request, Product $product)
   {
     $response = create_response();
-    
+
     try {
       if (!$request->has("tmp_video")) {
         $response->status_code = 403;
@@ -257,7 +257,10 @@ class ProductService extends BaseService
         [$newImage, $movedFile] = move_tmp_file($values['tmp_video'], 'product/video');
         $values['product_video'] = $newImage;
 
-        Storage::delete($product->product_video);
+        if ($product->product_video && file_exists(storage_path("app/product/video/{$product->product_video}"))) {
+          Storage::delete($product->product_video);
+        }
+        unset($values['tmp_video']);
       }
 
 
@@ -305,7 +308,7 @@ class ProductService extends BaseService
         $values['product_image'] = $productImages->first()['product_image'];
       }
 
-
+      // dd($values);
       Product::query()->where("id", $product->id)->update($values);
 
       ProductVariation::query()->where("product_id", $product->id)->delete();

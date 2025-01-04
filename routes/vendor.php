@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Apps\Vendor\DashboardController;
+use App\Http\Controllers\Apps\Vendor\EmployeeController;
 use App\Http\Controllers\Apps\Vendor\OrderController;
 use App\Http\Controllers\Apps\Vendor\ProductController;
 use App\Http\Controllers\Apps\Vendor\ProfileController;
@@ -26,4 +27,10 @@ Route::middleware(["auth", "check_division:2"])->group(function() {
 
   Route::get("/orders", [OrderController::class, "index"])->name("vendor.orders.index");
   Route::get("/orders/{order}", [OrderController::class, "show"])->name("vendor.orders.show");
+  Route::put("/orders/{order}/reject", [OrderController::class, "reject"])->name("vendor.orders.reject");
+  Route::put("/orders/{order}/commit", [OrderController::class, "commit"])->name("vendor.orders.commit");
+
+  Route::get("/employees", [EmployeeController::class, "index"])->name("vendor.employees.index");
+  Route::get("/employees/export", [EmployeeController::class, "export"])->name("vendor.employees.export");
+  Route::post("/employees/import", [EmployeeController::class, "import"])->name("vendor.employees.import");
 });

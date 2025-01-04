@@ -67,27 +67,22 @@
   <div class="tab-content">
     <div id="form" class="tab-pane" role="tabpanel" aria-labelledby="form">
       @include('users.events.step.form')
-      {{-- @livewire('apps.users.orders.setup.step1') --}}
     </div>
 
     <div id="criteria" class="tab-pane" role="tabpanel" aria-labelledby="criteria">
       @include('users.events.step.criteria')
-      {{-- @livewire('apps.users.orders.setup.step2') --}}
     </div>
 
     <div id="summary" class="tab-pane" role="tabpanel" aria-labelledby="summary">
       @include('users.events.step.summary')
-      {{-- @livewire('apps.users.orders.setup.step3') --}}
     </div>
 
     <div id="vendorsearch" class="tab-pane" role="tabpanel" aria-labelledby="vendorsearch">
       @include('users.events.step.vendor-search')
-      {{-- @livewire('apps.users.orders.setup.step4') --}}
     </div>
 
     <div id="cart" class="tab-pane" role="tabpanel" aria-labelledby="cart">
       @include('users.events.step.cart')
-      {{-- @livewire('apps.users.orders.setup.step5') --}}
     </div>
   </div>
 </div>

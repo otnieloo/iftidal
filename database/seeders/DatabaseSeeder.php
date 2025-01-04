@@ -45,7 +45,10 @@ class DatabaseSeeder extends Seeder
 
       // TransactionHistoryStatusSeeder::class,
       // TransactionHistoryTypeSeeder::class
-      UserWithdrawStatusSeeder::class,
+      // UserWithdrawStatusSeeder::class,
+      // DepartmentSeeder::class,
+
+      OrderVendorStatusSeeder::class,
     ]);
     // \App\Models\User::factory(10)->create();
 

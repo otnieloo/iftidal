@@ -23,20 +23,20 @@
         </thead>
         <tbody>
           @forelse ($orders as $item)
-            <tr>
-              <td>
-                <a href="{{ route('vendor.orders.show', $item->order_id) }}">{{ $item->order_number }}</a>
-              </td>
-              <td>{{ $item->product_name }}</td>
-              <td>{{ $item->name }}</td>
-              <td>{{ $item->location }}</td>
-              <td>{{ date('d/m/Y', strtotime($item->event_date)) }}</td>
-              <td>RM {{ number_format($item->grand_total, 2, ".") }}</td>
-            </tr>
+          <tr>
+            <td>
+              <a href="{{ route('vendor.orders.show', $item->order_id) }}">{{ $item->order_number }}</a>
+            </td>
+            <td>{{ $item->product_name }}</td>
+            <td>{{ $item->name }}</td>
+            <td>{{ $item->location }}</td>
+            <td>{{ date('d/m/Y', strtotime($item->event_date)) }}</td>
+            <td>RM {{ number_format($item->grand_total, 2, ".") }}</td>
+          </tr>
           @empty
-            <tr>
-              <td colspan="6" class="text-center">No orders found.</td>
-            </tr>
+          <tr>
+            <td colspan="6" class="text-center">No orders found.</td>
+          </tr>
           @endforelse
         </tbody>
       </table>
@@ -54,7 +54,7 @@
         entries
       </div>
 
-      {!! $orders->links() !!}
+      {!! $orders->appends(["tab" => "new-orders"])->links() !!}
     </div>
   </div>
 </div>

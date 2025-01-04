@@ -561,40 +561,39 @@ const Product = {
                   </div>
             </div>
         </div>
-      
+
         <div class="text-center">
             <h6 class="fw-bold">${data.product_name}</h6>
             <div>${data.product_description}</div>
             <select name="event_type_id" id="event_type_id" class="form-control form-select default-select">
                 <option value="0">Select Type Of Event</option>
             </select>
-      
+
         </div>
-      
+
         <div class="d-flex mt-3 justify-content-between">
             <div>
                 <div class="fw-bold">${data.product_sell_price}</div>
                 <div style="width: 100px;">per unit</div>
             </div>
-      
+
             <div class="d-flex align-items-center justify-content-end">
                 <div class="qty-button" no-update-cart="true">-</div>
-                <input type="number" class="form-control qty-input" no-update-cart="true" 
+                <input type="number" class="form-control qty-input" no-update-cart="true"
                 data-max="${data.product_stock || 0}">
                 <div class="qty-button" no-update-cart="true">+</div>
             </div>
         </div>
-      
-      
+
+
         <div class="d-flex mt-3 justify-content-between">
             <div class="fw-bold">Total</div>
             <div class="total-price-cart">RM 0</div>
         </div>
-      
+
         <div class="d-flex" style="gap:.5rem;">
-            <button class="btn btn-gray button-detail-product"
-                style="width: 100%;">Detail</button>
-            <button class="btn btn-info add-to-cart-button" style="width: 100%;">Add to cart</button>
+            <button class="btn btn-gray" style="width: 100%;">Watch</button>
+            <button class="btn btn-secondary button-detail-product" style="width: 100%;">Detail</button>
         </div>
       </div>`;
       });
@@ -649,6 +648,8 @@ const Product = {
     qtyCarts.forEach((qty) => {
       const minusButton = qty.previousElementSibling;
       const plusButton = qty.nextElementSibling;
+      // console.log(plusButton);
+
       let max = qty?.dataset?.max || 0;
       let productCart = qty.closest(".product-cart");
       let productId = productCart ? productCart.dataset.id : qty.dataset?.id;
@@ -676,12 +677,14 @@ const Product = {
       }
 
       if (isDetailProduct) {
+        // console.log(qty.parentElement.parentElement.parentElement);
+
         addToCartButton =
-          qty.parentElement.parentElement.parentElement.parentElement.nextElementSibling.querySelector(
+          qty.parentElement.parentElement.parentElement.nextElementSibling.querySelector(
             ".add-to-cart-button"
           );
 
-        console.log(addToCartButton);
+        // console.log(addToCartButton);
       }
 
       const product = Product.products.find((pro) => pro.id == productId);
@@ -778,6 +781,8 @@ const Product = {
       };
 
       if (detailButton) {
+        console.log(product);
+
         detailButton.addEventListener("click", function (e) {
           const productImages = product.product_images;
           let productImagesElement = "";
@@ -788,6 +793,13 @@ const Product = {
                 <img src="${image.product_image}" class="w-100" style="height:70px;" alt="img">
               </div>
             </div>`;
+            });
+          }
+
+          let selectVariations = "";
+          if (product.variations.length > 0) {
+            product.variations.forEach((variation) => {
+              selectVariations += `<option value="${variation.id}">${variation.variation}</option>`;
             });
           }
 
@@ -808,66 +820,87 @@ const Product = {
       </div>
 
       <div class="col-lg-9 col-md-12">
-        <h3 class="fw-bold">${product.product_name}</h3>
-        <div class="product-gallery-rats d-flex">
-          <ul class="product-gallery-rating">
-            <li>
-              <a href="javascript:void(0);"><i class="fa fa-star text-warning"></i></a>
-              <a href="javascript:void(0);"><i class="fa fa-star text-warning"></i></a>
-              <a href="javascript:void(0);"><i class="fa fa-star text-warning"></i></a>
-              <a href="javascript:void(0);"><i class="fa fa-star text-warning"></i></a>
-            </li>
-          </ul>
-          <div class="label-rating ms-2 d-flex gap-2">
-            <div class="text-secondary">79</div>
-            <div>|</div>
-            <div>
-              <span class="fw-bold">45</span>
-              <span class="text-muted">Ratings</span>
+
+        <div class="user-create-event">
+            <div class="product-container">
+                <h1 class="product-title">Product Name 1</h1>
+
+                <!-- Rating -->
+                <div class="rating">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-half"></i>
+                    <span class="rating-text">4.9</span>
+                    <span class="rating-count">(45 Ratings)</span>
+                </div>
+
+                <!-- Price -->
+                <div class="price">RM 15.00</div>
+
+                <!-- Info Grid -->
+                <div class="info-row row">
+                    <div class="col-md-4">
+                        <div class="info-label">Payment</div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="info-value">${product.payment_release}</div>
+                    </div>
+                </div>
+
+                <div class="info-row row">
+                    <div class="col-md-4">
+                        <div class="info-label">Vendor Guarantee</div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="info-value">
+                            <i class="bi bi-check-circle-fill guarantee-icon"></i>
+                            ${product.product_guarantee}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-row row">
+                    <div class="col-md-4">
+                        <div class="info-label">Variation</div>
+                    </div>
+                    <div class="col-md-8">
+                        <select class="form-select" id="formSelectVariation${product.id}">
+                            <option value="">Select Variation</option>
+                            ${selectVariations}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="info-row row">
+                    <div class="col-md-4">
+                        <div class="info-label">Quantity</div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="quantity-controls">
+                            <button class="qty-button btn-quantity" no-update-cart="true">-</button>
+                            <input type="text" class="quantity-input qty-input" value="0" data-max="${ product.product_stock || 0 }" data-id="${product.id}" detail-product="1">
+                            <button class="qty-button btn-quantity" no-update-cart="true">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-later">Later</button>
+                    <button class="btn btn-cart add-to-cart-button">
+                        <i class="bi bi-cart-plus"></i>
+                        Add to cart
+                    </button>
+                    <button class="btn btn-share">
+                        <i class="bi bi-share"></i>
+                        Share
+                    </button>
+                </div>
             </div>
-          </div>
         </div>
 
-        <div>
-          <h3 class="text-secondary fw-bold mt-3">RM 150 - RM 250</h3>
-        </div>
-
-        <div class="form-group mt-4">
-          <div class="row">
-            <div class="col-lg-2 col-md-12">
-              <label class="form-label" for="event_type_id">Variation</label>
-            </div>
-            <div class="col-lg-3 col-md-12">
-              <select name="event_type_id" id="event_type_id" class="form-control form-select default-select">
-                <option value="0">Select Type Of Event</option>
-                <option value="blue">Red</option>
-                <option value="red">Blue</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group mt-4">
-          <div class="row">
-            <div class="col-lg-2 col-md-12">
-              <label class="form-label" for="event_type_id">Quantity</label>
-            </div>
-            <div class="col-lg-3 col-md-12">
-              <div class="d-flex align-items-center justify-content-start">
-                <div class="qty-button" no-update-cart="true">-</div>
-                <input type="number" class="form-control qty-input" no-update-cart="true" 
-                data-max="${product.product_stock || 0}" 
-                data-id="${product.id}" detail-product="1">
-                <div class="qty-button" no-update-cart="true">+</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="d-flex" style="gap:.5rem;">
-          <button class="btn btn-gray">Later</button>
-          <button class="btn btn-info add-to-cart-button">Add to cart</button>
-        </div>
       </div>`;
 
           const productDescription = document.querySelector(
@@ -894,6 +927,14 @@ const Product = {
   },
 
   updateCart: CORE.debounce(async (qty, productId, type) => {
+    const selectVariation = document.querySelector(`#formSelectVariation${productId}`);
+    // console.log(selectVariation.value);
+
+    if (!selectVariation.value) {
+      CORE.showToast("error", "Please select variation");
+      return;
+    }
+
     const request = await fetch(`/user/events/addtocart`, {
       method: "POST",
       headers: {
@@ -904,6 +945,7 @@ const Product = {
       body: JSON.stringify({
         qty,
         product_id: productId,
+        variation_id: selectVariation.value,
         type,
       }),
     });
@@ -1012,9 +1054,9 @@ const Product = {
               <td class="text-center" style="width: 25%;">
                 <div class="d-flex align-items-center justify-content-center">
                   <div class="qty-button">-</div>
-                  <input type="text" class="form-control qty-input" 
-                  value="${product.qty}" 
-                  data-max="${stock}" 
+                  <input type="text" class="form-control qty-input"
+                  value="${product.qty}"
+                  data-max="${stock}"
                   data-id="${product.id}" data-type="cart">
                   <div class="qty-button">+</div>
                 </div>
@@ -1027,7 +1069,7 @@ const Product = {
                 </div>
               </td>
               <td class="text-center">
-                <i class="fa-solid fa-trash" 
+                <i class="fa-solid fa-trash"
                 onClick="Product.removeProductFromCart(${
                   d.order_product_id
                 })"></i>

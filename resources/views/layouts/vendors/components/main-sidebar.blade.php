@@ -25,15 +25,6 @@
           <a href="{{ route('vendor.dashboard.index') }}" class="side-menu__item"><i class="side-menu__icon ri-home-4-line"></i><span class="side-menu__label">Dashboard</span></a>
         </li>
         <li class="slide">
-          <a href="{{ route('vendor.dashboard.index') }}" class="side-menu__item"><i class="side-menu__icon fa-regular fa-calendar"></i><span class="side-menu__label">Advertisement</span></a>
-        </li>
-        <li class="slide">
-          <a href="{{ route('vendor.dashboard.index') }}" class="side-menu__item"><i class="side-menu__icon fa-solid fa-user"></i><span class="side-menu__label">Customer Engagement</span></a>
-        </li>
-        <li class="slide">
-          <a href="{{ route('vendor.dashboard.index') }}" class="side-menu__item"><i class="side-menu__icon fa-solid fa-tag"></i><span class="side-menu__label">Discount & Promotion</span></a>
-        </li>
-        <li class="slide">
           <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
             <i class="side-menu__icon fa-solid fa-user-gear"></i>
             <span class="side-menu__label">Management</span><i class="angle fe fe-chevron-right"></i></a>
@@ -43,12 +34,12 @@
                 <div class="tab-content">
                   <div class="tab-pane active" id="side29">
                     <ul class="sidemenu-list">
-                      <li class="side-menu-label1"><a href="javascript:void(0)">Submenu items</a></li>
-                      <li><a href="javascript:void(0)" class="slide-item">Financial</a></li>
-                      <li><a href="{{ route('vendor.orders.index') }}" class="slide-item">Order</a></li>
+                      <li><a href="javascript:void(0)" class="slide-item">Account Balance</a></li>
+                      <li><a href="{{ route('vendor.orders.index') }}" class="slide-item">My Order</a></li>
+                      <li><a href="#" class="slide-item">My Customer</a></li>
+                      <li><a href="{{ route('vendor.products.index') }}" class="slide-item">My Listing</a></li>
+                      <li><a href="#" class="slide-item">My Staff</a></li>
                       <li><a href="{{ route('vendor.profiles.index') }}" class="slide-item">Profile</a></li>
-                      <li><a href="{{ route('vendor.products.index') }}" class="slide-item">Product & Services</a></li>
-                      <li><a href="javascript:void(0)" class="slide-item">Work</a></li>
                     </ul>
                   </div>
                 </div>
